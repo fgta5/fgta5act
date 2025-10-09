@@ -5,12 +5,12 @@
   "type": "module",
   "main": "./src/index.js",
   "scripts": {
-    "start": "node .",
-    "clear": "kill -9 $(lsof -t -i :3010)"
+    "server": "node .",
+    "clear": "kill -9 $(lsof -t -i :3003)"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agungdhewe/fgta5ent.git"
+    "url": "git+https://github.com/agungdhewe/fgta5act.git"
   },
   "keywords": [
     "webapps",
@@ -23,9 +23,9 @@
     "access": "public"
   },
   "bugs": {
-    "url": "https://github.com/agungdhewe/fgta5ent/issues"
+    "url": "https://github.com/agungdhewe/fgta5act/issues"
   },
-  "homepage": "https://github.com/agungdhewe/fgta5ent#readme",
+  "homepage": "https://github.com/agungdhewe/fgta5act#readme",
   "dependencies": {
     "connect-redis": "^9.0.0",
     "cors": "^2.8.5",
@@ -41,10 +41,11 @@
     "redis": "^5.5.6",
     "serve-favicon": "^2.5.0",
     "ws": "^8.18.3"
-  },
+ },
   "devDependencies": {
     "@agung_dhewe/pgsqlc": "file:../../agungdhewe/pgsqlc",
     "@agung_dhewe/webapps": "file:../../agungdhewe/webapps",
-    "dotenv": "^17.1.0"
+    "rollup": "^4.46.2",
+    "@rollup/plugin-terser": "0.4.4"    
   }
 }

@@ -11,7 +11,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const webapp = createWebApplication()
-const appName = 'development'
+const appName = 'act'
 
 
 main()
@@ -40,9 +40,14 @@ async function main() {
 	const router = createRouter()
 
 
+	// ambil setting system
+	const applicationSetting = await getApplicationSetting()
+
+
 	// variabel local konfigurasi yang bisa diakses dari api/router
 	const appConfig = {
 		...createDefaultAppConfig(),
+		...applicationSetting,
 		...{
 			appName, 
 			fgta5jsDebugMode, 
@@ -70,10 +75,30 @@ async function main() {
 		port,
 		startingMessage,
 		appConfig,
-		router
+		router,
+		allowedOrigins: [
+			'http://localhost:3000',
+			/^https:\/\/.*\.transfashion\.id$/
+		]		
 	})
 }
 
+
+async function getApplicationSetting() {
+	const setting = {}
+	try {
+		const sql = 'select setting_id, setting_value from core.setting'
+		const rows = await db.any(sql);
+		for (var row of rows) {
+			const setting_id = row.setting_id
+			const setting_value = row.setting_value
+			setting[setting_id] = setting_value
+		}
+		return setting
+	} catch (err) {
+		throw err
+	}
+}
 
 function createRouter() {
 	const router = express.Router()
