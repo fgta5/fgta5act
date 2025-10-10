@@ -1,41 +1,36 @@
-import Context from './periode-context.mjs'
-import * as Extender from './periode-ext.mjs'
+import Context from './taxtype-context.mjs'
+import * as Extender from './taxtype-ext.mjs'
 import * as pageHelper from '/public/libs/webmodule/pagehelper.mjs'
 
 const CurrentState = {}
 const Crsl =  Context.Crsl
-const CurrentSectionId = Context.Sections.periodeHeaderEdit
+const CurrentSectionId = Context.Sections.taxtypeHeaderEdit
 const CurrentSection = Crsl.Items[CurrentSectionId]
 const Source = Context.Source
 
 
-const TitleWhenNew = 'New Periode'
-const TitleWhenView = 'View Periode'
-const TitleWhenEdit = 'Edit Periode'
+const TitleWhenNew = 'New Tax Type'
+const TitleWhenView = 'View Tax Type'
+const TitleWhenEdit = 'Edit Tax Type'
 const EditModeText = 'Edit'
 const LockModeText = 'Lock'
 
-const btn_edit = new $fgta5.ActionButton('periodeHeaderEdit-btn_edit')
-const btn_save = new $fgta5.ActionButton('periodeHeaderEdit-btn_save')
-const btn_new = new $fgta5.ActionButton('periodeHeaderEdit-btn_new', 'periodeHeader-new')
-const btn_del = new $fgta5.ActionButton('periodeHeaderEdit-btn_delete')
-const btn_reset = new $fgta5.ActionButton('periodeHeaderEdit-btn_reset')
-const btn_prev = new $fgta5.ActionButton('periodeHeaderEdit-btn_prev')
-const btn_next = new $fgta5.ActionButton('periodeHeaderEdit-btn_next')
+const btn_edit = new $fgta5.ActionButton('taxtypeHeaderEdit-btn_edit')
+const btn_save = new $fgta5.ActionButton('taxtypeHeaderEdit-btn_save')
+const btn_new = new $fgta5.ActionButton('taxtypeHeaderEdit-btn_new', 'taxtypeHeader-new')
+const btn_del = new $fgta5.ActionButton('taxtypeHeaderEdit-btn_delete')
+const btn_reset = new $fgta5.ActionButton('taxtypeHeaderEdit-btn_reset')
+const btn_prev = new $fgta5.ActionButton('taxtypeHeaderEdit-btn_prev')
+const btn_next = new $fgta5.ActionButton('taxtypeHeaderEdit-btn_next')
 
-const btn_recordstatus = document.getElementById('periodeHeader-btn_recordstatus')
-const btn_logs = document.getElementById('periodeHeader-btn_logs')
-const btn_about = document.getElementById('periodeHeader-btn_about')
+const btn_recordstatus = document.getElementById('taxtypeHeader-btn_recordstatus')
+const btn_logs = document.getElementById('taxtypeHeader-btn_logs')
+const btn_about = document.getElementById('taxtypeHeader-btn_about')
 
-const frm = new $fgta5.Form('periodeHeaderEdit-frm');
-const obj_periode_id = frm.Inputs['periodeHeaderEdit-obj_periode_id']
-const obj_periode_name = frm.Inputs['periodeHeaderEdit-obj_periode_name']
-const obj_periode_year = frm.Inputs['periodeHeaderEdit-obj_periode_year']
-const obj_periode_month = frm.Inputs['periodeHeaderEdit-obj_periode_month']
-const obj_periode_start = frm.Inputs['periodeHeaderEdit-obj_periode_start']
-const obj_periode_end = frm.Inputs['periodeHeaderEdit-obj_periode_end']
-const obj_previous_periode_id = frm.Inputs['periodeHeaderEdit-obj_previous_periode_id']
-const obj_periode_isclosed = frm.Inputs['periodeHeaderEdit-obj_periode_isclosed']	
+const frm = new $fgta5.Form('taxtypeHeaderEdit-frm');
+const obj_taxtype_id = frm.Inputs['taxtypeHeaderEdit-obj_taxtype_id']
+const obj_coareport_name = frm.Inputs['taxtypeHeaderEdit-obj_coareport_name']
+const obj_taxtype_descr = frm.Inputs['taxtypeHeaderEdit-obj_taxtype_descr']	
 const obj_createby = document.getElementById('fRecord-section-createby')
 const obj_createdate = document.getElementById('fRecord-section-createdate')
 const obj_modifyby = document.getElementById('fRecord-section-modifyby')
@@ -45,7 +40,7 @@ const obj_modifydate = document.getElementById('fRecord-section-modifydate')
 export const Section = CurrentSection
 
 export async function init(self, args) {
-	console.log('initializing periodeHeaderEdit ...')
+	console.log('initializing taxtypeHeaderEdit ...')
 	
 
 	CurrentSection.addEventListener($fgta5.Section.EVT_BACKBUTTONCLICK, async (evt)=>{
@@ -87,7 +82,7 @@ export async function openSelectedData(self, params) {
 
 		CurrentState.currentOpenedId = id
 
-		const fn_iseditdisabled_name = 'periodeHeaderEdit_isEditDisabled'
+		const fn_iseditdisabled_name = 'taxtypeHeaderEdit_isEditDisabled'
 		const fn_iseditdisabled = Extender[fn_iseditdisabled_name]
 		if (typeof fn_iseditdisabled === 'function') {
 			const editDisabled = fn_iseditdisabled(self, data)
@@ -101,7 +96,7 @@ export async function openSelectedData(self, params) {
 		frm.acceptChanges()
 		frm.lock()
 
-		const fn_formopened_name = 'periodeHeaderEdit_formOpened'
+		const fn_formopened_name = 'taxtypeHeaderEdit_formOpened'
 		const fn_formopened = Extender[fn_formopened_name]
 		if (typeof fn_formopened === 'function') {
 			fn_formopened(self, frm, CurrentState)
@@ -234,7 +229,7 @@ async function backToList(self, evt) {
 
 	if (goback) {
 		frm.lock()
-		const listId =  Context.Sections.periodeHeaderList
+		const listId =  Context.Sections.taxtypeHeaderList
 		const listSection = Crsl.Items[listId]
 		listSection.show({direction: 1})
 	}
@@ -257,7 +252,7 @@ async function  frm_locked(self, evt) {
 
 	
 	// Extender untuk event locked
-	const fn_name = 'periodeHeaderEdit_formLocked'
+	const fn_name = 'taxtypeHeaderEdit_formLocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
 		fn(self, frm, CurrentState)
@@ -293,7 +288,7 @@ async function  frm_unlocked(self, evt) {
 
 
 	// Extender untuk event Unlocked
-	const fn_name = 'periodeHeaderEdit_formUnlocked'
+	const fn_name = 'taxtypeHeaderEdit_formUnlocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
 		fn(self, frm)
@@ -334,8 +329,8 @@ async function btn_new_click(self, evt) {
 	console.log('btn_new_click')
 	const sourceSection = evt.target.getAttribute('data-sectionsource') 
 
-	const periodeHeaderList = self.Modules.periodeHeaderList
-	const listsecid = periodeHeaderList.Section.Id
+	const taxtypeHeaderList = self.Modules.taxtypeHeaderList
+	const listsecid = taxtypeHeaderList.Section.Id
 	const fromListSection = sourceSection===listsecid
 	if (fromListSection) {
 		// klik new dari list (tidak perlu cek ada perubahan data)
@@ -364,20 +359,12 @@ async function btn_new_click(self, evt) {
 	try {
 
 		// inisiasi data baru
-		let datainit = {
-			periode_year: 0,
-		
-			periode_month: 0,
-		
-			periode_start: new Date(),
-		
-			periode_end: new Date(),
-		}
+		let datainit = {}
 
 
 		// jika perlu modifikasi data initial,
 		// atau dialog untuk opsi data baru, dapat dibuat di Extender
-		const fn_newdata_name = 'periodeHeaderEdit_newData'
+		const fn_newdata_name = 'taxtypeHeaderEdit_newData'
 		const fn_newdata = Extender[fn_newdata_name]
 		if (typeof fn_newdata === 'function') {
 			await fn_newdata(self, datainit, frm)
@@ -397,7 +384,7 @@ async function btn_new_click(self, evt) {
 		await $fgta5.MessageBox.error(err.message)
 		if (fromListSection) {
 			// jika saat tombol baru dipilih saat di list, tampilan kembalikan ke list
-			self.Modules.periodeHeaderList.Section.show()
+			self.Modules.taxtypeHeaderList.Section.show()
 		}
 	}
 }
@@ -407,7 +394,7 @@ async function btn_save_click(self, evt) {
 
 
 	// Extender Autofill
-	const fn_autofill_name = 'periodeHeaderEdit_autofill'
+	const fn_autofill_name = 'taxtypeHeaderEdit_autofill'
 	const fn_autofill = Extender[fn_autofill_name]
 	if (typeof fn_autofill === 'function') {
 		await fn_autofill(self, frm)
@@ -444,7 +431,7 @@ async function btn_save_click(self, evt) {
 	}
 
 	// Extender Saving
-	const fn_datasaving_name = 'periodeHeaderEdit_dataSaving'
+	const fn_datasaving_name = 'taxtypeHeaderEdit_dataSaving'
 	const fn_datasaving = Extender[fn_datasaving_name]
 	if (typeof fn_datasaving === 'function') {
 		await fn_datasaving(self, dataToSave, frm)
@@ -499,7 +486,7 @@ async function btn_save_click(self, evt) {
 
 
 		// Extender Saving
-		const fn_datasaved_name = 'periodeHeaderEdit_dataSaved'
+		const fn_datasaved_name = 'taxtypeHeaderEdit_dataSaved'
 		const fn_datasaved = Extender[fn_datasaved_name]
 		if (typeof fn_datasaved === 'function') {
 			await fn_datasaved(self, data, frm)
@@ -517,10 +504,10 @@ async function btn_save_click(self, evt) {
 
 			// buat baris baru di grid
 			console.log('tamabah baris baru di grid')
-			self.Modules.periodeHeaderList.addNewRow(self, data)
+			self.Modules.taxtypeHeaderList.addNewRow(self, data)
 		} else {
 			console.log('update data baris yang dibuka')
-			self.Modules.periodeHeaderList.updateCurrentRow(self, data)
+			self.Modules.taxtypeHeaderList.updateCurrentRow(self, data)
 		}
 
 	} catch (err) {
@@ -559,10 +546,10 @@ async function btn_del_click(self, evt) {
 		const result = await deleteData(self, idValue)
 		
 		// hapus current row yang dipilih di list
-		self.Modules.periodeHeaderList.removeCurrentRow(self)
+		self.Modules.taxtypeHeaderList.removeCurrentRow(self)
 		
 		// kembali ke list
-		self.Modules.periodeHeaderList.Section.show()
+		self.Modules.taxtypeHeaderList.Section.show()
 
 
 		// lock kembali form
@@ -607,12 +594,12 @@ async function btn_reset_click(self, evt) {
 
 async function btn_prev_click(self, evt) {
 	console.log('btn_prev_click')
-	self.Modules.periodeHeaderList.selectPreviousRow(self)
+	self.Modules.taxtypeHeaderList.selectPreviousRow(self)
 }
 
 async function btn_next_click(self, evt) {
 	console.log('btn_next_click')
-	self.Modules.periodeHeaderList.selectNextRow(self)
+	self.Modules.taxtypeHeaderList.selectNextRow(self)
 }
 
 
@@ -639,7 +626,7 @@ async function btn_recordstatus_click(self, evt) {
 			obj_modifyby.innerHTML = data._modifyby
 			obj_modifydate.innerHTML = data._modifydate
 
-			const fn_addrecordinfo_name = 'periodeHeaderEdit_addRecordInfo'
+			const fn_addrecordinfo_name = 'taxtypeHeaderEdit_addRecordInfo'
 			const fn_addrecordinfo = Extender[fn_addrecordinfo_name]
 			if (typeof fn_addrecordinfo === 'function') {
 				await fn_addrecordinfo(self, data)
@@ -674,7 +661,7 @@ async function btn_logs_click(self, evt) {
 			const url = `${Context.appsUrls.core.url}/logs/list`
 			const criteria = {
 				module: Context.moduleName,
-				table: 'act.periode',
+				table: 'act.taxtype',
 				id: id
 			}
 
@@ -704,7 +691,7 @@ async function btn_about_click(self, evt) {
 	pageHelper.openSection(self, 'fAbout-section', params, async ()=>{
 		
 		const AboutSection = Crsl.Items['fAbout-section']
-		AboutSection.Title = 'About Periode'
+		AboutSection.Title = 'About Tax Type'
 
 		const section = document.getElementById('fAbout-section')
 
@@ -712,7 +699,7 @@ async function btn_about_click(self, evt) {
 			const divDescr = document.createElement('div')
 			divDescr.setAttribute('id', 'fAbout-section-fdescr')
 			divDescr.setAttribute('style', 'padding: 0 0 10px 0')
-			divDescr.innerHTML = 'periode financial'
+			divDescr.innerHTML = 'Definisi Tipe Tax'
 			const divTopbar = section.querySelector('div[data-topbar]')
 			divTopbar.parentNode.insertBefore(divDescr, divTopbar.nextSibling);
 		}

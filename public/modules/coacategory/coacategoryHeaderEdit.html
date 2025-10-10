@@ -1,0 +1,80 @@
+<form id="coacategoryHeaderEdit-frm" class="module-form" locked="true" autoid="false" primarykey="coacategoryHeaderEdit-obj_coacategory_id">
+
+	<!-- Textbox: coacategory_id-->	
+	<div id="coacategoryHeaderEdit-obj_coacategory_id-container" class="input-field" field="coacategoryHeaderEdit-obj_coacategory_id">
+		<label for="coacategoryHeaderEdit-obj_coacategory_id">ID</label>
+		<input id="coacategoryHeaderEdit-obj_coacategory_id"  fgta5-component="Textbox" placeholder="id" autocomplete="off" spellcheck="false" 
+			binding="coacategory_id"
+			data-tabindex="1" 
+			required 
+			invalid-message-required="id harus diisi" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+
+
+	<!-- Textbox: coacategory_name-->	
+	<div id="coacategoryHeaderEdit-obj_coacategory_name-container" class="input-field" field="coacategoryHeaderEdit-obj_coacategory_name">
+		<label for="coacategoryHeaderEdit-obj_coacategory_name">Name</label>
+		<input id="coacategoryHeaderEdit-obj_coacategory_name"  fgta5-component="Textbox" placeholder="nama kategori coa" autocomplete="off" spellcheck="false" 
+			binding="coacategory_name"
+			data-tabindex="2" 
+			character-case="uppercase" 
+			required 
+			invalid-message-required="nama kategori coa harus diisi" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+
+
+	<!-- Textbox: coacategory_descr-->	
+	<div id="coacategoryHeaderEdit-obj_coacategory_descr-container" class="input-field" field="coacategoryHeaderEdit-obj_coacategory_descr">
+		<label for="coacategoryHeaderEdit-obj_coacategory_descr">Descr</label>
+		<input id="coacategoryHeaderEdit-obj_coacategory_descr"  fgta5-component="Textbox" placeholder="deskripsi" autocomplete="off" spellcheck="false" 
+			binding="coacategory_descr"
+			data-tabindex="3" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+	
+</form>
+
+
+<div id="panel-detil-selector" class="panel-detil hidden">
+	<div panel-title>
+		Information Detil
+	</div>
+	<div panel-content>
+
+		<div id="panel-detil-additionalinfo">
+			<!-- tambahkan additional info disini -->
+		</div>
+	</div>
+</div>
+ 
+
+<div class="panel-recordbar" data-view="nodetil">
+	<div><a id="coacategoryHeader-btn_recordstatus" href="javascript:void(0)" tabindex="-1">Record Status</a></div>
+	<div><a id="coacategoryHeader-btn_logs" href="javascript:void(0)" tabindex="-1">Logs</a></div>
+	<div><a id="coacategoryHeader-btn_about" href="javascript:void(0)" tabindex="-1">About</a></div>
+</div>
+
+
+<div class="footer-buttons-container hidden">
+	<div>
+		<button id="coacategoryHeaderEdit-btn_prev"><span>&laquo;&laquo;</span></button>
+	</div>
+	<div>
+		<button id="coacategoryHeaderEdit-btn_save">Save</button>
+		<button id="coacategoryHeaderEdit-btn_edit">Edit</button>
+		<button id="coacategoryHeaderEdit-btn_new" data-action="coacategoryHeader-new">New</button>
+		<button id="coacategoryHeaderEdit-btn_reset">Reset</button>
+		<button id="coacategoryHeaderEdit-btn_delete">Delete</button>
+	</div>
+	<div>
+		<button id="coacategoryHeaderEdit-btn_next"><span>&raquo;&raquo;</span></button>
+	</div>
+</div>

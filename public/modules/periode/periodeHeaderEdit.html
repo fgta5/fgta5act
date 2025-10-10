@@ -5,6 +5,7 @@
 		<label for="periodeHeaderEdit-obj_periode_id">ID</label>
 		<input id="periodeHeaderEdit-obj_periode_id"  fgta5-component="Textbox" placeholder="[auto]" autocomplete="off" spellcheck="false" 
 			binding="periode_id"
+			data-tabindex="1" 
 			autocomplete="off" spellcheck="false" 
 			maxlength="4" 
 			disabled 
@@ -17,6 +18,7 @@
 		<label for="periodeHeaderEdit-obj_periode_name">Name</label>
 		<input id="periodeHeaderEdit-obj_periode_name"  fgta5-component="Textbox" placeholder="[auto]" autocomplete="off" spellcheck="false" 
 			binding="periode_name"
+			data-tabindex="2" 
 			required 
 			invalid-message-required="nama periode harus diisi" 
 			autocomplete="off" spellcheck="false" 
@@ -32,6 +34,7 @@
 		<input id="periodeHeaderEdit-obj_periode_year"  fgta5-component="Numberbox" placeholder="year" autocomplete="off" spellcheck="false" 
 			binding="periode_year"
 			value="0" 
+			data-tabindex="3" 
 			style="width: 60px" 
 			maxlength="4" 
 			min="2020" 
@@ -49,6 +52,7 @@
 		<input id="periodeHeaderEdit-obj_periode_month"  fgta5-component="Numberbox" placeholder="month" autocomplete="off" spellcheck="false" 
 			binding="periode_month"
 			value="0" 
+			data-tabindex="4" 
 			style="width: 40px" 
 			maxlength="2" 
 			min="1" 
@@ -65,6 +69,7 @@
 		<label for="periodeHeaderEdit-obj_periode_start">Start</label>
 		<input id="periodeHeaderEdit-obj_periode_start"  fgta5-component="Datepicker" placeholder="start" autocomplete="off" spellcheck="false" 
 			binding="periode_start"
+			data-tabindex="5" 
 			disabled 
 		>
 	</div>
@@ -75,6 +80,7 @@
 		<label for="periodeHeaderEdit-obj_periode_end">End</label>
 		<input id="periodeHeaderEdit-obj_periode_end"  fgta5-component="Datepicker" placeholder="periode_end" autocomplete="off" spellcheck="false" 
 			binding="periode_end"
+			data-tabindex="6" 
 			disabled 
 		>
 	</div>
@@ -85,6 +91,7 @@
 		<label for="periodeHeaderEdit-obj_previous_periode_id">Previous</label>
 		<input id="periodeHeaderEdit-obj_previous_periode_id"  fgta5-component="Textbox" placeholder="previous periode" autocomplete="off" spellcheck="false" 
 			binding="previous_periode_id"
+			data-tabindex="7" 
 			required 
 			invalid-message-required="previous periode harus diisi" 
 			autocomplete="off" spellcheck="false" 
@@ -99,6 +106,7 @@
 		<label for="periodeHeaderEdit-obj_periode_isclosed">Closed</label>
 		<input id="periodeHeaderEdit-obj_periode_isclosed"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
 			binding="periode_isclosed"
+			data-tabindex="8" 
 			type="checkbox" 
 			disabled 
 		>
@@ -121,9 +129,9 @@
  
 
 <div class="panel-recordbar" data-view="nodetil">
-	<div><a id="periodeHeader-btn_recordstatus" href="javascript:void(0)">Record Status</a></div>
-	<div><a id="periodeHeader-btn_logs" href="javascript:void(0)">Logs</a></div>
-	<div><a id="periodeHeader-btn_about" href="javascript:void(0)">About</a></div>
+	<div><a id="periodeHeader-btn_recordstatus" href="javascript:void(0)" tabindex="-1">Record Status</a></div>
+	<div><a id="periodeHeader-btn_logs" href="javascript:void(0)" tabindex="-1">Logs</a></div>
+	<div><a id="periodeHeader-btn_about" href="javascript:void(0)" tabindex="-1">About</a></div>
 </div>
 
 

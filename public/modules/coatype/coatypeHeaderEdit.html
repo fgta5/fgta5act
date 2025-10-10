@@ -1,0 +1,80 @@
+<form id="coatypeHeaderEdit-frm" class="module-form" locked="true" autoid="false" primarykey="coatypeHeaderEdit-obj_coatype_id">
+
+	<!-- Textbox: coatype_id-->	
+	<div id="coatypeHeaderEdit-obj_coatype_id-container" class="input-field" field="coatypeHeaderEdit-obj_coatype_id">
+		<label for="coatypeHeaderEdit-obj_coatype_id">ID</label>
+		<input id="coatypeHeaderEdit-obj_coatype_id"  fgta5-component="Textbox" placeholder="id" autocomplete="off" spellcheck="false" 
+			binding="coatype_id"
+			data-tabindex="1" 
+			required 
+			invalid-message-required="tipe coa harus diisi" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+
+
+	<!-- Textbox: coatype_name-->	
+	<div id="coatypeHeaderEdit-obj_coatype_name-container" class="input-field" field="coatypeHeaderEdit-obj_coatype_name">
+		<label for="coatypeHeaderEdit-obj_coatype_name">Name</label>
+		<input id="coatypeHeaderEdit-obj_coatype_name"  fgta5-component="Textbox" placeholder="nama tipe coa" autocomplete="off" spellcheck="false" 
+			binding="coatype_name"
+			data-tabindex="2" 
+			character-case="uppercase" 
+			required 
+			invalid-message-required="nama harus diisi" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="10" 
+		>
+	</div>
+
+
+	<!-- Textbox: coatype_descr-->	
+	<div id="coatypeHeaderEdit-obj_coatype_descr-container" class="input-field" field="coatypeHeaderEdit-obj_coatype_descr">
+		<label for="coatypeHeaderEdit-obj_coatype_descr">Descr</label>
+		<input id="coatypeHeaderEdit-obj_coatype_descr"  fgta5-component="Textbox" placeholder="descr" autocomplete="off" spellcheck="false" 
+			binding="coatype_descr"
+			data-tabindex="3" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+	
+</form>
+
+
+<div id="panel-detil-selector" class="panel-detil hidden">
+	<div panel-title>
+		Information Detil
+	</div>
+	<div panel-content>
+
+		<div id="panel-detil-additionalinfo">
+			<!-- tambahkan additional info disini -->
+		</div>
+	</div>
+</div>
+ 
+
+<div class="panel-recordbar" data-view="nodetil">
+	<div><a id="coatypeHeader-btn_recordstatus" href="javascript:void(0)" tabindex="-1">Record Status</a></div>
+	<div><a id="coatypeHeader-btn_logs" href="javascript:void(0)" tabindex="-1">Logs</a></div>
+	<div><a id="coatypeHeader-btn_about" href="javascript:void(0)" tabindex="-1">About</a></div>
+</div>
+
+
+<div class="footer-buttons-container hidden">
+	<div>
+		<button id="coatypeHeaderEdit-btn_prev"><span>&laquo;&laquo;</span></button>
+	</div>
+	<div>
+		<button id="coatypeHeaderEdit-btn_save">Save</button>
+		<button id="coatypeHeaderEdit-btn_edit">Edit</button>
+		<button id="coatypeHeaderEdit-btn_new" data-action="coatypeHeader-new">New</button>
+		<button id="coatypeHeaderEdit-btn_reset">Reset</button>
+		<button id="coatypeHeaderEdit-btn_delete">Delete</button>
+	</div>
+	<div>
+		<button id="coatypeHeaderEdit-btn_next"><span>&raquo;&raquo;</span></button>
+	</div>
+</div>

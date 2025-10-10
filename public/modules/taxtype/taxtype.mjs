@@ -1,7 +1,7 @@
-import Context from './periode-context.mjs'  
-import * as periodeHeaderList from './periodeHeaderList.mjs' 
-import * as periodeHeaderEdit from './periodeHeaderEdit.mjs' 
-import * as Extender from './periode-ext.mjs'
+import Context from './taxtype-context.mjs'  
+import * as taxtypeHeaderList from './taxtypeHeaderList.mjs' 
+import * as taxtypeHeaderEdit from './taxtypeHeaderEdit.mjs' 
+import * as Extender from './taxtype-ext.mjs'
 
 const app = Context.app
 const Crsl = Context.Crsl
@@ -15,7 +15,7 @@ export default class extends Module {
 	async main(args={}) {
 		
 		console.log('initializing module...')
-		app.setTitle('Periode')
+		app.setTitle('Tax Type')
 		app.showFooter(true)
 		
 		args.autoLoadGridData = true
@@ -26,8 +26,8 @@ export default class extends Module {
 		// jangan import lagi module-module ini di dalam mjs tersebut
 		// karena akan terjadi cyclic redudancy pada saat di rollup
 		self.Modules = { 
-			periodeHeaderList, 
-			periodeHeaderEdit, 
+			taxtypeHeaderList, 
+			taxtypeHeaderEdit, 
 		}
 
 		try {
@@ -46,8 +46,8 @@ export default class extends Module {
 			} 
 
 			await Promise.all([ 
-				periodeHeaderList.init(self, args), 
-				periodeHeaderEdit.init(self, args), 
+				taxtypeHeaderList.init(self, args), 
+				taxtypeHeaderEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -59,7 +59,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['periodeHeaderEdit']
+			const modNameList = ['taxtypeHeaderEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false
@@ -150,7 +150,7 @@ async function render(self) {
 		});
 
 		
-		// periode-ext.mjs, export function extendPage(self) {} 
+		// taxtype-ext.mjs, export function extendPage(self) {} 
 		const fn_name = 'extendPage'
 		const fn_extendPage = Extender[fn_name]
 		if (typeof fn_extendPage === 'function') {

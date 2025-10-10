@@ -1,41 +1,41 @@
-import Context from './periode-context.mjs'
-import * as Extender from './periode-ext.mjs'
+import Context from './coagroup-context.mjs'
+import * as Extender from './coagroup-ext.mjs'
 import * as pageHelper from '/public/libs/webmodule/pagehelper.mjs'
 
 const CurrentState = {}
 const Crsl =  Context.Crsl
-const CurrentSectionId = Context.Sections.periodeHeaderEdit
+const CurrentSectionId = Context.Sections.coagroupHeaderEdit
 const CurrentSection = Crsl.Items[CurrentSectionId]
 const Source = Context.Source
 
 
-const TitleWhenNew = 'New Periode'
-const TitleWhenView = 'View Periode'
-const TitleWhenEdit = 'Edit Periode'
+const TitleWhenNew = 'New Coa Group'
+const TitleWhenView = 'View Coa Group'
+const TitleWhenEdit = 'Edit Coa Group'
 const EditModeText = 'Edit'
 const LockModeText = 'Lock'
 
-const btn_edit = new $fgta5.ActionButton('periodeHeaderEdit-btn_edit')
-const btn_save = new $fgta5.ActionButton('periodeHeaderEdit-btn_save')
-const btn_new = new $fgta5.ActionButton('periodeHeaderEdit-btn_new', 'periodeHeader-new')
-const btn_del = new $fgta5.ActionButton('periodeHeaderEdit-btn_delete')
-const btn_reset = new $fgta5.ActionButton('periodeHeaderEdit-btn_reset')
-const btn_prev = new $fgta5.ActionButton('periodeHeaderEdit-btn_prev')
-const btn_next = new $fgta5.ActionButton('periodeHeaderEdit-btn_next')
+const btn_edit = new $fgta5.ActionButton('coagroupHeaderEdit-btn_edit')
+const btn_save = new $fgta5.ActionButton('coagroupHeaderEdit-btn_save')
+const btn_new = new $fgta5.ActionButton('coagroupHeaderEdit-btn_new', 'coagroupHeader-new')
+const btn_del = new $fgta5.ActionButton('coagroupHeaderEdit-btn_delete')
+const btn_reset = new $fgta5.ActionButton('coagroupHeaderEdit-btn_reset')
+const btn_prev = new $fgta5.ActionButton('coagroupHeaderEdit-btn_prev')
+const btn_next = new $fgta5.ActionButton('coagroupHeaderEdit-btn_next')
 
-const btn_recordstatus = document.getElementById('periodeHeader-btn_recordstatus')
-const btn_logs = document.getElementById('periodeHeader-btn_logs')
-const btn_about = document.getElementById('periodeHeader-btn_about')
+const btn_recordstatus = document.getElementById('coagroupHeader-btn_recordstatus')
+const btn_logs = document.getElementById('coagroupHeader-btn_logs')
+const btn_about = document.getElementById('coagroupHeader-btn_about')
 
-const frm = new $fgta5.Form('periodeHeaderEdit-frm');
-const obj_periode_id = frm.Inputs['periodeHeaderEdit-obj_periode_id']
-const obj_periode_name = frm.Inputs['periodeHeaderEdit-obj_periode_name']
-const obj_periode_year = frm.Inputs['periodeHeaderEdit-obj_periode_year']
-const obj_periode_month = frm.Inputs['periodeHeaderEdit-obj_periode_month']
-const obj_periode_start = frm.Inputs['periodeHeaderEdit-obj_periode_start']
-const obj_periode_end = frm.Inputs['periodeHeaderEdit-obj_periode_end']
-const obj_previous_periode_id = frm.Inputs['periodeHeaderEdit-obj_previous_periode_id']
-const obj_periode_isclosed = frm.Inputs['periodeHeaderEdit-obj_periode_isclosed']	
+const frm = new $fgta5.Form('coagroupHeaderEdit-frm');
+const obj_coagroup_id = frm.Inputs['coagroupHeaderEdit-obj_coagroup_id']
+const obj_coagroup_name = frm.Inputs['coagroupHeaderEdit-obj_coagroup_name']
+const obj_coagroup_descr = frm.Inputs['coagroupHeaderEdit-obj_coagroup_descr']
+const obj_coagroup_isparent = frm.Inputs['coagroupHeaderEdit-obj_coagroup_isparent']
+const obj_coagroup_parent = frm.Inputs['coagroupHeaderEdit-obj_coagroup_parent']
+const obj_coagrou_pathid = frm.Inputs['coagroupHeaderEdit-obj_coagrou_pathid']
+const obj_coagroup_path = frm.Inputs['coagroupHeaderEdit-obj_coagroup_path']
+const obj_coagroup_level = frm.Inputs['coagroupHeaderEdit-obj_coagroup_level']	
 const obj_createby = document.getElementById('fRecord-section-createby')
 const obj_createdate = document.getElementById('fRecord-section-createdate')
 const obj_modifyby = document.getElementById('fRecord-section-modifyby')
@@ -45,7 +45,7 @@ const obj_modifydate = document.getElementById('fRecord-section-modifydate')
 export const Section = CurrentSection
 
 export async function init(self, args) {
-	console.log('initializing periodeHeaderEdit ...')
+	console.log('initializing coagroupHeaderEdit ...')
 	
 
 	CurrentSection.addEventListener($fgta5.Section.EVT_BACKBUTTONCLICK, async (evt)=>{
@@ -70,6 +70,54 @@ export async function init(self, args) {
 	btn_about.addEventListener('click', evt=>{ btn_about_click(self, evt) })
 
 
+	
+	// Combobox: obj_coagroup_parent
+	obj_coagroup_parent.addEventListener('selecting', async (evt)=>{
+		const fn_selecting_name = 'obj_coagroup_parent_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_coagroup_parent_selecting(self, obj_coagroup_parent, frm, evt)
+			fn_selecting(self, obj_coagroup_parent, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = `${Context.appsUrls.act.url}/coagroup/header-list`
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			const fn_selecting_criteria_name = 'obj_coagroup_parent_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_coagroup_parent, criteria)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(url, {
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.coagroup_id, row.coagroup_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
 		
 	
 }
@@ -79,6 +127,7 @@ export async function openSelectedData(self, params) {
 
 	let mask = $fgta5.Modal.createMask()
 	try {
+		obj_coagroup_parent.clear()
 					
 		const id = params.keyvalue
 		const data = await openData(self, id)
@@ -87,7 +136,7 @@ export async function openSelectedData(self, params) {
 
 		CurrentState.currentOpenedId = id
 
-		const fn_iseditdisabled_name = 'periodeHeaderEdit_isEditDisabled'
+		const fn_iseditdisabled_name = 'coagroupHeaderEdit_isEditDisabled'
 		const fn_iseditdisabled = Extender[fn_iseditdisabled_name]
 		if (typeof fn_iseditdisabled === 'function') {
 			const editDisabled = fn_iseditdisabled(self, data)
@@ -101,7 +150,7 @@ export async function openSelectedData(self, params) {
 		frm.acceptChanges()
 		frm.lock()
 
-		const fn_formopened_name = 'periodeHeaderEdit_formOpened'
+		const fn_formopened_name = 'coagroupHeaderEdit_formOpened'
 		const fn_formopened = Extender[fn_formopened_name]
 		if (typeof fn_formopened === 'function') {
 			fn_formopened(self, frm, CurrentState)
@@ -234,7 +283,7 @@ async function backToList(self, evt) {
 
 	if (goback) {
 		frm.lock()
-		const listId =  Context.Sections.periodeHeaderList
+		const listId =  Context.Sections.coagroupHeaderList
 		const listSection = Crsl.Items[listId]
 		listSection.show({direction: 1})
 	}
@@ -257,7 +306,7 @@ async function  frm_locked(self, evt) {
 
 	
 	// Extender untuk event locked
-	const fn_name = 'periodeHeaderEdit_formLocked'
+	const fn_name = 'coagroupHeaderEdit_formLocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
 		fn(self, frm, CurrentState)
@@ -293,7 +342,7 @@ async function  frm_unlocked(self, evt) {
 
 
 	// Extender untuk event Unlocked
-	const fn_name = 'periodeHeaderEdit_formUnlocked'
+	const fn_name = 'coagroupHeaderEdit_formUnlocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
 		fn(self, frm)
@@ -334,8 +383,8 @@ async function btn_new_click(self, evt) {
 	console.log('btn_new_click')
 	const sourceSection = evt.target.getAttribute('data-sectionsource') 
 
-	const periodeHeaderList = self.Modules.periodeHeaderList
-	const listsecid = periodeHeaderList.Section.Id
+	const coagroupHeaderList = self.Modules.coagroupHeaderList
+	const listsecid = coagroupHeaderList.Section.Id
 	const fromListSection = sourceSection===listsecid
 	if (fromListSection) {
 		// klik new dari list (tidak perlu cek ada perubahan data)
@@ -365,19 +414,13 @@ async function btn_new_click(self, evt) {
 
 		// inisiasi data baru
 		let datainit = {
-			periode_year: 0,
-		
-			periode_month: 0,
-		
-			periode_start: new Date(),
-		
-			periode_end: new Date(),
+			coagroup_level: 0,
 		}
 
 
 		// jika perlu modifikasi data initial,
 		// atau dialog untuk opsi data baru, dapat dibuat di Extender
-		const fn_newdata_name = 'periodeHeaderEdit_newData'
+		const fn_newdata_name = 'coagroupHeaderEdit_newData'
 		const fn_newdata = Extender[fn_newdata_name]
 		if (typeof fn_newdata === 'function') {
 			await fn_newdata(self, datainit, frm)
@@ -397,7 +440,7 @@ async function btn_new_click(self, evt) {
 		await $fgta5.MessageBox.error(err.message)
 		if (fromListSection) {
 			// jika saat tombol baru dipilih saat di list, tampilan kembalikan ke list
-			self.Modules.periodeHeaderList.Section.show()
+			self.Modules.coagroupHeaderList.Section.show()
 		}
 	}
 }
@@ -407,7 +450,7 @@ async function btn_save_click(self, evt) {
 
 
 	// Extender Autofill
-	const fn_autofill_name = 'periodeHeaderEdit_autofill'
+	const fn_autofill_name = 'coagroupHeaderEdit_autofill'
 	const fn_autofill = Extender[fn_autofill_name]
 	if (typeof fn_autofill === 'function') {
 		await fn_autofill(self, frm)
@@ -444,7 +487,7 @@ async function btn_save_click(self, evt) {
 	}
 
 	// Extender Saving
-	const fn_datasaving_name = 'periodeHeaderEdit_dataSaving'
+	const fn_datasaving_name = 'coagroupHeaderEdit_dataSaving'
 	const fn_datasaving = Extender[fn_datasaving_name]
 	if (typeof fn_datasaving === 'function') {
 		await fn_datasaving(self, dataToSave, frm)
@@ -499,7 +542,7 @@ async function btn_save_click(self, evt) {
 
 
 		// Extender Saving
-		const fn_datasaved_name = 'periodeHeaderEdit_dataSaved'
+		const fn_datasaved_name = 'coagroupHeaderEdit_dataSaved'
 		const fn_datasaved = Extender[fn_datasaved_name]
 		if (typeof fn_datasaved === 'function') {
 			await fn_datasaved(self, data, frm)
@@ -517,10 +560,10 @@ async function btn_save_click(self, evt) {
 
 			// buat baris baru di grid
 			console.log('tamabah baris baru di grid')
-			self.Modules.periodeHeaderList.addNewRow(self, data)
+			self.Modules.coagroupHeaderList.addNewRow(self, data)
 		} else {
 			console.log('update data baris yang dibuka')
-			self.Modules.periodeHeaderList.updateCurrentRow(self, data)
+			self.Modules.coagroupHeaderList.updateCurrentRow(self, data)
 		}
 
 	} catch (err) {
@@ -559,10 +602,10 @@ async function btn_del_click(self, evt) {
 		const result = await deleteData(self, idValue)
 		
 		// hapus current row yang dipilih di list
-		self.Modules.periodeHeaderList.removeCurrentRow(self)
+		self.Modules.coagroupHeaderList.removeCurrentRow(self)
 		
 		// kembali ke list
-		self.Modules.periodeHeaderList.Section.show()
+		self.Modules.coagroupHeaderList.Section.show()
 
 
 		// lock kembali form
@@ -607,12 +650,12 @@ async function btn_reset_click(self, evt) {
 
 async function btn_prev_click(self, evt) {
 	console.log('btn_prev_click')
-	self.Modules.periodeHeaderList.selectPreviousRow(self)
+	self.Modules.coagroupHeaderList.selectPreviousRow(self)
 }
 
 async function btn_next_click(self, evt) {
 	console.log('btn_next_click')
-	self.Modules.periodeHeaderList.selectNextRow(self)
+	self.Modules.coagroupHeaderList.selectNextRow(self)
 }
 
 
@@ -639,7 +682,7 @@ async function btn_recordstatus_click(self, evt) {
 			obj_modifyby.innerHTML = data._modifyby
 			obj_modifydate.innerHTML = data._modifydate
 
-			const fn_addrecordinfo_name = 'periodeHeaderEdit_addRecordInfo'
+			const fn_addrecordinfo_name = 'coagroupHeaderEdit_addRecordInfo'
 			const fn_addrecordinfo = Extender[fn_addrecordinfo_name]
 			if (typeof fn_addrecordinfo === 'function') {
 				await fn_addrecordinfo(self, data)
@@ -674,7 +717,7 @@ async function btn_logs_click(self, evt) {
 			const url = `${Context.appsUrls.core.url}/logs/list`
 			const criteria = {
 				module: Context.moduleName,
-				table: 'act.periode',
+				table: 'act.coagroup',
 				id: id
 			}
 
@@ -704,7 +747,7 @@ async function btn_about_click(self, evt) {
 	pageHelper.openSection(self, 'fAbout-section', params, async ()=>{
 		
 		const AboutSection = Crsl.Items['fAbout-section']
-		AboutSection.Title = 'About Periode'
+		AboutSection.Title = 'About Coa Group'
 
 		const section = document.getElementById('fAbout-section')
 
@@ -712,7 +755,7 @@ async function btn_about_click(self, evt) {
 			const divDescr = document.createElement('div')
 			divDescr.setAttribute('id', 'fAbout-section-fdescr')
 			divDescr.setAttribute('style', 'padding: 0 0 10px 0')
-			divDescr.innerHTML = 'periode financial'
+			divDescr.innerHTML = 'grouping coa secara hierarkial'
 			const divTopbar = section.querySelector('div[data-topbar]')
 			divTopbar.parentNode.insertBefore(divDescr, divTopbar.nextSibling);
 		}

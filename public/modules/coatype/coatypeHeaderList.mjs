@@ -1,21 +1,21 @@
-import Context from './periode-context.mjs'
-import * as Extender from './periode-ext.mjs'
+import Context from './coatype-context.mjs'
+import * as Extender from './coatype-ext.mjs'
 
 
 const Crsl =  Context.Crsl
-const CurrentSectionId = Context.Sections.periodeHeaderList
+const CurrentSectionId = Context.Sections.coatypeHeaderList
 const CurrentSection = Crsl.Items[CurrentSectionId]
 const CurrentState = {}
 
-const tbl =  new $fgta5.Gridview('periodeHeaderList-tbl')
-const pnl_search = document.getElementById('periodeHeaderList-pnl_search')
-const btn_gridload = new $fgta5.ActionButton('periodeHeaderList-btn_gridload') 
+const tbl =  new $fgta5.Gridview('coatypeHeaderList-tbl')
+const pnl_search = document.getElementById('coatypeHeaderList-pnl_search')
+const btn_gridload = new $fgta5.ActionButton('coatypeHeaderList-btn_gridload') 
 
 export const Section = CurrentSection
 export const SearchParams = {}
 
 export async function init(self, args) {
-	console.log('initializing periodeHeaderList ...')
+	console.log('initializing coatypeHeaderList ...')
 
 	// add event listener
 	tbl.addEventListener('nextdata', async evt=>{ tbl_nextdata(self, evt) })
@@ -57,8 +57,8 @@ export async function init(self, args) {
 		}
 
 		// saat user ketik tombol enter di text search, lakukan load data
-		const obj_searchtext = document.getElementById('periodeHeaderList-txt_searchtext')
-		const btn_load = document.getElementById('periodeHeaderList-btn_gridload')
+		const obj_searchtext = document.getElementById('coatypeHeaderList-txt_searchtext')
+		const btn_load = document.getElementById('coatypeHeaderList-btn_gridload')
 		obj_searchtext.addEventListener('keydown', (evt)=>{
 			if (evt.key.toLowerCase()=='enter') {
 				evt.stopPropagation()
@@ -68,7 +68,7 @@ export async function init(self, args) {
 		})
 
 
-		// periodeHeaderList-ext.mjs, export function initSearchParams(self, SearchParams) {} 
+		// coatypeHeaderList-ext.mjs, export function initSearchParams(self, SearchParams) {} 
 		const fn_initSearchParams_name = 'headerList_initSearchParams'
 		const fn_initSearchParams = Extender[fn_initSearchParams_name]
 		if (typeof fn_initSearchParams === 'function') {
@@ -163,15 +163,15 @@ export function keyboardAction(self, actionName, evt) {
 	} else if (actionName=='down') {
 		tbl.nextRecord()
 	} else if (actionName=='enter') {
-		const periodeHeaderEdit = self.Modules.periodeHeaderEdit
-		periodeHeaderEdit.Section.show({}, ()=>{
+		const coatypeHeaderEdit = self.Modules.coatypeHeaderEdit
+		coatypeHeaderEdit.Section.show({}, ()=>{
 			openRow(self, tbl.CurrentRow)
 		})		
 	} else if (actionName=='typing') {
 		evt.preventDefault();
 		evt.stopPropagation();
 
-		const obj_searchtext = document.getElementById('periodeHeaderList-txt_searchtext')
+		const obj_searchtext = document.getElementById('coatypeHeaderList-txt_searchtext')
 		const key = evt.key
 		obj_searchtext.focus()
 		if (key=='Backspace') {
@@ -193,14 +193,14 @@ async function openRow(self, tr) {
 	const keyvalue = tr.getAttribute('keyvalue')
 	const key = tr.getAttribute('key')
 
-	const periodeHeaderEdit = self.Modules.periodeHeaderEdit
-	periodeHeaderEdit.clearForm(self, 'loading...')
+	const coatypeHeaderEdit = self.Modules.coatypeHeaderEdit
+	coatypeHeaderEdit.clearForm(self, 'loading...')
 
 	try {
 		setCurrentRow(self, tr)
 		CurrentState.SelectedRow.keyValue = keyvalue
 		CurrentState.SelectedRow.key = key
-		await periodeHeaderEdit.openSelectedData(self, {key:key, keyvalue:keyvalue})
+		await coatypeHeaderEdit.openSelectedData(self, {key:key, keyvalue:keyvalue})
 	} catch (err) {
 		console.error(err)
 		await $fgta5.MessageBox.error(err.message)
@@ -211,7 +211,7 @@ async function openRow(self, tr) {
 
 
 	// matikan atau nyalakan button prev/next sesuai kondisi
-	setPagingButton(self, periodeHeaderEdit)
+	setPagingButton(self, coatypeHeaderEdit)
 }
 
 async function listRows(self, criteria, offset,limit, sort) {
@@ -251,8 +251,8 @@ function tbl_sorting(self, evt) {
 function tbl_cellclick(self, evt) {
 	const tr = evt.detail.tr
 
-	const periodeHeaderEdit = self.Modules.periodeHeaderEdit
-	periodeHeaderEdit.Section.show({}, (evt)=>{
+	const coatypeHeaderEdit = self.Modules.coatypeHeaderEdit
+	coatypeHeaderEdit.Section.show({}, (evt)=>{
 		openRow(self, tr)
 	})
 
@@ -260,7 +260,7 @@ function tbl_cellclick(self, evt) {
 }
 
 async function tbl_loadData(self, params={}) {
-	console.log('loading periodeHeader data')
+	console.log('loading coatypeHeader data')
 	console.log(params)
 
 	const { criteria={}, limit=0, offset=0, sort={} } = params
