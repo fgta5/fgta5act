@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'node:url';
 import * as path from 'node:path';
 import { createWebApplication, createDefaultAppConfig } from '@agung_dhewe/webapps'
+import { getApplicationSetting, authorizeRequest } from '@agung_dhewe/webapps/src/startup.js'
 import db from '@agung_dhewe/webapps/src/db.js'
 
 
@@ -11,7 +12,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const webapp = createWebApplication()
-const appName = 'act'
+const appName =  process.env.APPNAME
 
 
 main()
@@ -19,7 +20,7 @@ main()
 
 async function main() {
 	const port = process.env.PORT || webapp.defaultPort;
-	const startingMessage = `Starting ${appName} module on port \x1b[32m${port}\x1b[0m`
+	const startingMessage = `Starting \x1b[1m\x1b[93m${appName}\x1b[0m module on port \x1b[32m${port}\x1b[0m`
 	
 	// Baca Data Dari Konfigurasi
 	const redisUrl = process.env.REDIS_URL
@@ -41,7 +42,7 @@ async function main() {
 
 
 	// ambil setting system
-	const applicationSetting = await getApplicationSetting()
+	const applicationSetting = await getApplicationSetting(db)
 
 
 	// variabel local konfigurasi yang bisa diakses dari api/router
@@ -67,7 +68,7 @@ async function main() {
 		}
 	} 
 	
-	console.log('running configuration', appConfig)
+	// console.log('running configuration', appConfig)
 
 	const rootDir = path.join(__dirname, '..')
 	webapp.setRootDirectory(rootDir)
@@ -79,33 +80,17 @@ async function main() {
 		allowedOrigins: [
 			'http://localhost:3000',
 			/^https:\/\/.*\.transfashion\.id$/
-		]		
+		],
+		fnParseModuleRequest: async (req)=>{
+			await authorizeRequest(db, req)
+		}				
 	})
-}
-
-
-async function getApplicationSetting() {
-	const setting = {}
-	try {
-		const sql = 'select setting_id, setting_value from core.setting'
-		const rows = await db.any(sql);
-		for (var row of rows) {
-			const setting_id = row.setting_id
-			const setting_value = row.setting_value
-			setting[setting_id] = setting_value
-		}
-		return setting
-	} catch (err) {
-		throw err
-	}
 }
 
 function createRouter() {
 	const router = express.Router()
-
 	// router.get('/', (req, res)=>{
 	// 	res.status(200).send('ini index custom')
 	// })
-
 	return router
 }
