@@ -1,31 +1,15 @@
 {
   "name": "@agung_dhewe/webapps",
   "version": "1.0.2",
-  "description": "modul entity untuk sistem fgta5",
+  "description": "modul accounting dengan framework fgta5",
   "type": "module",
   "main": "./src/index.js",
   "scripts": {
     "server": "node .",
-    "clear": "kill -9 $(lsof -t -i :3003)"
+    "clean": "kill -9 $(lsof -t -i :3003)"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/agungdhewe/fgta5act.git"
-  },
-  "keywords": [
-    "webapps",
-    "fgta5",
-    "postgresql"
-  ],
   "author": "Agung Nugroho",
   "license": "GPL-3.0-or-later",
-  "publishConfig": {
-    "access": "public"
-  },
-  "bugs": {
-    "url": "https://github.com/agungdhewe/fgta5act/issues"
-  },
-  "homepage": "https://github.com/agungdhewe/fgta5act#readme",
   "dependencies": {
     "@agung_dhewe/pgsqlc": "^1.1.5",
     "connect-redis": "^9.0.0",
@@ -45,7 +29,7 @@
   },
   "devDependencies": {
     "@agung_dhewe/webapps": "file:../../agungdhewe/webapps",
-    "@rollup/plugin-terser": "0.4.4",
-    "rollup": "^4.46.2"
+    "rollup": "^4.46.2",
+    "@rollup/plugin-terser": "0.4.4"
   }
 }
