@@ -1,9 +1,9 @@
-import Context from './coatype-context.mjs'
+import Context from './coareporttype-context.mjs'
 
 export async function init(self, args) {
-	console.log('initializing coatypeExtender ...')
+	console.log('initializing coareporttypeExtender ...')
 
-	// tambahkan extender inisiasi module coatype
+	// tambahkan extender inisiasi module coareporttype
 
 
 	/* // contoh menambahkan content dari template extender

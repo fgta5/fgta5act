@@ -6,11 +6,11 @@ import sqlUtil from '@agung_dhewe/pgsqlc'
 import context from '@agung_dhewe/webapps/src/context.js'  
 import logger from '@agung_dhewe/webapps/src/logger.js'
 
-import * as Extender from './extenders/coatype.apiext.js'
+import * as Extender from './extenders/coa.apiext.js'
 
-const moduleName = 'coatype'
+const moduleName = 'coa'
 const headerSectionName = 'header'
-const headerTableName = 'dev.coatype' 	
+const headerTableName = 'act.coa' 	
 
 // api: account
 export default class extends Api {
@@ -23,20 +23,20 @@ export default class extends Api {
 	// dipanggil dengan model snake syntax
 	// contoh: header-list
 	//         header-open-data
-	async init(body) { return await coatype_init(this, body) }
+	async init(body) { return await coa_init(this, body) }
 
 	// header
-	async headerList(body) { return await coatype_headerList(this, body) }
-	async headerOpen(body) { return await coatype_headerOpen(this, body) }
-	async headerUpdate(body) { return await coatype_headerUpdate(this, body)}
-	async headerCreate(body) { return await coatype_headerCreate(this, body)}
-	async headerDelete(body) { return await coatype_headerDelete(this, body) }
+	async headerList(body) { return await coa_headerList(this, body) }
+	async headerOpen(body) { return await coa_headerOpen(this, body) }
+	async headerUpdate(body) { return await coa_headerUpdate(this, body)}
+	async headerCreate(body) { return await coa_headerCreate(this, body)}
+	async headerDelete(body) { return await coa_headerDelete(this, body) }
 	
 			
 }	
 
 // init module
-async function coatype_init(self, body) {
+async function coa_init(self, body) {
 	const req = self.req
 
 	// set sid untuk session ini, diperlukan ini agar session aktif
@@ -71,7 +71,7 @@ async function coatype_init(self, body) {
 
 
 // data logging
-async function coatype_log(self, body, startTime, tablename, id, action, data={}, remark='') {
+async function coa_log(self, body, startTime, tablename, id, action, data={}, remark='') {
 	const { source } = body
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -88,11 +88,11 @@ async function coatype_log(self, body, startTime, tablename, id, action, data={}
 
 
 
-async function coatype_headerList(self, body) {
+async function coa_headerList(self, body) {
 	const tablename = headerTableName
 	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
 	const searchMap = {
-		searchtext: `coatype_name ILIKE '%' || \${searchtext} || '%'`,
+		searchtext: `coa_name ILIKE '%' || \${searchtext} || '%'`,
 	};
 
 	try {
@@ -127,6 +127,31 @@ async function coatype_headerList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
+			// lookup: coagroup_name dari field coagroup_name pada table act.coagroup dimana (act.coagroup.coagroup_id = act.coa.coagroup_id)
+			{
+				const { coagroup_name } = await sqlUtil.lookupdb(db, 'act.coagroup', 'coagroup_id', row.coagroup_id)
+				row.coagroup_name = coagroup_name
+			}
+			// lookup: agingtype_name dari field agingtype_name pada table act.agingtype dimana (act.agingtype.agingtype_id = act.coa.agingtype_id)
+			{
+				const { agingtype_name } = await sqlUtil.lookupdb(db, 'act.agingtype', 'agingtype_id', row.agingtype_id)
+				row.agingtype_name = agingtype_name
+			}
+			// lookup: coareporttype_name dari field coareporttype_name pada table act.coareporttype dimana (act.coareporttype.coareporttype_id = act.coa.coareporttype_id)
+			{
+				const { coareporttype_name } = await sqlUtil.lookupdb(db, 'act.coareporttype', 'coareporttype_id', row.coareporttype_id)
+				row.coareporttype_name = coareporttype_name
+			}
+			// lookup: taxtype_name dari field taxtype_name pada table act.taxtype dimana (act.taxtype.taxtype_id = act.coa.taxtype_id)
+			{
+				const { taxtype_name } = await sqlUtil.lookupdb(db, 'act.taxtype', 'taxtype_id', row.taxtype_id)
+				row.taxtype_name = taxtype_name
+			}
+			// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.coa.curr_id)
+			{
+				const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', row.curr_id)
+				row.curr_code = curr_code
+			}
 			
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
@@ -153,13 +178,13 @@ async function coatype_headerList(self, body) {
 	}
 }
 
-async function coatype_headerOpen(self, body) {
+async function coa_headerOpen(self, body) {
 	const tablename = headerTableName
 
 	try {
 		const { id } = body 
-		const criteria = { coatype_id: id }
-		const searchMap = { coatype_id: `coatype_id = \${coatype_id}`}
+		const criteria = { coa_id: id }
+		const searchMap = { coa_id: `coa_id = \${coa_id}`}
 		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
 		const sql = sqlUtil.createSqlSelect({
 			tablename: tablename, 
@@ -175,6 +200,31 @@ async function coatype_headerOpen(self, body) {
 			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
 		}	
 
+		// lookup: coagroup_name dari field coagroup_name pada table act.coagroup dimana (act.coagroup.coagroup_id = act.coa.coagroup_id)
+		{
+			const { coagroup_name } = await sqlUtil.lookupdb(db, 'act.coagroup', 'coagroup_id', data.coagroup_id)
+			data.coagroup_name = coagroup_name
+		}
+		// lookup: agingtype_name dari field agingtype_name pada table act.agingtype dimana (act.agingtype.agingtype_id = act.coa.agingtype_id)
+		{
+			const { agingtype_name } = await sqlUtil.lookupdb(db, 'act.agingtype', 'agingtype_id', data.agingtype_id)
+			data.agingtype_name = agingtype_name
+		}
+		// lookup: coareporttype_name dari field coareporttype_name pada table act.coareporttype dimana (act.coareporttype.coareporttype_id = act.coa.coareporttype_id)
+		{
+			const { coareporttype_name } = await sqlUtil.lookupdb(db, 'act.coareporttype', 'coareporttype_id', data.coareporttype_id)
+			data.coareporttype_name = coareporttype_name
+		}
+		// lookup: taxtype_name dari field taxtype_name pada table act.taxtype dimana (act.taxtype.taxtype_id = act.coa.taxtype_id)
+		{
+			const { taxtype_name } = await sqlUtil.lookupdb(db, 'act.taxtype', 'taxtype_id', data.taxtype_id)
+			data.taxtype_name = taxtype_name
+		}
+		// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.coa.curr_id)
+		{
+			const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', data.curr_id)
+			data.curr_code = curr_code
+		}
 		
 
 		// lookup data createby
@@ -201,8 +251,8 @@ async function coatype_headerOpen(self, body) {
 }
 
 
-async function coatype_headerCreate(self, body) {
-	const { source='coatype', data={} } = body
+async function coa_headerCreate(self, body) {
+	const { source='coa', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint();
@@ -238,7 +288,7 @@ async function coatype_headerCreate(self, body) {
 			}
 
 			// record log
-			coatype_log(self, body, startTime, tablename, ret.coatype_id, 'CREATE', logMetadata)
+			coa_log(self, body, startTime, tablename, ret.coa_id, 'CREATE', logMetadata)
 
 			return ret
 		})
@@ -249,8 +299,8 @@ async function coatype_headerCreate(self, body) {
 	}
 }
 
-async function coatype_headerUpdate(self, body) {
-	const { source='coatype', data={} } = body
+async function coa_headerUpdate(self, body) {
+	const { source='coa', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint()
@@ -275,7 +325,7 @@ async function coatype_headerUpdate(self, body) {
 			}
 
 			// eksekusi update
-			const cmd = sqlUtil.createUpdateCommand(tablename, data, ['coatype_id'])
+			const cmd = sqlUtil.createUpdateCommand(tablename, data, ['coa_id'])
 			const ret = await cmd.execute(data)
 
 			
@@ -287,7 +337,7 @@ async function coatype_headerUpdate(self, body) {
 			}			
 
 			// record log
-			coatype_log(self, body, startTime, tablename, data.coatype_id, 'UPDATE')
+			coa_log(self, body, startTime, tablename, data.coa_id, 'UPDATE')
 
 			return ret
 		})
@@ -300,7 +350,7 @@ async function coatype_headerUpdate(self, body) {
 }
 
 
-async function coatype_headerDelete(self, body) {
+async function coa_headerDelete(self, body) {
 	const { source, id } = body
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -312,7 +362,7 @@ async function coatype_headerDelete(self, body) {
 		const deletedRow = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
-			const dataToRemove = {coatype_id: id}
+			const dataToRemove = {coa_id: id}
 
 			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender headerDeleting
 			if (typeof Extender.headerDeleting === 'function') {
@@ -322,7 +372,7 @@ async function coatype_headerDelete(self, body) {
 			
 
 			// hapus data header
-			const cmd = sqlUtil.createDeleteCommand(tablename, ['coatype_id'])
+			const cmd = sqlUtil.createDeleteCommand(tablename, ['coa_id'])
 			const deletedRow = await cmd.execute(dataToRemove)
 
 			const logMetadata = {}
@@ -333,7 +383,7 @@ async function coatype_headerDelete(self, body) {
 			}
 
 			// record log
-			coatype_log(self, body, startTime, tablename, id, 'DELETE', logMetadata)
+			coa_log(self, body, startTime, tablename, id, 'DELETE', logMetadata)
 
 			return deletedRow
 		})

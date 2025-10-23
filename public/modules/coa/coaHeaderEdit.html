@@ -1,0 +1,175 @@
+<form id="coaHeaderEdit-frm" class="module-form" locked="true" autoid="false" primarykey="coaHeaderEdit-obj_coa_id">
+
+	<!-- Textbox: coa_id-->	
+	<div id="coaHeaderEdit-obj_coa_id-container" class="input-field" field="coaHeaderEdit-obj_coa_id">
+		<label for="coaHeaderEdit-obj_coa_id">ID</label>
+		<input id="coaHeaderEdit-obj_coa_id"  fgta5-component="Textbox" placeholder="id" autocomplete="off" spellcheck="false" 
+			binding="coa_id"
+			data-tabindex="1" 
+			required 
+			invalid-message-required="id coa harus diisi" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="7" 
+			minlength="7" 
+			invalid-message-minlength="panjang coa harus 7 digit" 
+		>
+	</div>
+
+
+	<!-- Checkbox: coa_isdisabled-->	
+	<div id="coaHeaderEdit-obj_coa_isdisabled-container" class="input-field" field="coaHeaderEdit-obj_coa_isdisabled">
+		<label for="coaHeaderEdit-obj_coa_isdisabled">Disabled</label>
+		<input id="coaHeaderEdit-obj_coa_isdisabled"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
+			binding="coa_isdisabled"
+			data-tabindex="2" 
+			type="checkbox" 
+		>
+	</div>
+
+
+	<!-- Textbox: coa_name-->	
+	<div id="coaHeaderEdit-obj_coa_name-container" class="input-field" field="coaHeaderEdit-obj_coa_name">
+		<label for="coaHeaderEdit-obj_coa_name">Name</label>
+		<input id="coaHeaderEdit-obj_coa_name"  fgta5-component="Textbox" placeholder="nama coa" autocomplete="off" spellcheck="false" 
+			binding="coa_name"
+			data-tabindex="3" 
+			required 
+			invalid-message-required="nama coa harus diisi" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="90" 
+		>
+	</div>
+
+
+	<!-- Numberbox: coa_normalposition-->	
+	<div id="coaHeaderEdit-obj_coa_normal-container" class="input-field" field="coaHeaderEdit-obj_coa_normal">
+		<label for="coaHeaderEdit-obj_coa_normal">Normal</label>
+		<input id="coaHeaderEdit-obj_coa_normal"  fgta5-component="Numberbox" placeholder="normal balance position" autocomplete="off" spellcheck="false" 
+			binding="coa_normalposition"
+			value="0" 
+			data-tabindex="4" 
+			description="masukkan nilai -1 untuk Kredit, dan 1 untuk Debet" 
+			maxlength="9" 
+			validator="valueIs:['-1', '1']" 
+			invalid-message="invalid value, masukkan -1 untuk kredit, 1 untuk debit" 
+		>
+	</div>
+
+
+	<!-- Textbox: coa_descr-->	
+	<div id="coaHeaderEdit-obj_coa_descr-container" class="input-field" field="coaHeaderEdit-obj_coa_descr">
+		<label for="coaHeaderEdit-obj_coa_descr">Descr</label>
+		<input id="coaHeaderEdit-obj_coa_descr"  fgta5-component="Textbox" placeholder="descr" autocomplete="off" spellcheck="false" 
+			binding="coa_descr"
+			data-tabindex="5" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="90" 
+		>
+	</div>
+
+
+	<!-- Combobox: coagroup_id-->	
+	<div id="coaHeaderEdit-obj_coagroup_id-container" class="input-field" field="coaHeaderEdit-obj_coagroup_id">
+		<label for="coaHeaderEdit-obj_coagroup_id">Group</label>
+		<input id="coaHeaderEdit-obj_coagroup_id"  fgta5-component="Combobox" placeholder="group" autocomplete="off" spellcheck="false" 
+			binding="coagroup_id"
+			data-tabindex="6" 
+			data-display="coagroup_name" 
+		>
+	</div>
+
+
+	<!-- Combobox: agingtype_id-->	
+	<div id="coaHeaderEdit-obj_agingtype_id-container" class="input-field" field="coaHeaderEdit-obj_agingtype_id">
+		<label for="coaHeaderEdit-obj_agingtype_id">Aging Type</label>
+		<input id="coaHeaderEdit-obj_agingtype_id"  fgta5-component="Combobox" placeholder="tipe aging" autocomplete="off" spellcheck="false" 
+			binding="agingtype_id"
+			data-tabindex="7" 
+			data-display="agingtype_name" 
+		>
+	</div>
+
+
+	<!-- Combobox: coareporttype_id-->	
+	<div id="coaHeaderEdit-obj_coareporttype_id-container" class="input-field" field="coaHeaderEdit-obj_coareporttype_id">
+		<label for="coaHeaderEdit-obj_coareporttype_id">Report Type</label>
+		<input id="coaHeaderEdit-obj_coareporttype_id"  fgta5-component="Combobox" placeholder="report type" autocomplete="off" spellcheck="false" 
+			binding="coareporttype_id"
+			data-tabindex="8" 
+			data-display="coareporttype_name" 
+		>
+	</div>
+
+
+	<!-- Checkbox: coa_istax-->	
+	<div id="coaHeaderEdit-obj_coa_istax-container" class="input-field" field="coaHeaderEdit-obj_coa_istax">
+		<label for="coaHeaderEdit-obj_coa_istax">Tax Account</label>
+		<input id="coaHeaderEdit-obj_coa_istax"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
+			binding="coa_istax"
+			data-tabindex="9" 
+			type="checkbox" 
+		>
+	</div>
+
+
+	<!-- Combobox: taxtype_id-->	
+	<div id="coaHeaderEdit-obj_taxtype_id-container" class="input-field" field="coaHeaderEdit-obj_taxtype_id">
+		<label for="coaHeaderEdit-obj_taxtype_id">Tax Type</label>
+		<input id="coaHeaderEdit-obj_taxtype_id"  fgta5-component="Combobox" placeholder="tipe tax" autocomplete="off" spellcheck="false" 
+			binding="taxtype_id"
+			data-tabindex="10" 
+			data-display="taxtype_name" 
+		>
+	</div>
+
+
+	<!-- Combobox: curr_id-->	
+	<div id="coaHeaderEdit-obj_curr_id-container" class="input-field" field="coaHeaderEdit-obj_curr_id">
+		<label for="coaHeaderEdit-obj_curr_id">Curr</label>
+		<input id="coaHeaderEdit-obj_curr_id"  fgta5-component="Combobox" placeholder="curr" autocomplete="off" spellcheck="false" 
+			binding="curr_id"
+			data-tabindex="11" 
+			data-display="curr_code" 
+		>
+	</div>
+	
+</form>
+
+
+
+
+<div id="panel-detil-selector" class="panel-detil hidden">
+	<div panel-title>
+		Information Detil
+	</div>
+	<div panel-content>
+
+		<div id="panel-detil-additionalinfo">
+			<!-- tambahkan additional info disini -->
+		</div>
+	</div>
+</div>
+ 
+
+<div class="panel-recordbar" data-view="nodetil">
+	<div><a id="coaHeader-btn_recordstatus" href="javascript:void(0)" tabindex="-1">Record Status</a></div>
+	<div><a id="coaHeader-btn_logs" href="javascript:void(0)" tabindex="-1">Logs</a></div>
+	<div><a id="coaHeader-btn_about" href="javascript:void(0)" tabindex="-1">About</a></div>
+</div>
+
+
+<div class="footer-buttons-container hidden">
+	<div>
+		<button id="coaHeaderEdit-btn_prev"><span>&laquo;&laquo;</span></button>
+	</div>
+	<div>
+		<button id="coaHeaderEdit-btn_save">Save</button>
+		<button id="coaHeaderEdit-btn_edit">Edit</button>
+		<button id="coaHeaderEdit-btn_new" data-action="coaHeader-new">New</button>
+		<button id="coaHeaderEdit-btn_reset">Reset</button>
+		<button id="coaHeaderEdit-btn_delete">Delete</button>
+	</div>
+	<div>
+		<button id="coaHeaderEdit-btn_next"><span>&raquo;&raquo;</span></button>
+	</div>
+</div>

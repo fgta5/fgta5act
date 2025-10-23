@@ -1,7 +1,7 @@
-import Context from './coacategory-context.mjs'  
-import * as coacategoryHeaderList from './coacategoryHeaderList.mjs' 
-import * as coacategoryHeaderEdit from './coacategoryHeaderEdit.mjs' 
-import * as Extender from './coacategory-ext.mjs'
+import Context from './coareporttype-context.mjs'  
+import * as coareporttypeHeaderList from './coareporttypeHeaderList.mjs' 
+import * as coareporttypeHeaderEdit from './coareporttypeHeaderEdit.mjs' 
+import * as Extender from './coareporttype-ext.mjs'
 
 const app = Context.app
 const Crsl = Context.Crsl
@@ -15,7 +15,7 @@ export default class extends Module {
 	async main(args={}) {
 		
 		console.log('initializing module...')
-		app.setTitle('Coa Category')
+		app.setTitle('Coa Report Type')
 		app.showFooter(true)
 		
 		args.autoLoadGridData = true
@@ -26,8 +26,8 @@ export default class extends Module {
 		// jangan import lagi module-module ini di dalam mjs tersebut
 		// karena akan terjadi cyclic redudancy pada saat di rollup
 		self.Modules = { 
-			coacategoryHeaderList, 
-			coacategoryHeaderEdit, 
+			coareporttypeHeaderList, 
+			coareporttypeHeaderEdit, 
 		}
 
 		try {
@@ -46,8 +46,8 @@ export default class extends Module {
 			} 
 
 			await Promise.all([ 
-				coacategoryHeaderList.init(self, args), 
-				coacategoryHeaderEdit.init(self, args), 
+				coareporttypeHeaderList.init(self, args), 
+				coareporttypeHeaderEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -59,7 +59,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['coacategoryHeaderEdit']
+			const modNameList = ['coareporttypeHeaderEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false
@@ -150,7 +150,7 @@ async function render(self) {
 		});
 
 		
-		// coacategory-ext.mjs, export function extendPage(self) {} 
+		// coareporttype-ext.mjs, export function extendPage(self) {} 
 		const fn_name = 'extendPage'
 		const fn_extendPage = Extender[fn_name]
 		if (typeof fn_extendPage === 'function') {

@@ -1,36 +1,37 @@
-import Context from './coacategory-context.mjs'
-import * as Extender from './coacategory-ext.mjs'
+import Context from './coareporttype-context.mjs'
+import * as Extender from './coareporttype-ext.mjs'
 import * as pageHelper from '/public/libs/webmodule/pagehelper.mjs'
 
 const CurrentState = {}
 const Crsl =  Context.Crsl
-const CurrentSectionId = Context.Sections.coacategoryHeaderEdit
+const CurrentSectionId = Context.Sections.coareporttypeHeaderEdit
 const CurrentSection = Crsl.Items[CurrentSectionId]
 const Source = Context.Source
 
 
-const TitleWhenNew = 'New Coa Category'
-const TitleWhenView = 'View Coa Category'
-const TitleWhenEdit = 'Edit Coa Category'
+const TitleWhenNew = 'New Coa Report Type'
+const TitleWhenView = 'View Coa Report Type'
+const TitleWhenEdit = 'Edit Coa Report Type'
 const EditModeText = 'Edit'
 const LockModeText = 'Lock'
 
-const btn_edit = new $fgta5.ActionButton('coacategoryHeaderEdit-btn_edit')
-const btn_save = new $fgta5.ActionButton('coacategoryHeaderEdit-btn_save')
-const btn_new = new $fgta5.ActionButton('coacategoryHeaderEdit-btn_new', 'coacategoryHeader-new')
-const btn_del = new $fgta5.ActionButton('coacategoryHeaderEdit-btn_delete')
-const btn_reset = new $fgta5.ActionButton('coacategoryHeaderEdit-btn_reset')
-const btn_prev = new $fgta5.ActionButton('coacategoryHeaderEdit-btn_prev')
-const btn_next = new $fgta5.ActionButton('coacategoryHeaderEdit-btn_next')
+const btn_edit = new $fgta5.ActionButton('coareporttypeHeaderEdit-btn_edit')
+const btn_save = new $fgta5.ActionButton('coareporttypeHeaderEdit-btn_save')
+const btn_new = new $fgta5.ActionButton('coareporttypeHeaderEdit-btn_new', 'coareporttypeHeader-new')
+const btn_del = new $fgta5.ActionButton('coareporttypeHeaderEdit-btn_delete')
+const btn_reset = new $fgta5.ActionButton('coareporttypeHeaderEdit-btn_reset')
+const btn_prev = new $fgta5.ActionButton('coareporttypeHeaderEdit-btn_prev')
+const btn_next = new $fgta5.ActionButton('coareporttypeHeaderEdit-btn_next')
 
-const btn_recordstatus = document.getElementById('coacategoryHeader-btn_recordstatus')
-const btn_logs = document.getElementById('coacategoryHeader-btn_logs')
-const btn_about = document.getElementById('coacategoryHeader-btn_about')
 
-const frm = new $fgta5.Form('coacategoryHeaderEdit-frm');
-const obj_coacategory_id = frm.Inputs['coacategoryHeaderEdit-obj_coacategory_id']
-const obj_coacategory_name = frm.Inputs['coacategoryHeaderEdit-obj_coacategory_name']
-const obj_coacategory_descr = frm.Inputs['coacategoryHeaderEdit-obj_coacategory_descr']	
+const btn_recordstatus = document.getElementById('coareporttypeHeader-btn_recordstatus')
+const btn_logs = document.getElementById('coareporttypeHeader-btn_logs')
+const btn_about = document.getElementById('coareporttypeHeader-btn_about')
+
+const frm = new $fgta5.Form('coareporttypeHeaderEdit-frm');
+const obj_coareporttype_id = frm.Inputs['coareporttypeHeaderEdit-obj_coareporttype_id']
+const obj_coareporttype_name = frm.Inputs['coareporttypeHeaderEdit-obj_coareporttype_name']
+const obj_coareporttype_descr = frm.Inputs['coareporttypeHeaderEdit-obj_coareporttype_descr']	
 const obj_createby = document.getElementById('fRecord-section-createby')
 const obj_createdate = document.getElementById('fRecord-section-createdate')
 const obj_modifyby = document.getElementById('fRecord-section-modifyby')
@@ -40,7 +41,7 @@ const obj_modifydate = document.getElementById('fRecord-section-modifydate')
 export const Section = CurrentSection
 
 export async function init(self, args) {
-	console.log('initializing coacategoryHeaderEdit ...')
+	console.log('initializing coareporttypeHeaderEdit ...')
 	
 
 	CurrentSection.addEventListener($fgta5.Section.EVT_BACKBUTTONCLICK, async (evt)=>{
@@ -64,6 +65,12 @@ export async function init(self, args) {
 	btn_logs.addEventListener('click', evt=>{ btn_logs_click(self, evt) })	
 	btn_about.addEventListener('click', evt=>{ btn_about_click(self, evt) })
 
+	// set actions
+	CurrentState.Actions = {
+		edit: btn_edit,	
+	}
+
+	
 
 		
 	
@@ -82,7 +89,7 @@ export async function openSelectedData(self, params) {
 
 		CurrentState.currentOpenedId = id
 
-		const fn_iseditdisabled_name = 'coacategoryHeaderEdit_isEditDisabled'
+		const fn_iseditdisabled_name = 'coareporttypeHeaderEdit_isEditDisabled'
 		const fn_iseditdisabled = Extender[fn_iseditdisabled_name]
 		if (typeof fn_iseditdisabled === 'function') {
 			const editDisabled = fn_iseditdisabled(self, data)
@@ -96,10 +103,11 @@ export async function openSelectedData(self, params) {
 		frm.acceptChanges()
 		frm.lock()
 
-		const fn_formopened_name = 'coacategoryHeaderEdit_formOpened'
+		const fn_formopened_name = 'coareporttypeHeaderEdit_formOpened'
 		const fn_formopened = Extender[fn_formopened_name]
 		if (typeof fn_formopened === 'function') {
-			fn_formopened(self, frm, CurrentState)
+			// export async function coareporttypeHeaderEdit_formOpened(self, frm, CurrentState)
+			await fn_formopened(self, frm, CurrentState)
 		}
 
 	} catch (err) {
@@ -229,15 +237,13 @@ async function backToList(self, evt) {
 
 	if (goback) {
 		frm.lock()
-		const listId =  Context.Sections.coacategoryHeaderList
+		const listId =  Context.Sections.coareporttypeHeaderList
 		const listSection = Crsl.Items[listId]
 		listSection.show({direction: 1})
 	}
 }
 
 async function  frm_locked(self, evt) {
-	console.log('frm_locked')
-
 	CurrentSection.Title = TitleWhenView
 
 	btn_edit.setText(EditModeText)
@@ -251,8 +257,9 @@ async function  frm_locked(self, evt) {
 	btn_next.disabled = false
 
 	
+	
 	// Extender untuk event locked
-	const fn_name = 'coacategoryHeaderEdit_formLocked'
+	const fn_name = 'coareporttypeHeaderEdit_formLocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
 		fn(self, frm, CurrentState)
@@ -268,8 +275,6 @@ async function  frm_locked(self, evt) {
 }
 
 async function  frm_unlocked(self, evt) {
-	console.log('frm_unlocked')
-
 	if (frm.isNew()) {
 		CurrentSection.Title = TitleWhenNew
 	} else {
@@ -286,12 +291,13 @@ async function  frm_unlocked(self, evt) {
 	btn_prev.disabled = true
 	btn_next.disabled = true
 
+	
 
 	// Extender untuk event Unlocked
-	const fn_name = 'coacategoryHeaderEdit_formUnlocked'
+	const fn_name = 'coareporttypeHeaderEdit_formUnlocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
-		fn(self, frm)
+		fn(self, frm, CurrentState)
 	}
 
 		
@@ -329,8 +335,8 @@ async function btn_new_click(self, evt) {
 	console.log('btn_new_click')
 	const sourceSection = evt.target.getAttribute('data-sectionsource') 
 
-	const coacategoryHeaderList = self.Modules.coacategoryHeaderList
-	const listsecid = coacategoryHeaderList.Section.Id
+	const coareporttypeHeaderList = self.Modules.coareporttypeHeaderList
+	const listsecid = coareporttypeHeaderList.Section.Id
 	const fromListSection = sourceSection===listsecid
 	if (fromListSection) {
 		// klik new dari list (tidak perlu cek ada perubahan data)
@@ -364,7 +370,7 @@ async function btn_new_click(self, evt) {
 
 		// jika perlu modifikasi data initial,
 		// atau dialog untuk opsi data baru, dapat dibuat di Extender
-		const fn_newdata_name = 'coacategoryHeaderEdit_newData'
+		const fn_newdata_name = 'coareporttypeHeaderEdit_newData'
 		const fn_newdata = Extender[fn_newdata_name]
 		if (typeof fn_newdata === 'function') {
 			await fn_newdata(self, datainit, frm)
@@ -376,6 +382,10 @@ async function btn_new_click(self, evt) {
 		// buka lock, agar user bisa edit
 		frm.lock(false)
 
+		// jika edit di suspend, enable dulu
+		btn_edit.suspend(false)
+
+
 		// matikan tombol edit dan del saat kondisi form adalah data baru 
 		btn_edit.disabled = true
 		btn_del.disabled = true
@@ -384,7 +394,7 @@ async function btn_new_click(self, evt) {
 		await $fgta5.MessageBox.error(err.message)
 		if (fromListSection) {
 			// jika saat tombol baru dipilih saat di list, tampilan kembalikan ke list
-			self.Modules.coacategoryHeaderList.Section.show()
+			self.Modules.coareporttypeHeaderList.Section.show()
 		}
 	}
 }
@@ -394,7 +404,7 @@ async function btn_save_click(self, evt) {
 
 
 	// Extender Autofill
-	const fn_autofill_name = 'coacategoryHeaderEdit_autofill'
+	const fn_autofill_name = 'coareporttypeHeaderEdit_autofill'
 	const fn_autofill = Extender[fn_autofill_name]
 	if (typeof fn_autofill === 'function') {
 		await fn_autofill(self, frm)
@@ -431,7 +441,7 @@ async function btn_save_click(self, evt) {
 	}
 
 	// Extender Saving
-	const fn_datasaving_name = 'coacategoryHeaderEdit_dataSaving'
+	const fn_datasaving_name = 'coareporttypeHeaderEdit_dataSaving'
 	const fn_datasaving = Extender[fn_datasaving_name]
 	if (typeof fn_datasaving === 'function') {
 		await fn_datasaving(self, dataToSave, frm)
@@ -486,7 +496,7 @@ async function btn_save_click(self, evt) {
 
 
 		// Extender Saving
-		const fn_datasaved_name = 'coacategoryHeaderEdit_dataSaved'
+		const fn_datasaved_name = 'coareporttypeHeaderEdit_dataSaved'
 		const fn_datasaved = Extender[fn_datasaved_name]
 		if (typeof fn_datasaved === 'function') {
 			await fn_datasaved(self, data, frm)
@@ -504,10 +514,10 @@ async function btn_save_click(self, evt) {
 
 			// buat baris baru di grid
 			console.log('tamabah baris baru di grid')
-			self.Modules.coacategoryHeaderList.addNewRow(self, data)
+			self.Modules.coareporttypeHeaderList.addNewRow(self, data)
 		} else {
 			console.log('update data baris yang dibuka')
-			self.Modules.coacategoryHeaderList.updateCurrentRow(self, data)
+			self.Modules.coareporttypeHeaderList.updateCurrentRow(self, data)
 		}
 
 	} catch (err) {
@@ -546,10 +556,10 @@ async function btn_del_click(self, evt) {
 		const result = await deleteData(self, idValue)
 		
 		// hapus current row yang dipilih di list
-		self.Modules.coacategoryHeaderList.removeCurrentRow(self)
+		self.Modules.coareporttypeHeaderList.removeCurrentRow(self)
 		
 		// kembali ke list
-		self.Modules.coacategoryHeaderList.Section.show()
+		self.Modules.coareporttypeHeaderList.Section.show()
 
 
 		// lock kembali form
@@ -594,12 +604,12 @@ async function btn_reset_click(self, evt) {
 
 async function btn_prev_click(self, evt) {
 	console.log('btn_prev_click')
-	self.Modules.coacategoryHeaderList.selectPreviousRow(self)
+	self.Modules.coareporttypeHeaderList.selectPreviousRow(self)
 }
 
 async function btn_next_click(self, evt) {
 	console.log('btn_next_click')
-	self.Modules.coacategoryHeaderList.selectNextRow(self)
+	self.Modules.coareporttypeHeaderList.selectNextRow(self)
 }
 
 
@@ -626,7 +636,7 @@ async function btn_recordstatus_click(self, evt) {
 			obj_modifyby.innerHTML = data._modifyby
 			obj_modifydate.innerHTML = data._modifydate
 
-			const fn_addrecordinfo_name = 'coacategoryHeaderEdit_addRecordInfo'
+			const fn_addrecordinfo_name = 'coareporttypeHeaderEdit_addRecordInfo'
 			const fn_addrecordinfo = Extender[fn_addrecordinfo_name]
 			if (typeof fn_addrecordinfo === 'function') {
 				await fn_addrecordinfo(self, data)
@@ -661,7 +671,7 @@ async function btn_logs_click(self, evt) {
 			const url = `${Context.appsUrls.core.url}/logs/list`
 			const criteria = {
 				module: Context.moduleName,
-				table: 'dev.coacategory',
+				table: 'act.coareporttype',
 				id: id
 			}
 
@@ -691,7 +701,7 @@ async function btn_about_click(self, evt) {
 	pageHelper.openSection(self, 'fAbout-section', params, async ()=>{
 		
 		const AboutSection = Crsl.Items['fAbout-section']
-		AboutSection.Title = 'About Coa Category'
+		AboutSection.Title = 'About Coa Report Type'
 
 		const section = document.getElementById('fAbout-section')
 
@@ -699,7 +709,7 @@ async function btn_about_click(self, evt) {
 			const divDescr = document.createElement('div')
 			divDescr.setAttribute('id', 'fAbout-section-fdescr')
 			divDescr.setAttribute('style', 'padding: 0 0 10px 0')
-			divDescr.innerHTML = ''
+			divDescr.innerHTML = 'tipe report COA: Balance Sheet, Income Statement'
 			const divTopbar = section.querySelector('div[data-topbar]')
 			divTopbar.parentNode.insertBefore(divDescr, divTopbar.nextSibling);
 		}
@@ -708,7 +718,7 @@ async function btn_about_click(self, evt) {
 			const divFooter = document.createElement('div')
 			divFooter.setAttribute('id', 'fAbout-section-footer')
 			divFooter.setAttribute('style', 'border-top: 1px solid #ccc; padding: 5px 0 0 0; margin-top: 50px')
-			divFooter.innerHTML = 'This module is generated by fgta5 generator at 10 Oct 2025 18:42'
+			divFooter.innerHTML = 'This module is generated by fgta5 generator at 23 Oct 2025 12:59'
 			section.appendChild(divFooter)
 		}
 		

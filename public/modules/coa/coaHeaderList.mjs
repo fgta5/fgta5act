@@ -1,21 +1,21 @@
-import Context from './coatype-context.mjs'
-import * as Extender from './coatype-ext.mjs'
+import Context from './coa-context.mjs'
+import * as Extender from './coa-ext.mjs'
 
 
 const Crsl =  Context.Crsl
-const CurrentSectionId = Context.Sections.coatypeHeaderList
+const CurrentSectionId = Context.Sections.coaHeaderList
 const CurrentSection = Crsl.Items[CurrentSectionId]
 const CurrentState = {}
 
-const tbl =  new $fgta5.Gridview('coatypeHeaderList-tbl')
-const pnl_search = document.getElementById('coatypeHeaderList-pnl_search')
-const btn_gridload = new $fgta5.ActionButton('coatypeHeaderList-btn_gridload') 
+const tbl =  new $fgta5.Gridview('coaHeaderList-tbl')
+const pnl_search = document.getElementById('coaHeaderList-pnl_search')
+const btn_gridload = new $fgta5.ActionButton('coaHeaderList-btn_gridload') 
 
 export const Section = CurrentSection
 export const SearchParams = {}
 
 export async function init(self, args) {
-	console.log('initializing coatypeHeaderList ...')
+	console.log('initializing coaHeaderList ...')
 
 	// add event listener
 	tbl.addEventListener('nextdata', async evt=>{ tbl_nextdata(self, evt) })
@@ -57,8 +57,8 @@ export async function init(self, args) {
 		}
 
 		// saat user ketik tombol enter di text search, lakukan load data
-		const obj_searchtext = document.getElementById('coatypeHeaderList-txt_searchtext')
-		const btn_load = document.getElementById('coatypeHeaderList-btn_gridload')
+		const obj_searchtext = document.getElementById('coaHeaderList-txt_searchtext')
+		const btn_load = document.getElementById('coaHeaderList-btn_gridload')
 		obj_searchtext.addEventListener('keydown', (evt)=>{
 			if (evt.key.toLowerCase()=='enter') {
 				evt.stopPropagation()
@@ -68,7 +68,7 @@ export async function init(self, args) {
 		})
 
 
-		// coatypeHeaderList-ext.mjs, export function initSearchParams(self, SearchParams) {} 
+		// coaHeaderList-ext.mjs, export function initSearchParams(self, SearchParams) {} 
 		const fn_initSearchParams_name = 'headerList_initSearchParams'
 		const fn_initSearchParams = Extender[fn_initSearchParams_name]
 		if (typeof fn_initSearchParams === 'function') {
@@ -163,15 +163,18 @@ export function keyboardAction(self, actionName, evt) {
 	} else if (actionName=='down') {
 		tbl.nextRecord()
 	} else if (actionName=='enter') {
-		const coatypeHeaderEdit = self.Modules.coatypeHeaderEdit
-		coatypeHeaderEdit.Section.show({}, ()=>{
-			openRow(self, tbl.CurrentRow)
-		})		
+		const coaHeaderEdit = self.Modules.coaHeaderEdit
+		if (tbl.CurrentRow!=null) {
+			coaHeaderEdit.Section.show({}, ()=>{
+				openRow(self, tbl.CurrentRow)
+			})
+		}	
+		
 	} else if (actionName=='typing') {
 		evt.preventDefault();
 		evt.stopPropagation();
 
-		const obj_searchtext = document.getElementById('coatypeHeaderList-txt_searchtext')
+		const obj_searchtext = document.getElementById('coaHeaderList-txt_searchtext')
 		const key = evt.key
 		obj_searchtext.focus()
 		if (key=='Backspace') {
@@ -187,20 +190,25 @@ export function keyboardAction(self, actionName, evt) {
 
 function setCurrentRow(self, tr) {
 	CurrentState.SelectedRow = tr
+	tbl.CurrentRow = tr
 }
 
 async function openRow(self, tr) {
+	if (tr==null) {
+		return
+	}
+
 	const keyvalue = tr.getAttribute('keyvalue')
 	const key = tr.getAttribute('key')
 
-	const coatypeHeaderEdit = self.Modules.coatypeHeaderEdit
-	coatypeHeaderEdit.clearForm(self, 'loading...')
+	const coaHeaderEdit = self.Modules.coaHeaderEdit
+	coaHeaderEdit.clearForm(self, 'loading...')
 
 	try {
 		setCurrentRow(self, tr)
 		CurrentState.SelectedRow.keyValue = keyvalue
 		CurrentState.SelectedRow.key = key
-		await coatypeHeaderEdit.openSelectedData(self, {key:key, keyvalue:keyvalue})
+		await coaHeaderEdit.openSelectedData(self, {key:key, keyvalue:keyvalue})
 	} catch (err) {
 		console.error(err)
 		await $fgta5.MessageBox.error(err.message)
@@ -211,7 +219,7 @@ async function openRow(self, tr) {
 
 
 	// matikan atau nyalakan button prev/next sesuai kondisi
-	setPagingButton(self, coatypeHeaderEdit)
+	setPagingButton(self, coaHeaderEdit)
 }
 
 async function listRows(self, criteria, offset,limit, sort) {
@@ -251,8 +259,8 @@ function tbl_sorting(self, evt) {
 function tbl_cellclick(self, evt) {
 	const tr = evt.detail.tr
 
-	const coatypeHeaderEdit = self.Modules.coatypeHeaderEdit
-	coatypeHeaderEdit.Section.show({}, (evt)=>{
+	const coaHeaderEdit = self.Modules.coaHeaderEdit
+	coaHeaderEdit.Section.show({}, (evt)=>{
 		openRow(self, tr)
 	})
 
@@ -260,7 +268,7 @@ function tbl_cellclick(self, evt) {
 }
 
 async function tbl_loadData(self, params={}) {
-	console.log('loading coatypeHeader data')
+	console.log('loading coaHeader data')
 	console.log(params)
 
 	const { criteria={}, limit=0, offset=0, sort={} } = params

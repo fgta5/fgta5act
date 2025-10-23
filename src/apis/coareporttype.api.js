@@ -6,11 +6,11 @@ import sqlUtil from '@agung_dhewe/pgsqlc'
 import context from '@agung_dhewe/webapps/src/context.js'  
 import logger from '@agung_dhewe/webapps/src/logger.js'
 
-import * as Extender from './extenders/coacategory.apiext.js'
+import * as Extender from './extenders/coareporttype.apiext.js'
 
-const moduleName = 'coacategory'
+const moduleName = 'coareporttype'
 const headerSectionName = 'header'
-const headerTableName = 'dev.coacategory' 	
+const headerTableName = 'act.coareporttype' 	
 
 // api: account
 export default class extends Api {
@@ -23,20 +23,20 @@ export default class extends Api {
 	// dipanggil dengan model snake syntax
 	// contoh: header-list
 	//         header-open-data
-	async init(body) { return await coacategory_init(this, body) }
+	async init(body) { return await coareporttype_init(this, body) }
 
 	// header
-	async headerList(body) { return await coacategory_headerList(this, body) }
-	async headerOpen(body) { return await coacategory_headerOpen(this, body) }
-	async headerUpdate(body) { return await coacategory_headerUpdate(this, body)}
-	async headerCreate(body) { return await coacategory_headerCreate(this, body)}
-	async headerDelete(body) { return await coacategory_headerDelete(this, body) }
+	async headerList(body) { return await coareporttype_headerList(this, body) }
+	async headerOpen(body) { return await coareporttype_headerOpen(this, body) }
+	async headerUpdate(body) { return await coareporttype_headerUpdate(this, body)}
+	async headerCreate(body) { return await coareporttype_headerCreate(this, body)}
+	async headerDelete(body) { return await coareporttype_headerDelete(this, body) }
 	
 			
 }	
 
 // init module
-async function coacategory_init(self, body) {
+async function coareporttype_init(self, body) {
 	const req = self.req
 
 	// set sid untuk session ini, diperlukan ini agar session aktif
@@ -71,7 +71,7 @@ async function coacategory_init(self, body) {
 
 
 // data logging
-async function coacategory_log(self, body, startTime, tablename, id, action, data={}, remark='') {
+async function coareporttype_log(self, body, startTime, tablename, id, action, data={}, remark='') {
 	const { source } = body
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -88,11 +88,11 @@ async function coacategory_log(self, body, startTime, tablename, id, action, dat
 
 
 
-async function coacategory_headerList(self, body) {
+async function coareporttype_headerList(self, body) {
 	const tablename = headerTableName
 	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
 	const searchMap = {
-		searchtext: `coacategory_name ILIKE '%' || \${searchtext} || '%'`,
+		searchtext: `coareporttype_name ILIKE '%' || \${searchtext} || '%'`,
 	};
 
 	try {
@@ -153,13 +153,13 @@ async function coacategory_headerList(self, body) {
 	}
 }
 
-async function coacategory_headerOpen(self, body) {
+async function coareporttype_headerOpen(self, body) {
 	const tablename = headerTableName
 
 	try {
 		const { id } = body 
-		const criteria = { coacategory_id: id }
-		const searchMap = { coacategory_id: `coacategory_id = \${coacategory_id}`}
+		const criteria = { coareporttype_id: id }
+		const searchMap = { coareporttype_id: `coareporttype_id = \${coareporttype_id}`}
 		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
 		const sql = sqlUtil.createSqlSelect({
 			tablename: tablename, 
@@ -201,8 +201,8 @@ async function coacategory_headerOpen(self, body) {
 }
 
 
-async function coacategory_headerCreate(self, body) {
-	const { source='coacategory', data={} } = body
+async function coareporttype_headerCreate(self, body) {
+	const { source='coareporttype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint();
@@ -238,7 +238,7 @@ async function coacategory_headerCreate(self, body) {
 			}
 
 			// record log
-			coacategory_log(self, body, startTime, tablename, ret.coacategory_id, 'CREATE', logMetadata)
+			coareporttype_log(self, body, startTime, tablename, ret.coareporttype_id, 'CREATE', logMetadata)
 
 			return ret
 		})
@@ -249,8 +249,8 @@ async function coacategory_headerCreate(self, body) {
 	}
 }
 
-async function coacategory_headerUpdate(self, body) {
-	const { source='coacategory', data={} } = body
+async function coareporttype_headerUpdate(self, body) {
+	const { source='coareporttype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint()
@@ -275,7 +275,7 @@ async function coacategory_headerUpdate(self, body) {
 			}
 
 			// eksekusi update
-			const cmd = sqlUtil.createUpdateCommand(tablename, data, ['coacategory_id'])
+			const cmd = sqlUtil.createUpdateCommand(tablename, data, ['coareporttype_id'])
 			const ret = await cmd.execute(data)
 
 			
@@ -287,7 +287,7 @@ async function coacategory_headerUpdate(self, body) {
 			}			
 
 			// record log
-			coacategory_log(self, body, startTime, tablename, data.coacategory_id, 'UPDATE')
+			coareporttype_log(self, body, startTime, tablename, data.coareporttype_id, 'UPDATE')
 
 			return ret
 		})
@@ -300,7 +300,7 @@ async function coacategory_headerUpdate(self, body) {
 }
 
 
-async function coacategory_headerDelete(self, body) {
+async function coareporttype_headerDelete(self, body) {
 	const { source, id } = body
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -312,7 +312,7 @@ async function coacategory_headerDelete(self, body) {
 		const deletedRow = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
-			const dataToRemove = {coacategory_id: id}
+			const dataToRemove = {coareporttype_id: id}
 
 			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender headerDeleting
 			if (typeof Extender.headerDeleting === 'function') {
@@ -322,7 +322,7 @@ async function coacategory_headerDelete(self, body) {
 			
 
 			// hapus data header
-			const cmd = sqlUtil.createDeleteCommand(tablename, ['coacategory_id'])
+			const cmd = sqlUtil.createDeleteCommand(tablename, ['coareporttype_id'])
 			const deletedRow = await cmd.execute(dataToRemove)
 
 			const logMetadata = {}
@@ -333,7 +333,7 @@ async function coacategory_headerDelete(self, body) {
 			}
 
 			// record log
-			coacategory_log(self, body, startTime, tablename, id, 'DELETE', logMetadata)
+			coareporttype_log(self, body, startTime, tablename, id, 'DELETE', logMetadata)
 
 			return deletedRow
 		})

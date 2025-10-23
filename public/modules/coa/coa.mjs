@@ -1,7 +1,7 @@
-import Context from './coatype-context.mjs'  
-import * as coatypeHeaderList from './coatypeHeaderList.mjs' 
-import * as coatypeHeaderEdit from './coatypeHeaderEdit.mjs' 
-import * as Extender from './coatype-ext.mjs'
+import Context from './coa-context.mjs'  
+import * as coaHeaderList from './coaHeaderList.mjs' 
+import * as coaHeaderEdit from './coaHeaderEdit.mjs' 
+import * as Extender from './coa-ext.mjs'
 
 const app = Context.app
 const Crsl = Context.Crsl
@@ -15,7 +15,7 @@ export default class extends Module {
 	async main(args={}) {
 		
 		console.log('initializing module...')
-		app.setTitle('Coa Type')
+		app.setTitle('Coa')
 		app.showFooter(true)
 		
 		args.autoLoadGridData = true
@@ -26,8 +26,8 @@ export default class extends Module {
 		// jangan import lagi module-module ini di dalam mjs tersebut
 		// karena akan terjadi cyclic redudancy pada saat di rollup
 		self.Modules = { 
-			coatypeHeaderList, 
-			coatypeHeaderEdit, 
+			coaHeaderList, 
+			coaHeaderEdit, 
 		}
 
 		try {
@@ -46,8 +46,8 @@ export default class extends Module {
 			} 
 
 			await Promise.all([ 
-				coatypeHeaderList.init(self, args), 
-				coatypeHeaderEdit.init(self, args), 
+				coaHeaderList.init(self, args), 
+				coaHeaderEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -59,7 +59,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['coatypeHeaderEdit']
+			const modNameList = ['coaHeaderEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false
@@ -150,7 +150,7 @@ async function render(self) {
 		});
 
 		
-		// coatype-ext.mjs, export function extendPage(self) {} 
+		// coa-ext.mjs, export function extendPage(self) {} 
 		const fn_name = 'extendPage'
 		const fn_extendPage = Extender[fn_name]
 		if (typeof fn_extendPage === 'function') {
