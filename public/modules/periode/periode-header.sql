@@ -147,15 +147,30 @@ comment on column act."periode".periode_closedate is '';
 
 
 -- =============================================
--- FIELD: _createby bigint
+-- FIELD: periode_isactive boolean
+-- =============================================
+-- ADD periode_isactive
+alter table act."periode" add periode_isactive boolean not null default false;
+comment on column act."periode".periode_isactive is '';
+
+-- MODIFY periode_isactive
+alter table act."periode"
+	alter column periode_isactive type boolean,
+	ALTER COLUMN periode_isactive SET DEFAULT false,
+	ALTER COLUMN periode_isactive SET NOT NULL;
+comment on column act."periode".periode_isactive is '';
+
+
+-- =============================================
+-- FIELD: _createby integer
 -- =============================================
 -- ADD _createby
-alter table act."periode" add _createby bigint not null ;
+alter table act."periode" add _createby integer not null ;
 comment on column act."periode"._createby is 'user yang pertama kali membuat record ini';
 
 -- MODIFY _createby
 alter table act."periode"
-	alter column _createby type bigint,
+	alter column _createby type integer,
 	ALTER COLUMN _createby DROP DEFAULT,
 	ALTER COLUMN _createby SET NOT NULL;
 comment on column act."periode"._createby is 'user yang pertama kali membuat record ini';
@@ -165,27 +180,27 @@ comment on column act."periode"._createby is 'user yang pertama kali membuat rec
 -- FIELD: _createdate timestamp with time zone
 -- =============================================
 -- ADD _createdate
-alter table act."periode" add _createdate timestamp with time zone not null ;
+alter table act."periode" add _createdate timestamp with time zone not null default now();
 comment on column act."periode"._createdate is 'waktu record dibuat pertama kali';
 
 -- MODIFY _createdate
 alter table act."periode"
 	alter column _createdate type timestamp with time zone,
-	ALTER COLUMN _createdate DROP DEFAULT,
+	ALTER COLUMN _createdate SET DEFAULT now(),
 	ALTER COLUMN _createdate SET NOT NULL;
 comment on column act."periode"._createdate is 'waktu record dibuat pertama kali';
 
 
 -- =============================================
--- FIELD: _modifyby bigint
+-- FIELD: _modifyby integer
 -- =============================================
 -- ADD _modifyby
-alter table act."periode" add _modifyby bigint  ;
+alter table act."periode" add _modifyby integer  ;
 comment on column act."periode"._modifyby is 'user yang terakhir modifikasi record ini';
 
 -- MODIFY _modifyby
 alter table act."periode"
-	alter column _modifyby type bigint,
+	alter column _modifyby type integer,
 	ALTER COLUMN _modifyby DROP DEFAULT,
 	ALTER COLUMN _modifyby DROP NOT NULL;
 comment on column act."periode"._modifyby is 'user yang terakhir modifikasi record ini';
@@ -234,13 +249,13 @@ CREATE INDEX idx_fk$act$periode$previous_periode_id ON act."periode"(previous_pe
 -- =============================================
 -- Drop existing unique index 
 alter table act."periode"
-	drop constraint uq$act$periode$periode_name;
+	drop constraint uq$act$periode$previous_periode_id;
 
 alter table act."periode"
 	drop constraint uq$act$periode$periode_yearmonth;
 
 alter table act."periode"
-	drop constraint uq$act$periode$previous_periode_id;
+	drop constraint uq$act$periode$periode_name;
 	
 
 -- Add unique index 

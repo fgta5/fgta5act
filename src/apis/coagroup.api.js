@@ -54,15 +54,22 @@ async function coagroup_init(self, body) {
 			}
 		}
 
-		return {
+		const initialData = {
 			userId: req.session.user.userId,
 			userName: req.session.user.userName,
 			userFullname: req.session.userFullname,
 			sid: req.session.sid ,
 			notifierId: Api.generateNotifierId(moduleName, req.sessionID),
 			notifierSocket: req.app.locals.appConfig.notifierSocket,
-			appsUrls: appsUrls
+			appsUrls: appsUrls,
+			setting: {}
 		}
+		
+		if (typeof Extender.coa_init === 'function') {
+			await Extender.coa_init(self, initialData)
+		}
+
+		return initialData
 		
 	} catch (err) {
 		throw err
@@ -132,6 +139,11 @@ async function coagroup_headerList(self, body) {
 				const { coagroup_name } = await sqlUtil.lookupdb(db, 'act.coagroup', 'coagroup_id', row.coagroup_parent)
 				row.coagroup_parent_name = coagroup_name
 			}
+			// lookup: coareporttype_name dari field coareporttype_name pada table act.coareporttype dimana (act.coareporttype.coareporttype_id = act.coagroup.coareporttype_id)
+			{
+				const { coareporttype_name } = await sqlUtil.lookupdb(db, 'act.coareporttype', 'coareporttype_id', row.coareporttype_id)
+				row.coareporttype_name = coareporttype_name
+			}
 			
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
@@ -184,6 +196,11 @@ async function coagroup_headerOpen(self, body) {
 		{
 			const { coagroup_name } = await sqlUtil.lookupdb(db, 'act.coagroup', 'coagroup_id', data.coagroup_parent)
 			data.coagroup_parent_name = coagroup_name
+		}
+		// lookup: coareporttype_name dari field coareporttype_name pada table act.coareporttype dimana (act.coareporttype.coareporttype_id = act.coagroup.coareporttype_id)
+		{
+			const { coareporttype_name } = await sqlUtil.lookupdb(db, 'act.coareporttype', 'coareporttype_id', data.coareporttype_id)
+			data.coareporttype_name = coareporttype_name
 		}
 		
 

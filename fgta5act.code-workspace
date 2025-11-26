@@ -41,7 +41,8 @@
 		"breadcrumbs.showStrings": false,
 		"breadcrumbs.showStructs": false,
 		"breadcrumbs.showTypeParameters": false,
-		"breadcrumbs.showVariables": false		
+		"breadcrumbs.showVariables": false,
+		"workbench.list.horizontalScrolling": true
 	},
 
 	"launch": {

@@ -1,0 +1,534 @@
+-- jurnal.sql
+
+
+/* =============================================
+ * CREATE TABLE act."jurnal"
+ * ============================================*/
+create table act."jurnal" (
+	jurnal_id bigint not null,
+	constraint jurnal_pk primary key (jurnal_id)
+);
+comment on table act."jurnal" is '';	
+
+
+-- =============================================
+-- FIELD: jurnal_doc varchar(30)
+-- =============================================
+-- ADD jurnal_doc
+alter table act."jurnal" add jurnal_doc varchar(30)  ;
+comment on column act."jurnal".jurnal_doc is '';
+
+-- MODIFY jurnal_doc
+alter table act."jurnal"
+	alter column jurnal_doc type varchar(30),
+	ALTER COLUMN jurnal_doc DROP DEFAULT,
+	ALTER COLUMN jurnal_doc DROP NOT NULL;
+comment on column act."jurnal".jurnal_doc is '';
+
+
+-- =============================================
+-- FIELD: jurnaltype_id smallint
+-- =============================================
+-- ADD jurnaltype_id
+alter table act."jurnal" add jurnaltype_id smallint not null default 0;
+comment on column act."jurnal".jurnaltype_id is '';
+
+-- MODIFY jurnaltype_id
+alter table act."jurnal"
+	alter column jurnaltype_id type smallint,
+	ALTER COLUMN jurnaltype_id SET DEFAULT 0,
+	ALTER COLUMN jurnaltype_id SET NOT NULL;
+comment on column act."jurnal".jurnaltype_id is '';
+
+
+-- =============================================
+-- FIELD: periode_id smallint
+-- =============================================
+-- ADD periode_id
+alter table act."jurnal" add periode_id smallint not null default 0;
+comment on column act."jurnal".periode_id is '';
+
+-- MODIFY periode_id
+alter table act."jurnal"
+	alter column periode_id type smallint,
+	ALTER COLUMN periode_id SET DEFAULT 0,
+	ALTER COLUMN periode_id SET NOT NULL;
+comment on column act."jurnal".periode_id is '';
+
+
+-- =============================================
+-- FIELD: jurnal_date date
+-- =============================================
+-- ADD jurnal_date
+alter table act."jurnal" add jurnal_date date  default now();
+comment on column act."jurnal".jurnal_date is '';
+
+-- MODIFY jurnal_date
+alter table act."jurnal"
+	alter column jurnal_date type date,
+	ALTER COLUMN jurnal_date SET DEFAULT now(),
+	ALTER COLUMN jurnal_date DROP NOT NULL;
+comment on column act."jurnal".jurnal_date is '';
+
+
+-- =============================================
+-- FIELD: jurnal_datedue date
+-- =============================================
+-- ADD jurnal_datedue
+alter table act."jurnal" add jurnal_datedue date  default now();
+comment on column act."jurnal".jurnal_datedue is '';
+
+-- MODIFY jurnal_datedue
+alter table act."jurnal"
+	alter column jurnal_datedue type date,
+	ALTER COLUMN jurnal_datedue SET DEFAULT now(),
+	ALTER COLUMN jurnal_datedue DROP NOT NULL;
+comment on column act."jurnal".jurnal_datedue is '';
+
+
+-- =============================================
+-- FIELD: jurnal_descr text
+-- =============================================
+-- ADD jurnal_descr
+alter table act."jurnal" add jurnal_descr text  ;
+comment on column act."jurnal".jurnal_descr is '';
+
+-- MODIFY jurnal_descr
+alter table act."jurnal"
+	alter column jurnal_descr type text,
+	ALTER COLUMN jurnal_descr DROP DEFAULT,
+	ALTER COLUMN jurnal_descr DROP NOT NULL;
+comment on column act."jurnal".jurnal_descr is '';
+
+
+-- =============================================
+-- FIELD: curr_id smallint
+-- =============================================
+-- ADD curr_id
+alter table act."jurnal" add curr_id smallint  ;
+comment on column act."jurnal".curr_id is '';
+
+-- MODIFY curr_id
+alter table act."jurnal"
+	alter column curr_id type smallint,
+	ALTER COLUMN curr_id DROP DEFAULT,
+	ALTER COLUMN curr_id DROP NOT NULL;
+comment on column act."jurnal".curr_id is '';
+
+
+-- =============================================
+-- FIELD: curr_rate decimal(5, 0)
+-- =============================================
+-- ADD curr_rate
+alter table act."jurnal" add curr_rate decimal(5, 0) not null default 0;
+comment on column act."jurnal".curr_rate is '';
+
+-- MODIFY curr_rate
+alter table act."jurnal"
+	alter column curr_rate type decimal(5, 0),
+	ALTER COLUMN curr_rate SET DEFAULT 0,
+	ALTER COLUMN curr_rate SET NOT NULL;
+comment on column act."jurnal".curr_rate is '';
+
+
+-- =============================================
+-- FIELD: jurnal_idr decimal(18, 2)
+-- =============================================
+-- ADD jurnal_idr
+alter table act."jurnal" add jurnal_idr decimal(18, 2) not null default 0;
+comment on column act."jurnal".jurnal_idr is '';
+
+-- MODIFY jurnal_idr
+alter table act."jurnal"
+	alter column jurnal_idr type decimal(18, 2),
+	ALTER COLUMN jurnal_idr SET DEFAULT 0,
+	ALTER COLUMN jurnal_idr SET NOT NULL;
+comment on column act."jurnal".jurnal_idr is '';
+
+
+-- =============================================
+-- FIELD: jurnal_value decimal(13, 2)
+-- =============================================
+-- ADD jurnal_value
+alter table act."jurnal" add jurnal_value decimal(13, 2) not null default 0;
+comment on column act."jurnal".jurnal_value is '';
+
+-- MODIFY jurnal_value
+alter table act."jurnal"
+	alter column jurnal_value type decimal(13, 2),
+	ALTER COLUMN jurnal_value SET DEFAULT 0,
+	ALTER COLUMN jurnal_value SET NOT NULL;
+comment on column act."jurnal".jurnal_value is '';
+
+
+-- =============================================
+-- FIELD: coa_id int
+-- =============================================
+-- ADD coa_id
+alter table act."jurnal" add coa_id int  ;
+comment on column act."jurnal".coa_id is '';
+
+-- MODIFY coa_id
+alter table act."jurnal"
+	alter column coa_id type int,
+	ALTER COLUMN coa_id DROP DEFAULT,
+	ALTER COLUMN coa_id DROP NOT NULL;
+comment on column act."jurnal".coa_id is '';
+
+
+-- =============================================
+-- FIELD: unit_id int
+-- =============================================
+-- ADD unit_id
+alter table act."jurnal" add unit_id int  ;
+comment on column act."jurnal".unit_id is '';
+
+-- MODIFY unit_id
+alter table act."jurnal"
+	alter column unit_id type int,
+	ALTER COLUMN unit_id DROP DEFAULT,
+	ALTER COLUMN unit_id DROP NOT NULL;
+comment on column act."jurnal".unit_id is '';
+
+
+-- =============================================
+-- FIELD: site_id int
+-- =============================================
+-- ADD site_id
+alter table act."jurnal" add site_id int  ;
+comment on column act."jurnal".site_id is '';
+
+-- MODIFY site_id
+alter table act."jurnal"
+	alter column site_id type int,
+	ALTER COLUMN site_id DROP DEFAULT,
+	ALTER COLUMN site_id DROP NOT NULL;
+comment on column act."jurnal".site_id is '';
+
+
+-- =============================================
+-- FIELD: dept_id int
+-- =============================================
+-- ADD dept_id
+alter table act."jurnal" add dept_id int  ;
+comment on column act."jurnal".dept_id is '';
+
+-- MODIFY dept_id
+alter table act."jurnal"
+	alter column dept_id type int,
+	ALTER COLUMN dept_id DROP DEFAULT,
+	ALTER COLUMN dept_id DROP NOT NULL;
+comment on column act."jurnal".dept_id is '';
+
+
+-- =============================================
+-- FIELD: partner_id int
+-- =============================================
+-- ADD partner_id
+alter table act."jurnal" add partner_id int  ;
+comment on column act."jurnal".partner_id is '';
+
+-- MODIFY partner_id
+alter table act."jurnal"
+	alter column partner_id type int,
+	ALTER COLUMN partner_id DROP DEFAULT,
+	ALTER COLUMN partner_id DROP NOT NULL;
+comment on column act."jurnal".partner_id is '';
+
+
+-- =============================================
+-- FIELD: project_id int
+-- =============================================
+-- ADD project_id
+alter table act."jurnal" add project_id int  ;
+comment on column act."jurnal".project_id is '';
+
+-- MODIFY project_id
+alter table act."jurnal"
+	alter column project_id type int,
+	ALTER COLUMN project_id DROP DEFAULT,
+	ALTER COLUMN project_id DROP NOT NULL;
+comment on column act."jurnal".project_id is '';
+
+
+-- =============================================
+-- FIELD: iscommit boolean
+-- =============================================
+-- ADD iscommit
+alter table act."jurnal" add iscommit boolean not null default false;
+comment on column act."jurnal".iscommit is '';
+
+-- MODIFY iscommit
+alter table act."jurnal"
+	alter column iscommit type boolean,
+	ALTER COLUMN iscommit SET DEFAULT false,
+	ALTER COLUMN iscommit SET NOT NULL;
+comment on column act."jurnal".iscommit is '';
+
+
+-- =============================================
+-- FIELD: ispost boolean
+-- =============================================
+-- ADD ispost
+alter table act."jurnal" add ispost boolean not null default false;
+comment on column act."jurnal".ispost is '';
+
+-- MODIFY ispost
+alter table act."jurnal"
+	alter column ispost type boolean,
+	ALTER COLUMN ispost SET DEFAULT false,
+	ALTER COLUMN ispost SET NOT NULL;
+comment on column act."jurnal".ispost is '';
+
+
+-- =============================================
+-- FIELD: _commitby bigint
+-- =============================================
+-- ADD _commitby
+alter table act."jurnal" add _commitby bigint  ;
+comment on column act."jurnal"._commitby is '';
+
+-- MODIFY _commitby
+alter table act."jurnal"
+	alter column _commitby type bigint,
+	ALTER COLUMN _commitby DROP DEFAULT,
+	ALTER COLUMN _commitby DROP NOT NULL;
+comment on column act."jurnal"._commitby is '';
+
+
+-- =============================================
+-- FIELD: _commitdate timestamp with time zone
+-- =============================================
+-- ADD _commitdate
+alter table act."jurnal" add _commitdate timestamp with time zone  ;
+comment on column act."jurnal"._commitdate is '';
+
+-- MODIFY _commitdate
+alter table act."jurnal"
+	alter column _commitdate type timestamp with time zone,
+	ALTER COLUMN _commitdate DROP DEFAULT,
+	ALTER COLUMN _commitdate DROP NOT NULL;
+comment on column act."jurnal"._commitdate is '';
+
+
+-- =============================================
+-- FIELD: _postby text
+-- =============================================
+-- ADD _postby
+alter table act."jurnal" add _postby text  ;
+comment on column act."jurnal"._postby is '';
+
+-- MODIFY _postby
+alter table act."jurnal"
+	alter column _postby type text,
+	ALTER COLUMN _postby DROP DEFAULT,
+	ALTER COLUMN _postby DROP NOT NULL;
+comment on column act."jurnal"._postby is '';
+
+
+-- =============================================
+-- FIELD: _postdate text
+-- =============================================
+-- ADD _postdate
+alter table act."jurnal" add _postdate text  ;
+comment on column act."jurnal"._postdate is '';
+
+-- MODIFY _postdate
+alter table act."jurnal"
+	alter column _postdate type text,
+	ALTER COLUMN _postdate DROP DEFAULT,
+	ALTER COLUMN _postdate DROP NOT NULL;
+comment on column act."jurnal"._postdate is '';
+
+
+-- =============================================
+-- FIELD: _createby integer
+-- =============================================
+-- ADD _createby
+alter table act."jurnal" add _createby integer not null ;
+comment on column act."jurnal"._createby is 'user yang pertama kali membuat record ini';
+
+-- MODIFY _createby
+alter table act."jurnal"
+	alter column _createby type integer,
+	ALTER COLUMN _createby DROP DEFAULT,
+	ALTER COLUMN _createby SET NOT NULL;
+comment on column act."jurnal"._createby is 'user yang pertama kali membuat record ini';
+
+
+-- =============================================
+-- FIELD: _createdate timestamp with time zone
+-- =============================================
+-- ADD _createdate
+alter table act."jurnal" add _createdate timestamp with time zone not null default now();
+comment on column act."jurnal"._createdate is 'waktu record dibuat pertama kali';
+
+-- MODIFY _createdate
+alter table act."jurnal"
+	alter column _createdate type timestamp with time zone,
+	ALTER COLUMN _createdate SET DEFAULT now(),
+	ALTER COLUMN _createdate SET NOT NULL;
+comment on column act."jurnal"._createdate is 'waktu record dibuat pertama kali';
+
+
+-- =============================================
+-- FIELD: _modifyby integer
+-- =============================================
+-- ADD _modifyby
+alter table act."jurnal" add _modifyby integer  ;
+comment on column act."jurnal"._modifyby is 'user yang terakhir modifikasi record ini';
+
+-- MODIFY _modifyby
+alter table act."jurnal"
+	alter column _modifyby type integer,
+	ALTER COLUMN _modifyby DROP DEFAULT,
+	ALTER COLUMN _modifyby DROP NOT NULL;
+comment on column act."jurnal"._modifyby is 'user yang terakhir modifikasi record ini';
+
+
+-- =============================================
+-- FIELD: _modifydate timestamp with time zone
+-- =============================================
+-- ADD _modifydate
+alter table act."jurnal" add _modifydate timestamp with time zone  ;
+comment on column act."jurnal"._modifydate is 'waktu terakhir record dimodifikasi';
+
+-- MODIFY _modifydate
+alter table act."jurnal"
+	alter column _modifydate type timestamp with time zone,
+	ALTER COLUMN _modifydate DROP DEFAULT,
+	ALTER COLUMN _modifydate DROP NOT NULL;
+comment on column act."jurnal"._modifydate is 'waktu terakhir record dimodifikasi';
+
+
+
+
+-- =============================================
+-- FOREIGN KEY CONSTRAINT
+-- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$jurnaltype_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$periode_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$curr_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$coa_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$unit_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$site_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$dept_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$partner_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$project_id;
+
+
+-- Add Foreign Key Constraint  
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$jurnaltype_id
+	FOREIGN KEY (jurnaltype_id)
+	REFERENCES act."jurnaltype"(jurnaltype_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$jurnaltype_id;
+CREATE INDEX idx_fk$act$jurnal$jurnaltype_id ON act."jurnal"(jurnaltype_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$periode_id
+	FOREIGN KEY (periode_id)
+	REFERENCES act."periode"(periode_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$periode_id;
+CREATE INDEX idx_fk$act$jurnal$periode_id ON act."jurnal"(periode_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$curr_id
+	FOREIGN KEY (curr_id)
+	REFERENCES ent."curr"(curr_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$curr_id;
+CREATE INDEX idx_fk$act$jurnal$curr_id ON act."jurnal"(curr_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$coa_id
+	FOREIGN KEY (coa_id)
+	REFERENCES act."coa"(coa_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$coa_id;
+CREATE INDEX idx_fk$act$jurnal$coa_id ON act."jurnal"(coa_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$unit_id
+	FOREIGN KEY (unit_id)
+	REFERENCES ent."unit"(unit_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$unit_id;
+CREATE INDEX idx_fk$act$jurnal$unit_id ON act."jurnal"(unit_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$site_id
+	FOREIGN KEY (site_id)
+	REFERENCES ent."site"(site_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$site_id;
+CREATE INDEX idx_fk$act$jurnal$site_id ON act."jurnal"(site_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$dept_id
+	FOREIGN KEY (dept_id)
+	REFERENCES ent."dept"(dept_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$dept_id;
+CREATE INDEX idx_fk$act$jurnal$dept_id ON act."jurnal"(dept_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$partner_id
+	FOREIGN KEY (partner_id)
+	REFERENCES ent."partner"(partner_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$partner_id;
+CREATE INDEX idx_fk$act$jurnal$partner_id ON act."jurnal"(partner_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$project_id
+	FOREIGN KEY (project_id)
+	REFERENCES prj."project"(project_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$project_id;
+CREATE INDEX idx_fk$act$jurnal$project_id ON act."jurnal"(project_id);	
+
+	
+
+
+-- =============================================
+-- UNIQUE INDEX
+-- =============================================
+-- Drop existing unique index 
+alter table act."jurnal"
+	drop constraint uq$act$jurnal$jurnal_doc;
+	
+
+-- Add unique index 
+alter table  act."jurnal"
+	add constraint uq$act$jurnal$jurnal_doc unique (jurnal_doc); 
+

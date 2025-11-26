@@ -1,0 +1,698 @@
+import pgp from 'pg-promise';
+
+import db from '@agung_dhewe/webapps/src/db.js'
+import Api from '@agung_dhewe/webapps/src/api.js'
+import sqlUtil from '@agung_dhewe/pgsqlc'
+import context from '@agung_dhewe/webapps/src/context.js'  
+import logger from '@agung_dhewe/webapps/src/logger.js'
+import { createSequencerLine } from '@agung_dhewe/webapps/src/sequencerline.js' 
+
+import * as Extender from './extenders/jurnaltype.apiext.js'
+
+const moduleName = 'jurnaltype'
+const headerSectionName = 'header'
+const headerTableName = 'act.jurnaltype' 
+const coaTableName = 'act.jurnaltypecoa'  	
+
+// api: account
+export default class extends Api {
+	constructor(req, res, next) {
+		super(req, res, next);
+		Api.cekLogin(req)
+	}
+
+
+	// dipanggil dengan model snake syntax
+	// contoh: header-list
+	//         header-open-data
+	async init(body) { return await jurnaltype_init(this, body) }
+
+	// header
+	async headerList(body) { return await jurnaltype_headerList(this, body) }
+	async headerOpen(body) { return await jurnaltype_headerOpen(this, body) }
+	async headerUpdate(body) { return await jurnaltype_headerUpdate(this, body)}
+	async headerCreate(body) { return await jurnaltype_headerCreate(this, body)}
+	async headerDelete(body) { return await jurnaltype_headerDelete(this, body) }
+	
+	
+	// coa	
+	async coaList(body) { return await jurnaltype_coaList(this, body) }
+	async coaOpen(body) { return await jurnaltype_coaOpen(this, body) }
+	async coaUpdate(body) { return await jurnaltype_coaUpdate(this, body)}
+	async coaCreate(body) { return await jurnaltype_coaCreate(this, body) }
+	async coaDelete(body) { return await jurnaltype_coaDelete(this, body) }
+	async coaDeleteRows(body) { return await jurnaltype_coaDeleteRows(this, body) }
+			
+}	
+
+// init module
+async function jurnaltype_init(self, body) {
+	const req = self.req
+
+	// set sid untuk session ini, diperlukan ini agar session aktif
+	req.session.sid = req.sessionID
+
+	try {
+		// ambil data app dari database
+		const sql = 'select apps_id, apps_url from core."apps"'
+		const result = await db.any(sql)
+
+		const appsUrls = {}
+		for (let row of result) {
+			appsUrls[row.apps_id] = {
+				url: row.apps_url
+			}
+		}
+
+		const initialData = {
+			userId: req.session.user.userId,
+			userName: req.session.user.userName,
+			userFullname: req.session.userFullname,
+			sid: req.session.sid ,
+			notifierId: Api.generateNotifierId(moduleName, req.sessionID),
+			notifierSocket: req.app.locals.appConfig.notifierSocket,
+			appsUrls: appsUrls,
+			setting: {}
+		}
+		
+		if (typeof Extender.coa_init === 'function') {
+			await Extender.coa_init(self, initialData)
+		}
+
+		return initialData
+		
+	} catch (err) {
+		throw err
+	}
+}
+
+
+// data logging
+async function jurnaltype_log(self, body, startTime, tablename, id, action, data={}, remark='') {
+	const { source } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const user_name = req.session.user.userFullname
+	const ipaddress = req.ip
+	const metadata = JSON.stringify({...{source:source}, ...data})
+	const endTime = process.hrtime.bigint();
+	const executionTimeMs = Number((endTime - startTime) / 1_000_000n); // hasil dalam ms tanpa desimal
+	
+	const logdata = {id, user_id, user_name, moduleName, action, tablename, executionTimeMs, remark, metadata, ipaddress}
+	const ret = await logger.log(logdata)
+	return ret
+}
+
+
+
+async function jurnaltype_headerList(self, body) {
+	const tablename = headerTableName
+	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
+	const searchMap = {
+		searchtext: `jurnaltype_name ILIKE '%' || \${searchtext} || '%'`,
+	};
+
+	try {
+	
+		// jika tidak ada default searchtext
+		if (searchMap.searchtext===undefined) {
+			throw new Error(`'searchtext' belum didefinisikan di searchMap`)	
+		}
+		
+
+		// hilangkan criteria '' atau null
+		for (var cname in criteria) {
+			if (criteria[cname]==='' || criteria[cname]===null) {
+				delete criteria[cname]
+			}
+		}
+
+		// apabila ada keperluan untuk recompose criteria
+		if (typeof Extender.headerListCriteria === 'function') {
+			await Extender.headerListCriteria(self, db, searchMap, criteria, sort, columns)
+		}
+
+		var max_rows = limit==0 ? 10 : limit
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({tablename, columns, whereClause, sort, limit:max_rows+1, offset, queryParams})
+		const rows = await db.any(sql, queryParams);
+
+		
+		var i = 0
+		const data = []
+		for (var row of rows) {
+			i++
+			if (i>max_rows) { break }
+
+			
+			// pasang extender di sini
+			if (typeof Extender.headerListRow === 'function') {
+				await Extender.headerListRow(self, row)
+			}
+
+			data.push(row)
+		}
+
+		var nextoffset = null
+		if (rows.length>max_rows) {
+			nextoffset = offset+max_rows
+		}
+
+		return {
+			criteria: criteria,
+			limit:  max_rows,
+			nextoffset: nextoffset,
+			data: data
+		}
+
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_headerOpen(self, body) {
+	const tablename = headerTableName
+
+	try {
+		const { id } = body 
+		const criteria = { jurnaltype_id: id }
+		const searchMap = { jurnaltype_id: `jurnaltype_id = \${jurnaltype_id}`}
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename: tablename, 
+			columns:[], 
+			whereClause, 
+			sort:{}, 
+			limit:0, 
+			offset:0, 
+			queryParams
+		})
+		const data = await db.one(sql, queryParams);
+		if (data==null) { 
+			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
+		}	
+
+		
+
+		// lookup data createby
+		{
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
+			data._createby = user_fullname ?? ''
+		}
+
+		// lookup data modifyby
+		{
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
+			data._modifyby = user_fullname ?? ''
+		}
+		
+		// pasang extender untuk olah data
+		if (typeof Extender.headerOpen === 'function') {
+			await Extender.headerOpen(self, data)
+		}
+
+		return data
+	} catch (err) {
+		throw err
+	}
+}
+
+
+async function jurnaltype_headerCreate(self, body) {
+	const { source='jurnaltype', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = headerTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+
+		data._createby = user_id
+		data._createdate = (new Date()).toISOString()
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+				
+			// apabila ada keperluan pengelohan data sebelum disimpan, lakukan di extender headerCreating
+			if (typeof Extender.headerCreating === 'function') {
+				await Extender.headerCreating(self, tx, data)
+			}
+
+			const cmd = sqlUtil.createInsertCommand(tablename, data)
+			const ret = await cmd.execute(data)
+
+			
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.headerCreated === 'function') {
+				await Extender.headerCreated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			jurnaltype_log(self, body, startTime, tablename, ret.jurnaltype_id, 'CREATE', logMetadata)
+
+			return ret
+		})
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_headerUpdate(self, body) {
+	const { source='jurnaltype', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = headerTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+
+		data._modifyby = user_id
+		data._modifydate = (new Date()).toISOString()
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			// apabila ada keperluan pengelohan data sebelum disimpan, lakukan di extender headerCreating
+			if (typeof Extender.headerUpdating === 'function') {
+				await Extender.headerUpdating(self, tx, data)
+			}
+
+			// eksekusi update
+			const cmd = sqlUtil.createUpdateCommand(tablename, data, ['jurnaltype_id'])
+			const ret = await cmd.execute(data)
+
+			
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.headerUpdated === 'function') {
+				await Extender.headerUpdated(self, tx, ret, data, logMetadata)
+			}			
+
+			// record log
+			jurnaltype_log(self, body, startTime, tablename, data.jurnaltype_id, 'UPDATE')
+
+			return ret
+		})
+		
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+
+async function jurnaltype_headerDelete(self, body) {
+	const { source, id } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = headerTableName
+
+	try {
+
+		const deletedRow = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToRemove = {jurnaltype_id: id}
+
+			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender headerDeleting
+			if (typeof Extender.headerDeleting === 'function') {
+				await Extender.headerDeleting(self, tx, dataToRemove)
+			}
+
+			
+			// hapus data coa
+			{
+				const sql = `select * from ${coaTableName} where jurnaltype_id=\${jurnaltype_id}`
+				const rows = await tx.any(sql, dataToRemove)
+				for (let rowcoa of rows) {
+					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+					if (typeof Extender.coaDeleting === 'function') {
+						await Extender.coaDeleting(self, tx, rowcoa, logMetadata)
+					}
+
+					const param = {jurnaltypecoa_id: rowcoa.jurnaltypecoa_id}
+					const cmd = sqlUtil.createDeleteCommand(coaTableName, ['jurnaltypecoa_id'])
+					const deletedRow = await cmd.execute(param)
+
+					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+					if (typeof Extender.coaDeleted === 'function') {
+						await Extender.coaDeleted(self, tx, deletedRow, logMetadata)
+					}					
+
+					jurnaltype_log(self, body, startTime, coaTableName, rowcoa.jurnaltypecoa_id, 'DELETE', {rowdata: deletedRow})
+					jurnaltype_log(self, body, startTime, headerTableName, rowcoa.jurnaltype_id, 'DELETE ROW COA', {jurnaltypecoa_id: rowcoa.jurnaltypecoa_id, tablename: coaTableName}, `removed: ${rowcoa.jurnaltypecoa_id}`)
+
+
+				}	
+			}
+
+			
+			
+
+			// hapus data header
+			const cmd = sqlUtil.createDeleteCommand(tablename, ['jurnaltype_id'])
+			const deletedRow = await cmd.execute(dataToRemove)
+
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender headerDeleted
+			if (typeof Extender.headerDeleted === 'function') {
+				await Extender.headerDeleted(self, tx, ret, logMetadata)
+			}
+
+			// record log
+			jurnaltype_log(self, body, startTime, tablename, id, 'DELETE', logMetadata)
+
+			return deletedRow
+		})
+	
+
+		return deletedRow
+	} catch (err) {
+		throw err
+	}
+}
+
+
+
+// coa	
+
+async function jurnaltype_coaList(self, body) {
+	const tablename = coaTableName
+	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
+	const searchMap = {
+		jurnaltype_id: `jurnaltype_id=try_cast_bigint(\${jurnaltype_id}, 0)`,
+	};
+
+
+	try {
+	
+		// hilangkan criteria '' atau null
+		for (var cname in criteria) {
+			if (criteria[cname]==='' || criteria[cname]===null) {
+				delete criteria[cname]
+			}
+		}
+
+		// apabila ada keperluan untuk recompose criteria
+		if (typeof Extender.jurnaltypeListCriteria === 'function') {
+			await Extender.jurnaltypeListCriteria(self, db, searchMap, criteria, sort, columns)
+		}
+
+		var max_rows = limit==0 ? 10 : limit
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({tablename, columns, whereClause, sort, limit:max_rows+1, offset, queryParams})
+		const rows = await db.any(sql, queryParams);
+
+		
+		var i = 0
+		const data = []
+		for (var row of rows) {
+			i++
+			if (i>max_rows) { break }
+
+			// lookup: coa_name dari field coa_name pada table act.coa dimana (act.coa.coa_id = act.jurnaltype.coa_id)
+			{
+				const { coa_name } = await sqlUtil.lookupdb(db, 'act.coa', 'coa_id', row.coa_id)
+				row.coa_name = coa_name
+			}
+			
+
+			// pasang extender di sini
+			if (typeof Extender.detilListRow === 'function') {
+				await Extender.detilListRow(row)
+			}
+
+			data.push(row)
+		}
+
+		var nextoffset = null
+		if (rows.length>max_rows) {
+			nextoffset = offset+max_rows
+		}
+
+		return {
+			criteria: criteria,
+			limit:  max_rows,
+			nextoffset: nextoffset,
+			data: data
+		}
+
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_coaOpen(self, body) {
+	const tablename = coaTableName
+
+	try {
+		const { id } = body 
+		const criteria = { jurnaltypecoa_id: id }
+		const searchMap = { jurnaltypecoa_id: `jurnaltypecoa_id = \${jurnaltypecoa_id}`}
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename, 
+			columns:[], 
+			whereClause, 
+			sort:{}, 
+			limit:0, 
+			offset:0, 
+			queryParams
+		})
+		const data = await db.one(sql, queryParams);
+		if (data==null) { 
+			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
+		}	
+
+
+		// lookup: coa_name dari field coa_name pada table act.coa dimana (act.coa.coa_id = act.jurnaltype.coa_id)
+		{
+			const { coa_name } = await sqlUtil.lookupdb(db, 'act.coa', 'coa_id', data.coa_id)
+			data.coa_name = coa_name
+		}
+		
+
+		// lookup data createby
+		{
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
+			data._createby = user_fullname ?? ''
+		}
+
+		// lookup data modifyby
+		{
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
+			data._modifyby = user_fullname ?? ''
+		}	
+
+		return data
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_coaCreate(self, body) {
+	const { source='jurnaltype', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = coaTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+
+		data._createby = user_id
+		data._createdate = (new Date()).toISOString()
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const sequencer = createSequencerLine(tx, {})
+			const seqdata = await sequencer.increment('')
+			data.jurnaltypecoa_id = seqdata.id
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.coaCreating === 'function') {
+				await Extender.coaCreating(self, tx, data, seqdata)
+			}
+
+			const cmd = sqlUtil.createInsertCommand(tablename, data)
+			const ret = await cmd.execute(data)
+			
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.coaCreated === 'function') {
+				await Extender.coaCreated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			jurnaltype_log(self, body, startTime, tablename, ret.jurnaltypecoa_id, 'CREATE', logMetadata)
+
+			return ret
+		})
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_coaUpdate(self, body) {
+	const { source='jurnaltype', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = coaTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+
+		data._modifyby = user_id
+		data._modifydate = (new Date()).toISOString()
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.coaUpdating === 'function') {
+				await Extender.coaUpdating(self, tx, data)
+			}			
+			
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['jurnaltypecoa_id'])
+			const ret = await cmd.execute(data)
+			
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.coaUpdated === 'function') {
+				await Extender.coaUpdated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			jurnaltype_log(self, body, startTime, tablename, data.jurnaltypecoa_id, 'UPDATE', logMetadata)
+
+			return ret
+		})
+	
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_coaDelete(self, body) {
+	const { source, id } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = coaTableName
+
+	try {
+
+		const deletedRow = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToRemove = {jurnaltypecoa_id: id}
+			const sql = `select * from ${coaTableName} where jurnaltypecoa_id=\${jurnaltypecoa_id}`
+			const rowcoa = await tx.oneOrNone(sql, dataToRemove)
+
+
+			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+			if (typeof Extender.coaDeleting === 'function') {
+				await Extender.coaDeleting(self, tx, rowcoa, logMetadata)
+			}
+
+			const param = {jurnaltypecoa_id: rowcoa.jurnaltypecoa_id}
+			const cmd = sqlUtil.createDeleteCommand(coaTableName, ['jurnaltypecoa_id'])
+			const deletedRow = await cmd.execute(param)
+
+			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+			if (typeof Extender.coaDeleted === 'function') {
+				await Extender.coaDeleted(self, tx, deletedRow, logMetadata)
+			}					
+
+			jurnaltype_log(self, body, startTime, coaTableName, rowcoa.jurnaltypecoa_id, 'DELETE', {rowdata: deletedRow})
+			jurnaltype_log(self, body, startTime, headerTableName, rowcoa.jurnaltype_id, 'DELETE ROW COA', {jurnaltypecoa_id: rowcoa.jurnaltypecoa_id, tablename: coaTableName}, `removed: ${rowcoa.jurnaltypecoa_id}`)
+
+			return deletedRow
+		})
+	
+
+		return deletedRow
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_coaDeleteRows(self, body) {
+	const { data } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = coaTableName
+
+
+	try {
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			for (let id of data) {
+				const dataToRemove = {jurnaltypecoa_id: id}
+				const sql = `select * from ${coaTableName} where jurnaltypecoa_id=\${jurnaltypecoa_id}`
+				const rowcoa = await tx.oneOrNone(sql, dataToRemove)
+
+				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+				if (typeof Extender.coaDeleting === 'function') {
+					await Extender.coaDeleting(self, tx, rowcoa, logMetadata)
+				}
+
+				const param = {jurnaltypecoa_id: rowcoa.jurnaltypecoa_id}
+				const cmd = sqlUtil.createDeleteCommand(coaTableName, ['jurnaltypecoa_id'])
+				const deletedRow = await cmd.execute(param)
+
+				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+				if (typeof Extender.coaDeleted === 'function') {
+					await Extender.coaDeleted(self, tx, deletedRow, logMetadata)
+				}					
+
+				jurnaltype_log(self, body, startTime, coaTableName, rowcoa.jurnaltypecoa_id, 'DELETE', {rowdata: deletedRow})
+				jurnaltype_log(self, body, startTime, headerTableName, rowcoa.jurnaltype_id, 'DELETE ROW COA', {jurnaltypecoa_id: rowcoa.jurnaltypecoa_id, tablename: coaTableName}, `removed: ${rowcoa.jurnaltypecoa_id}`)
+			}
+		})
+
+		const res = {
+			deleted: true,
+			message: ''
+		}
+		return res
+	} catch (err) {
+		throw err
+	}	
+}
+
+	

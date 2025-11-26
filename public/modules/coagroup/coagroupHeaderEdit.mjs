@@ -23,6 +23,7 @@ const btn_reset = new $fgta5.ActionButton('coagroupHeaderEdit-btn_reset')
 const btn_prev = new $fgta5.ActionButton('coagroupHeaderEdit-btn_prev')
 const btn_next = new $fgta5.ActionButton('coagroupHeaderEdit-btn_next')
 
+
 const btn_recordstatus = document.getElementById('coagroupHeader-btn_recordstatus')
 const btn_logs = document.getElementById('coagroupHeader-btn_logs')
 const btn_about = document.getElementById('coagroupHeader-btn_about')
@@ -35,7 +36,8 @@ const obj_coagroup_isparent = frm.Inputs['coagroupHeaderEdit-obj_coagroup_ispare
 const obj_coagroup_parent = frm.Inputs['coagroupHeaderEdit-obj_coagroup_parent']
 const obj_coagrou_pathid = frm.Inputs['coagroupHeaderEdit-obj_coagrou_pathid']
 const obj_coagroup_path = frm.Inputs['coagroupHeaderEdit-obj_coagroup_path']
-const obj_coagroup_level = frm.Inputs['coagroupHeaderEdit-obj_coagroup_level']	
+const obj_coagroup_level = frm.Inputs['coagroupHeaderEdit-obj_coagroup_level']
+const obj_coareporttype_id = frm.Inputs['coagroupHeaderEdit-obj_coareporttype_id']	
 const obj_createby = document.getElementById('fRecord-section-createby')
 const obj_createdate = document.getElementById('fRecord-section-createdate')
 const obj_modifyby = document.getElementById('fRecord-section-modifyby')
@@ -69,6 +71,12 @@ export async function init(self, args) {
 	btn_logs.addEventListener('click', evt=>{ btn_logs_click(self, evt) })	
 	btn_about.addEventListener('click', evt=>{ btn_about_click(self, evt) })
 
+	// set actions
+	CurrentState.Actions = {
+		edit: btn_edit,	
+	}
+
+	
 
 	
 	// Combobox: obj_coagroup_parent
@@ -118,6 +126,54 @@ export async function init(self, args) {
 		}		
 	})
 	
+	
+	// Combobox: obj_coareporttype_id
+	obj_coareporttype_id.addEventListener('selecting', async (evt)=>{
+		const fn_selecting_name = 'obj_coareporttype_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_coareporttype_id_selecting(self, obj_coareporttype_id, frm, evt)
+			fn_selecting(self, obj_coareporttype_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'coareporttype/header-list'
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			const fn_selecting_criteria_name = 'obj_coareporttype_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_coareporttype_id, criteria)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(url, {
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.coareporttype_id, row.coareporttype_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
 		
 	
 }
@@ -128,6 +184,7 @@ export async function openSelectedData(self, params) {
 	let mask = $fgta5.Modal.createMask()
 	try {
 		obj_coagroup_parent.clear()
+		obj_coareporttype_id.clear()
 					
 		const id = params.keyvalue
 		const data = await openData(self, id)
@@ -153,7 +210,8 @@ export async function openSelectedData(self, params) {
 		const fn_formopened_name = 'coagroupHeaderEdit_formOpened'
 		const fn_formopened = Extender[fn_formopened_name]
 		if (typeof fn_formopened === 'function') {
-			fn_formopened(self, frm, CurrentState)
+			// export async function coagroupHeaderEdit_formOpened(self, frm, CurrentState)
+			await fn_formopened(self, frm, CurrentState)
 		}
 
 	} catch (err) {
@@ -290,8 +348,6 @@ async function backToList(self, evt) {
 }
 
 async function  frm_locked(self, evt) {
-	console.log('frm_locked')
-
 	CurrentSection.Title = TitleWhenView
 
 	btn_edit.setText(EditModeText)
@@ -304,6 +360,7 @@ async function  frm_locked(self, evt) {
 	btn_prev.disabled = false
 	btn_next.disabled = false
 
+	
 	
 	// Extender untuk event locked
 	const fn_name = 'coagroupHeaderEdit_formLocked'
@@ -322,8 +379,6 @@ async function  frm_locked(self, evt) {
 }
 
 async function  frm_unlocked(self, evt) {
-	console.log('frm_unlocked')
-
 	if (frm.isNew()) {
 		CurrentSection.Title = TitleWhenNew
 	} else {
@@ -340,12 +395,13 @@ async function  frm_unlocked(self, evt) {
 	btn_prev.disabled = true
 	btn_next.disabled = true
 
+	
 
 	// Extender untuk event Unlocked
 	const fn_name = 'coagroupHeaderEdit_formUnlocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
-		fn(self, frm)
+		fn(self, frm, CurrentState)
 	}
 
 		
@@ -431,6 +487,10 @@ async function btn_new_click(self, evt) {
 
 		// buka lock, agar user bisa edit
 		frm.lock(false)
+
+		// jika edit di suspend, enable dulu
+		btn_edit.suspend(false)
+
 
 		// matikan tombol edit dan del saat kondisi form adalah data baru 
 		btn_edit.disabled = true
@@ -764,7 +824,7 @@ async function btn_about_click(self, evt) {
 			const divFooter = document.createElement('div')
 			divFooter.setAttribute('id', 'fAbout-section-footer')
 			divFooter.setAttribute('style', 'border-top: 1px solid #ccc; padding: 5px 0 0 0; margin-top: 50px')
-			divFooter.innerHTML = 'This module is generated by fgta5 generator at 10 Oct 2025 18:06'
+			divFooter.innerHTML = 'This module is generated by fgta5 generator at 20 Nov 2025 23:56'
 			section.appendChild(divFooter)
 		}
 		

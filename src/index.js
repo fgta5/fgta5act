@@ -64,7 +64,12 @@ async function main() {
 			sessionMaxAge : sessionMaxAge * 60 * 1000,
 			sessionDomain,
 			sessionSecure : sessionSecure.toLowerCase()==='true' ? true : false,
-			sessionHttpOnly : sessionHttpOnly.toLowerCase()==='false' ? false : true
+			sessionHttpOnly : sessionHttpOnly.toLowerCase()==='false' ? false : true,
+
+			useSSL: process.env.USESSL==='true' ? true : false,
+			sslKey: process.env.SSL_KEY,
+			sslCertificate: process.env.SSL_CERTIFICATE, 
+
 		}
 	} 
 	
@@ -78,8 +83,7 @@ async function main() {
 		appConfig,
 		router,
 		allowedOrigins: [
-			'http://localhost:3000',
-			/^https:\/\/.*\.transfashion\.id$/
+			/^https:\/\/[a-z0-9.-]+\.transfashion\.id(:\d+)?$/
 		],
 		fnParseModuleRequest: async (req)=>{
 			await authorizeRequest(db, req)

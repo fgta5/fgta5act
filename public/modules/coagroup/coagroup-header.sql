@@ -117,15 +117,30 @@ comment on column act."coagroup".coagroup_level is '';
 
 
 -- =============================================
--- FIELD: _createby bigint
+-- FIELD: coareporttype_id int
+-- =============================================
+-- ADD coareporttype_id
+alter table act."coagroup" add coareporttype_id int  ;
+comment on column act."coagroup".coareporttype_id is '';
+
+-- MODIFY coareporttype_id
+alter table act."coagroup"
+	alter column coareporttype_id type int,
+	ALTER COLUMN coareporttype_id DROP DEFAULT,
+	ALTER COLUMN coareporttype_id DROP NOT NULL;
+comment on column act."coagroup".coareporttype_id is '';
+
+
+-- =============================================
+-- FIELD: _createby integer
 -- =============================================
 -- ADD _createby
-alter table act."coagroup" add _createby bigint not null ;
+alter table act."coagroup" add _createby integer not null ;
 comment on column act."coagroup"._createby is 'user yang pertama kali membuat record ini';
 
 -- MODIFY _createby
 alter table act."coagroup"
-	alter column _createby type bigint,
+	alter column _createby type integer,
 	ALTER COLUMN _createby DROP DEFAULT,
 	ALTER COLUMN _createby SET NOT NULL;
 comment on column act."coagroup"._createby is 'user yang pertama kali membuat record ini';
@@ -135,27 +150,27 @@ comment on column act."coagroup"._createby is 'user yang pertama kali membuat re
 -- FIELD: _createdate timestamp with time zone
 -- =============================================
 -- ADD _createdate
-alter table act."coagroup" add _createdate timestamp with time zone not null ;
+alter table act."coagroup" add _createdate timestamp with time zone not null default now();
 comment on column act."coagroup"._createdate is 'waktu record dibuat pertama kali';
 
 -- MODIFY _createdate
 alter table act."coagroup"
 	alter column _createdate type timestamp with time zone,
-	ALTER COLUMN _createdate DROP DEFAULT,
+	ALTER COLUMN _createdate SET DEFAULT now(),
 	ALTER COLUMN _createdate SET NOT NULL;
 comment on column act."coagroup"._createdate is 'waktu record dibuat pertama kali';
 
 
 -- =============================================
--- FIELD: _modifyby bigint
+-- FIELD: _modifyby integer
 -- =============================================
 -- ADD _modifyby
-alter table act."coagroup" add _modifyby bigint  ;
+alter table act."coagroup" add _modifyby integer  ;
 comment on column act."coagroup"._modifyby is 'user yang terakhir modifikasi record ini';
 
 -- MODIFY _modifyby
 alter table act."coagroup"
-	alter column _modifyby type bigint,
+	alter column _modifyby type integer,
 	ALTER COLUMN _modifyby DROP DEFAULT,
 	ALTER COLUMN _modifyby DROP NOT NULL;
 comment on column act."coagroup"._modifyby is 'user yang terakhir modifikasi record ini';
@@ -195,6 +210,17 @@ ALTER TABLE act."coagroup"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS act.idx_fk$act$coagroup$coagroup_parent;
 CREATE INDEX idx_fk$act$coagroup$coagroup_parent ON act."coagroup"(coagroup_parent);	
+
+
+ALTER TABLE act."coagroup"
+	ADD CONSTRAINT fk$act$coagroup$coareporttype_id
+	FOREIGN KEY (coareporttype_id)
+	REFERENCES act."coareporttype"(coareporttype_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$coagroup$coareporttype_id;
+CREATE INDEX idx_fk$act$coagroup$coareporttype_id ON act."coagroup"(coareporttype_id);	
 
 	
 
