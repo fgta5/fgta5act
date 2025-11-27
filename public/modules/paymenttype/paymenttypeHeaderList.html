@@ -1,0 +1,25 @@
+<div class="search-container">
+	<div id="paymenttypeHeaderList-pnl_search" class="search-parameters">
+		<input id="paymenttypeHeaderList-txt_searchtext" fgta5-component="Textbox" placeholder="search" autocomplete="off" spellcheck="false" binding="searchtext" data-searchinput>
+	</div>
+	<button id="paymenttypeHeaderList-btn_gridload">Load</button>
+</div>
+
+<table id="paymenttypeHeaderList-tbl" fgta5-component="Gridview">
+	<thead>
+		<tr data-header key="paymenttype_id">
+			<th data-name="paymenttype_id" binding="paymenttype_id" >ID</th>
+			<th data-name="paymenttype_name" binding="paymenttype_name" >Name</th>
+		</tr>
+	</thead>
+</table>
+
+
+
+<div class="footer-buttons-container">
+	<div></div>
+	<div>
+		<button id="paymenttypeHeaderList-btn_new" data-action="paymenttypeHeader-new" data-sectionsource="paymenttypeHeaderList-section">New</button>
+	</div>
+	<div></div>
+</div>

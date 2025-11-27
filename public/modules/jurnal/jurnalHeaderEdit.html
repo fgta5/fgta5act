@@ -2,7 +2,7 @@
 
 	<!-- Textbox: jurnal_id-->	
 	<div id="jurnalHeaderEdit-obj_jurnal_id-container" class="input-field" field="jurnalHeaderEdit-obj_jurnal_id">
-		<label for="jurnalHeaderEdit-obj_jurnal_id">ID</label>
+		<label for="jurnalHeaderEdit-obj_jurnal_id">Id</label>
 		<input id="jurnalHeaderEdit-obj_jurnal_id"  fgta5-component="Textbox" placeholder="ID" autocomplete="off" spellcheck="false" 
 			binding="jurnal_id"
 			data-tabindex="1" 
@@ -14,7 +14,7 @@
 
 	<!-- Textbox: jurnal_doc-->	
 	<div id="jurnalHeaderEdit-obj_jurnal_doc-container" class="input-field" field="jurnalHeaderEdit-obj_jurnal_doc">
-		<label for="jurnalHeaderEdit-obj_jurnal_doc">Doc.Id</label>
+		<label for="jurnalHeaderEdit-obj_jurnal_doc">Doc Id</label>
 		<input id="jurnalHeaderEdit-obj_jurnal_doc"  fgta5-component="Textbox" placeholder="Document Id" autocomplete="off" spellcheck="false" 
 			binding="jurnal_doc"
 			data-tabindex="2" 
@@ -32,6 +32,7 @@
 			binding="jurnaltype_id"
 			data-tabindex="3" 
 			required 
+			invalid-message-required="Tipe jurnal harus diisi" 
 			data-display="jurnaltype_name" 
 		>
 	</div>
@@ -195,34 +196,104 @@
 	</div>
 
 
-	<!-- Checkbox: iscommit-->	
-	<div id="jurnalHeaderEdit-obj_iscommit-container" class="input-field" field="jurnalHeaderEdit-obj_iscommit">
-		<label for="jurnalHeaderEdit-obj_iscommit">Commit</label>
-		<input id="jurnalHeaderEdit-obj_iscommit"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
-			binding="iscommit"
+	<!-- Checkbox: ispost-->	
+	<div id="jurnalHeaderEdit-obj_ispost-container" class="input-field" field="jurnalHeaderEdit-obj_ispost">
+		<label for="jurnalHeaderEdit-obj_ispost">Posted</label>
+		<input id="jurnalHeaderEdit-obj_ispost"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
+			binding="ispost"
 			data-tabindex="18" 
 			type="checkbox" 
 		>
 	</div>
 
 
-	<!-- Checkbox: ispost-->	
-	<div id="jurnalHeaderEdit-obj_ispost-container" class="input-field" field="jurnalHeaderEdit-obj_ispost">
-		<label for="jurnalHeaderEdit-obj_ispost">Posted</label>
-		<input id="jurnalHeaderEdit-obj_ispost"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
-			binding="ispost"
-			data-tabindex="19" 
-			type="checkbox" 
+	<!-- Combobox: paymenttype_id-->	
+	<div id="jurnalHeaderEdit-obj_paymenttype_id-container" class="input-field" field="jurnalHeaderEdit-obj_paymenttype_id">
+		<label for="jurnalHeaderEdit-obj_paymenttype_id">PaymentType</label>
+		<input id="jurnalHeaderEdit-obj_paymenttype_id"  fgta5-component="Combobox" placeholder="paymenttype" autocomplete="off" spellcheck="false" 
+			binding="paymenttype_id"
+			data-tabindex="21" 
+			data-display="paymenttype_name" 
+		>
+	</div>
+
+
+	<!-- Combobox: partnercontact_id-->	
+	<div id="jurnalHeaderEdit-obj_partnercontact_id-container" class="input-field" field="jurnalHeaderEdit-obj_partnercontact_id">
+		<label for="jurnalHeaderEdit-obj_partnercontact_id">Up</label>
+		<input id="jurnalHeaderEdit-obj_partnercontact_id"  fgta5-component="Combobox" placeholder="up" autocomplete="off" spellcheck="false" 
+			binding="partnercontact_id"
+			data-tabindex="22" 
+			data-display="partnercontact_name" 
+		>
+	</div>
+
+
+	<!-- Combobox: partnerbank_id-->	
+	<div id="jurnalHeaderEdit-obj_partnerbank_id-container" class="input-field" field="jurnalHeaderEdit-obj_partnerbank_id">
+		<label for="jurnalHeaderEdit-obj_partnerbank_id">Partner Bank</label>
+		<input id="jurnalHeaderEdit-obj_partnerbank_id"  fgta5-component="Combobox" placeholder="partner bank" autocomplete="off" spellcheck="false" 
+			binding="partnerbank_id"
+			data-tabindex="23" 
+			data-display="partnerbank_name" 
+		>
+	</div>
+
+
+	<!-- Textbox: partnerbank_bankname-->	
+	<div id="jurnalHeaderEdit-obj_partnerbank_bankname-container" class="input-field" field="jurnalHeaderEdit-obj_partnerbank_bankname">
+		<label for="jurnalHeaderEdit-obj_partnerbank_bankname">Bank Name</label>
+		<input id="jurnalHeaderEdit-obj_partnerbank_bankname"  fgta5-component="Textbox" placeholder="partnerbank_bankname" autocomplete="off" spellcheck="false" 
+			binding="partnerbank_bankname"
+			data-tabindex="24" 
+			character-case="uppercase" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+
+
+	<!-- Textbox: partnerbank_account-->	
+	<div id="jurnalHeaderEdit-obj_partnerbank_account-container" class="input-field" field="jurnalHeaderEdit-obj_partnerbank_account">
+		<label for="jurnalHeaderEdit-obj_partnerbank_account">Account</label>
+		<input id="jurnalHeaderEdit-obj_partnerbank_account"  fgta5-component="Textbox" placeholder="account" autocomplete="off" spellcheck="false" 
+			binding="partnerbank_account"
+			data-tabindex="25" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+
+
+	<!-- Textbox: partnerbank_accountname-->	
+	<div id="jurnalHeaderEdit-obj_partnerbank_accountname-container" class="input-field" field="jurnalHeaderEdit-obj_partnerbank_accountname">
+		<label for="jurnalHeaderEdit-obj_partnerbank_accountname">Account Name</label>
+		<input id="jurnalHeaderEdit-obj_partnerbank_accountname"  fgta5-component="Textbox" placeholder="accountname" autocomplete="off" spellcheck="false" 
+			binding="partnerbank_accountname"
+			data-tabindex="26" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+
+
+	<!-- Textbox: payment_bgno-->	
+	<div id="jurnalHeaderEdit-obj_payment_bgno-container" class="input-field" field="jurnalHeaderEdit-obj_payment_bgno">
+		<label for="jurnalHeaderEdit-obj_payment_bgno">No BG/Cheque</label>
+		<input id="jurnalHeaderEdit-obj_payment_bgno"  fgta5-component="Textbox" placeholder="no bilyet / cheque" autocomplete="off" spellcheck="false" 
+			binding="payment_bgno"
+			data-tabindex="27" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
 		>
 	</div>
 	
 </form>
 
 <div class="panel-action">
-	<button id="jurnalHeaderEdit-btn_actionCommit">Commit</button>
-	<button id="jurnalHeaderEdit-btn_actionUncommit">UnCommit</button>
 	<button id="jurnalHeaderEdit-btn_actionPost">Post</button>
 	<button id="jurnalHeaderEdit-btn_actionUnpost">UnPost</button>
+	<button id="jurnalHeaderEdit-btn_actionPrint">Print</button>
 </div>
 
 

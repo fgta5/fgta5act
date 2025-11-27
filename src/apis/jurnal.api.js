@@ -190,6 +190,21 @@ async function jurnal_headerList(self, body) {
 				const { project_name } = await sqlUtil.lookupdb(db, 'prj.project', 'project_id', row.project_id)
 				row.project_name = project_name
 			}
+			// lookup: paymenttype_name dari field paymenttype_name pada table act.paymenttype dimana (act.paymenttype.paymenttype_id = act.jurnal.paymenttype_id)
+			{
+				const { paymenttype_name } = await sqlUtil.lookupdb(db, 'act.paymenttype', 'paymenttype_id', row.paymenttype_id)
+				row.paymenttype_name = paymenttype_name
+			}
+			// lookup: partnercontact_name dari field partnercontact_name pada table ent.partnercontact dimana (ent.partnercontact.partnercontact_id = act.jurnal.partnercontact_id)
+			{
+				const { partnercontact_name } = await sqlUtil.lookupdb(db, 'ent.partnercontact', 'partnercontact_id', row.partnercontact_id)
+				row.partnercontact_name = partnercontact_name
+			}
+			// lookup: partnerbank_name dari field partnerbank_name pada table ent.partnerbank dimana (ent.partnerbank.partnerbank_id = act.jurnal.partnerbank_id)
+			{
+				const { partnerbank_name } = await sqlUtil.lookupdb(db, 'ent.partnerbank', 'partnerbank_id', row.partnerbank_id)
+				row.partnerbank_name = partnerbank_name
+			}
 			
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
@@ -283,6 +298,21 @@ async function jurnal_headerOpen(self, body) {
 			const { project_name } = await sqlUtil.lookupdb(db, 'prj.project', 'project_id', data.project_id)
 			data.project_name = project_name
 		}
+		// lookup: paymenttype_name dari field paymenttype_name pada table act.paymenttype dimana (act.paymenttype.paymenttype_id = act.jurnal.paymenttype_id)
+		{
+			const { paymenttype_name } = await sqlUtil.lookupdb(db, 'act.paymenttype', 'paymenttype_id', data.paymenttype_id)
+			data.paymenttype_name = paymenttype_name
+		}
+		// lookup: partnercontact_name dari field partnercontact_name pada table ent.partnercontact dimana (ent.partnercontact.partnercontact_id = act.jurnal.partnercontact_id)
+		{
+			const { partnercontact_name } = await sqlUtil.lookupdb(db, 'ent.partnercontact', 'partnercontact_id', data.partnercontact_id)
+			data.partnercontact_name = partnercontact_name
+		}
+		// lookup: partnerbank_name dari field partnerbank_name pada table ent.partnerbank dimana (ent.partnerbank.partnerbank_id = act.jurnal.partnerbank_id)
+		{
+			const { partnerbank_name } = await sqlUtil.lookupdb(db, 'ent.partnerbank', 'partnerbank_id', data.partnerbank_id)
+			data.partnerbank_name = partnerbank_name
+		}
 		
 
 		// lookup data createby
@@ -341,8 +371,8 @@ async function jurnal_headerCreate(self, body) {
 				await Extender.sequencerSetup(self, tx, sequencer, data)
 			}
 
-			// generate data JV reset perbulan
-			const seqdata = await sequencer.monthly('JV')	
+			// generate data XX reset perbulan
+			const seqdata = await sequencer.monthly('XX')	
 			data.jurnal_id = seqdata.id
 
 			// apabila ada keperluan pengelohan data sebelum disimpan, lakukan di extender headerCreating
@@ -707,7 +737,7 @@ async function jurnal_detilCreate(self, body) {
 			sqlUtil.connect(tx)
 
 			const sequencer = createSequencerLine(tx, {})
-			const seqdata = await sequencer.increment('JV')
+			const seqdata = await sequencer.increment('XX')
 			data.jurnaldetil_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan

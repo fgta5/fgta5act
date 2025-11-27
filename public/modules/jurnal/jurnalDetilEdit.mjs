@@ -93,19 +93,24 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = `${Context.appsUrls.ent.url}/curr/header-list`
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			
+			// buat function di extender:
+			// export function obj_curr_id_selecting_criteria(self, obj_curr_id, criteria, sort) {}
 			const fn_selecting_criteria_name = 'obj_curr_id_selecting_criteria'
 			const fn_obj_curr_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_curr_id_selecting_criteria(self, obj_curr_id, criteria)
+				fn_obj_curr_id_selecting_criteria(self, obj_curr_id, criteria, sort)
 			}
 
 			cbo.wait()
 			try {
 				const result = await Module.apiCall(url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -140,19 +145,24 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = 'coa/header-list'
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			
+			// buat function di extender:
+			// export function obj_coa_id_selecting_criteria(self, obj_coa_id, criteria, sort) {}
 			const fn_selecting_criteria_name = 'obj_coa_id_selecting_criteria'
 			const fn_obj_coa_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_coa_id_selecting_criteria(self, obj_coa_id, criteria)
+				fn_obj_coa_id_selecting_criteria(self, obj_coa_id, criteria, sort)
 			}
 
 			cbo.wait()
 			try {
 				const result = await Module.apiCall(url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -187,19 +197,24 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = `${Context.appsUrls.ent.url}/unit/header-list`
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			
+			// buat function di extender:
+			// export function obj_unit_id_selecting_criteria(self, obj_unit_id, criteria, sort) {}
 			const fn_selecting_criteria_name = 'obj_unit_id_selecting_criteria'
 			const fn_obj_unit_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_unit_id_selecting_criteria(self, obj_unit_id, criteria)
+				fn_obj_unit_id_selecting_criteria(self, obj_unit_id, criteria, sort)
 			}
 
 			cbo.wait()
 			try {
 				const result = await Module.apiCall(url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -234,19 +249,24 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = `${Context.appsUrls.ent.url}/site/header-list`
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			
+			// buat function di extender:
+			// export function obj_site_id_selecting_criteria(self, obj_site_id, criteria, sort) {}
 			const fn_selecting_criteria_name = 'obj_site_id_selecting_criteria'
 			const fn_obj_site_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_site_id_selecting_criteria(self, obj_site_id, criteria)
+				fn_obj_site_id_selecting_criteria(self, obj_site_id, criteria, sort)
 			}
 
 			cbo.wait()
 			try {
 				const result = await Module.apiCall(url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -281,19 +301,24 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = `${Context.appsUrls.ent.url}/dept/header-list`
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			
+			// buat function di extender:
+			// export function obj_dept_id_selecting_criteria(self, obj_dept_id, criteria, sort) {}
 			const fn_selecting_criteria_name = 'obj_dept_id_selecting_criteria'
 			const fn_obj_dept_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_dept_id_selecting_criteria(self, obj_dept_id, criteria)
+				fn_obj_dept_id_selecting_criteria(self, obj_dept_id, criteria, sort)
 			}
 
 			cbo.wait()
 			try {
 				const result = await Module.apiCall(url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -328,19 +353,24 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = `${Context.appsUrls.ent.url}/partner/header-list`
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			
+			// buat function di extender:
+			// export function obj_partner_id_selecting_criteria(self, obj_partner_id, criteria, sort) {}
 			const fn_selecting_criteria_name = 'obj_partner_id_selecting_criteria'
 			const fn_obj_partner_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_partner_id_selecting_criteria(self, obj_partner_id, criteria)
+				fn_obj_partner_id_selecting_criteria(self, obj_partner_id, criteria, sort)
 			}
 
 			cbo.wait()
 			try {
 				const result = await Module.apiCall(url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -374,20 +404,25 @@ export async function init(self, args) {
 			const cbo = evt.detail.sender
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
-			const url = `${Context.appsUrls.dev.url}/project/header-list`
+			const url = `${Context.appsUrls.prj.url}/project/header-list`
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			
+			// buat function di extender:
+			// export function obj_project_id_selecting_criteria(self, obj_project_id, criteria, sort) {}
 			const fn_selecting_criteria_name = 'obj_project_id_selecting_criteria'
 			const fn_obj_project_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_project_id_selecting_criteria(self, obj_project_id, criteria)
+				fn_obj_project_id_selecting_criteria(self, obj_project_id, criteria, sort)
 			}
 
 			cbo.wait()
 			try {
 				const result = await Module.apiCall(url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -989,6 +1024,12 @@ async function btn_recordstatus_click(self, evt) {
 		sectionReturn: CurrentSection
 	}
 	
+	if (frm.isNew()) {
+		console.warn('tidak bisa buka rescord status jika data baru')	
+		$fgta5.MessageBox.warning('Record Status bisa dibuka setelah data disimpan')
+		return;
+	}
+
 	pageHelper.openSection(self, 'fRecord-section', params, async ()=>{
 
 		let mask = $fgta5.Modal.createMask()
@@ -1028,6 +1069,12 @@ async function btn_logs_click(self, evt) {
 	const params = {
 		Context,
 		sectionReturn: CurrentSection
+	}
+
+	if (frm.isNew()) {
+		console.warn('tidak bisa buka logs jika data baru')	
+		$fgta5.MessageBox.warning('Logs bisa dibuka setelah data disimpan')
+		return;
 	}
 
 	pageHelper.openSection(self, 'fLogs-section', params, async ()=>{

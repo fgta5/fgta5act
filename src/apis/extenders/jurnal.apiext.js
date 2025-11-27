@@ -18,7 +18,7 @@ export async function headerCreating(self, tx, data, seqdata) {
 	// buang data yang tidak boleh dimodif user
 	excludeNonEditableHeader(data)
 
-
+	data.jurnal_doc = seqdata.doc;
 
 }
 

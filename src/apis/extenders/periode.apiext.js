@@ -11,3 +11,9 @@ export async function headerCreating(self, tx, data) {
 	data.periode_closeby = null
 	data.periode_closedate = null
 }
+
+
+export async function headerListCriteria(self, db, searchMap, criteria, sort, columns) {
+	searchMap.periode_isclosed = 'periode_isclosed=${periode_isclosed}'
+}
+

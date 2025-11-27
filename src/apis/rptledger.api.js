@@ -149,7 +149,7 @@ async function notifyClient(notifierServer, clientId, status, info) {
 }
 
 export const runDetachedWorker = (notifierServer, clientId, options) => {
-	const timeout = 2 * 60 * 1000  // timeout setelah n detik ekskusi
+	const timeout = 2  // menit
 
 	// cek dulu apakah valid
 	try {
@@ -172,7 +172,7 @@ export const runDetachedWorker = (notifierServer, clientId, options) => {
 		console.warn('Worker timeout, terminating...');
 		notifyClient(notifierServer, clientId, 'timeout')     // nofify ke clent, kalau timeout
 		worker.terminate();
-	}, timeout);
+	}, (timeout * 60 * 1000));
 
 
 	
