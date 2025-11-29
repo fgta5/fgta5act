@@ -1,21 +1,22 @@
-import Context from './paymenttype-context.mjs'
-import * as Extender from './paymenttype-ext.mjs'
+import Context from './paymtype-context.mjs'
+import * as Ext from './paymtype-ext.mjs'
 
+const Extender = Ext.extenderHeader ?? Ext
 
 const Crsl =  Context.Crsl
-const CurrentSectionId = Context.Sections.paymenttypeHeaderList
+const CurrentSectionId = Context.Sections.paymtypeHeaderList
 const CurrentSection = Crsl.Items[CurrentSectionId]
 const CurrentState = {}
 
-const tbl =  new $fgta5.Gridview('paymenttypeHeaderList-tbl')
-const pnl_search = document.getElementById('paymenttypeHeaderList-pnl_search')
-const btn_gridload = new $fgta5.ActionButton('paymenttypeHeaderList-btn_gridload') 
+const tbl =  new $fgta5.Gridview('paymtypeHeaderList-tbl')
+const pnl_search = document.getElementById('paymtypeHeaderList-pnl_search')
+const btn_gridload = new $fgta5.ActionButton('paymtypeHeaderList-btn_gridload') 
 
 export const Section = CurrentSection
 export const SearchParams = {}
 
 export async function init(self, args) {
-	console.log('initializing paymenttypeHeaderList ...')
+	console.log('initializing paymtypeHeaderList ...')
 
 	// add event listener
 	tbl.addEventListener('nextdata', async evt=>{ tbl_nextdata(self, evt) })
@@ -57,8 +58,8 @@ export async function init(self, args) {
 		}
 
 		// saat user ketik tombol enter di text search, lakukan load data
-		const obj_searchtext = document.getElementById('paymenttypeHeaderList-txt_searchtext')
-		const btn_load = document.getElementById('paymenttypeHeaderList-btn_gridload')
+		const obj_searchtext = document.getElementById('paymtypeHeaderList-txt_searchtext')
+		const btn_load = document.getElementById('paymtypeHeaderList-btn_gridload')
 		obj_searchtext.addEventListener('keydown', (evt)=>{
 			if (evt.key.toLowerCase()=='enter') {
 				evt.stopPropagation()
@@ -68,7 +69,7 @@ export async function init(self, args) {
 		})
 
 
-		// paymenttypeHeaderList-ext.mjs, export function initSearchParams(self, SearchParams) {} 
+		// paymtypeHeaderList-ext.mjs, export function initSearchParams(self, SearchParams) {} 
 		const fn_initSearchParams_name = 'headerList_initSearchParams'
 		const fn_initSearchParams = Extender[fn_initSearchParams_name]
 		if (typeof fn_initSearchParams === 'function') {
@@ -163,9 +164,9 @@ export function keyboardAction(self, actionName, evt) {
 	} else if (actionName=='down') {
 		tbl.nextRecord()
 	} else if (actionName=='enter') {
-		const paymenttypeHeaderEdit = self.Modules.paymenttypeHeaderEdit
+		const paymtypeHeaderEdit = self.Modules.paymtypeHeaderEdit
 		if (tbl.CurrentRow!=null) {
-			paymenttypeHeaderEdit.Section.show({}, ()=>{
+			paymtypeHeaderEdit.Section.show({}, ()=>{
 				openRow(self, tbl.CurrentRow)
 			})
 		}	
@@ -174,7 +175,7 @@ export function keyboardAction(self, actionName, evt) {
 		evt.preventDefault();
 		evt.stopPropagation();
 
-		const obj_searchtext = document.getElementById('paymenttypeHeaderList-txt_searchtext')
+		const obj_searchtext = document.getElementById('paymtypeHeaderList-txt_searchtext')
 		const key = evt.key
 		obj_searchtext.focus()
 		if (key=='Backspace') {
@@ -201,14 +202,14 @@ async function openRow(self, tr) {
 	const keyvalue = tr.getAttribute('keyvalue')
 	const key = tr.getAttribute('key')
 
-	const paymenttypeHeaderEdit = self.Modules.paymenttypeHeaderEdit
-	paymenttypeHeaderEdit.clearForm(self, 'loading...')
+	const paymtypeHeaderEdit = self.Modules.paymtypeHeaderEdit
+	paymtypeHeaderEdit.clearForm(self, 'loading...')
 
 	try {
 		setCurrentRow(self, tr)
 		CurrentState.SelectedRow.keyValue = keyvalue
 		CurrentState.SelectedRow.key = key
-		await paymenttypeHeaderEdit.openSelectedData(self, {key:key, keyvalue:keyvalue})
+		await paymtypeHeaderEdit.openSelectedData(self, {key:key, keyvalue:keyvalue})
 	} catch (err) {
 		console.error(err)
 		await $fgta5.MessageBox.error(err.message)
@@ -219,7 +220,7 @@ async function openRow(self, tr) {
 
 
 	// matikan atau nyalakan button prev/next sesuai kondisi
-	setPagingButton(self, paymenttypeHeaderEdit)
+	setPagingButton(self, paymtypeHeaderEdit)
 }
 
 async function listRows(self, criteria, offset,limit, sort) {
@@ -259,8 +260,8 @@ function tbl_sorting(self, evt) {
 function tbl_cellclick(self, evt) {
 	const tr = evt.detail.tr
 
-	const paymenttypeHeaderEdit = self.Modules.paymenttypeHeaderEdit
-	paymenttypeHeaderEdit.Section.show({}, (evt)=>{
+	const paymtypeHeaderEdit = self.Modules.paymtypeHeaderEdit
+	paymtypeHeaderEdit.Section.show({}, (evt)=>{
 		openRow(self, tr)
 	})
 
@@ -268,7 +269,7 @@ function tbl_cellclick(self, evt) {
 }
 
 async function tbl_loadData(self, params={}) {
-	console.log('loading paymenttypeHeader data')
+	console.log('loading paymtypeHeader data')
 	console.log(params)
 
 	const { criteria={}, limit=0, offset=0, sort={} } = params

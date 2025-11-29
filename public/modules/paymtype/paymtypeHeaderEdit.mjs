@@ -1,10 +1,13 @@
-import Context from './paymenttype-context.mjs'
-import * as Extender from './paymenttype-ext.mjs'
+import Context from './paymtype-context.mjs'
+import * as Ext from './paymtype-ext.mjs'
 import * as pageHelper from '/public/libs/webmodule/pagehelper.mjs'
+
+const Extender = Ext.extenderHeader ?? Ext
+
 
 const CurrentState = {}
 const Crsl =  Context.Crsl
-const CurrentSectionId = Context.Sections.paymenttypeHeaderEdit
+const CurrentSectionId = Context.Sections.paymtypeHeaderEdit
 const CurrentSection = Crsl.Items[CurrentSectionId]
 const Source = Context.Source
 
@@ -15,32 +18,39 @@ const TitleWhenEdit = 'Edit Payment Type'
 const EditModeText = 'Edit'
 const LockModeText = 'Lock'
 
-const btn_edit = new $fgta5.ActionButton('paymenttypeHeaderEdit-btn_edit')
-const btn_save = new $fgta5.ActionButton('paymenttypeHeaderEdit-btn_save')
-const btn_new = new $fgta5.ActionButton('paymenttypeHeaderEdit-btn_new', 'paymenttypeHeader-new')
-const btn_del = new $fgta5.ActionButton('paymenttypeHeaderEdit-btn_delete')
-const btn_reset = new $fgta5.ActionButton('paymenttypeHeaderEdit-btn_reset')
-const btn_prev = new $fgta5.ActionButton('paymenttypeHeaderEdit-btn_prev')
-const btn_next = new $fgta5.ActionButton('paymenttypeHeaderEdit-btn_next')
+const btn_edit = new $fgta5.ActionButton('paymtypeHeaderEdit-btn_edit')
+const btn_save = new $fgta5.ActionButton('paymtypeHeaderEdit-btn_save')
+const btn_new = new $fgta5.ActionButton('paymtypeHeaderEdit-btn_new', 'paymtypeHeader-new')
+const btn_del = new $fgta5.ActionButton('paymtypeHeaderEdit-btn_delete')
+const btn_reset = new $fgta5.ActionButton('paymtypeHeaderEdit-btn_reset')
+const btn_prev = new $fgta5.ActionButton('paymtypeHeaderEdit-btn_prev')
+const btn_next = new $fgta5.ActionButton('paymtypeHeaderEdit-btn_next')
 
 
-const btn_recordstatus = document.getElementById('paymenttypeHeader-btn_recordstatus')
-const btn_logs = document.getElementById('paymenttypeHeader-btn_logs')
-const btn_about = document.getElementById('paymenttypeHeader-btn_about')
+const btn_recordstatus = document.getElementById('paymtypeHeader-btn_recordstatus')
+const btn_logs = document.getElementById('paymtypeHeader-btn_logs')
+const btn_about = document.getElementById('paymtypeHeader-btn_about')
 
-const frm = new $fgta5.Form('paymenttypeHeaderEdit-frm');
-const obj_paymenttype_id = frm.Inputs['paymenttypeHeaderEdit-obj_paymenttype_id']
-const obj_paymenttype_name = frm.Inputs['paymenttypeHeaderEdit-obj_paymenttype_name']	
-const obj_createby = document.getElementById('fRecord-section-createby')
-const obj_createdate = document.getElementById('fRecord-section-createdate')
-const obj_modifyby = document.getElementById('fRecord-section-modifyby')
-const obj_modifydate = document.getElementById('fRecord-section-modifydate')
+const frm = new $fgta5.Form('paymtypeHeaderEdit-frm');
+const obj_paymtype_id = frm.Inputs['paymtypeHeaderEdit-obj_paymtype_id']
+const obj_paymtype_name = frm.Inputs['paymtypeHeaderEdit-obj_paymtype_name']
+const obj_ishaspartnercontact = frm.Inputs['paymtypeHeaderEdit-obj_ishaspartnercontact']
+const obj_ishaspartnerbankselector = frm.Inputs['paymtypeHeaderEdit-obj_ishaspartnerbankselector']
+const obj_ishasgiro = frm.Inputs['paymtypeHeaderEdit-obj_ishasgiro']
+const obj_ishasbankaccount = frm.Inputs['paymtypeHeaderEdit-obj_ishasbankaccount']
+const obj_ishasbankaccountname = frm.Inputs['paymtypeHeaderEdit-obj_ishasbankaccountname']
+const obj_ishasbankname = frm.Inputs['paymtypeHeaderEdit-obj_ishasbankname']	
+const rec_createby = document.getElementById('fRecord-section-createby')
+const rec_createdate = document.getElementById('fRecord-section-createdate')
+const rec_modifyby = document.getElementById('fRecord-section-modifyby')
+const rec_modifydate = document.getElementById('fRecord-section-modifydate')
+const rec_id = document.getElementById('fRecord-section-id')
 
 
 export const Section = CurrentSection
 
 export async function init(self, args) {
-	console.log('initializing paymenttypeHeaderEdit ...')
+	console.log('initializing paymtypeHeaderEdit ...')
 	
 
 	CurrentSection.addEventListener($fgta5.Section.EVT_BACKBUTTONCLICK, async (evt)=>{
@@ -88,7 +98,7 @@ export async function openSelectedData(self, params) {
 
 		CurrentState.currentOpenedId = id
 
-		const fn_iseditdisabled_name = 'paymenttypeHeaderEdit_isEditDisabled'
+		const fn_iseditdisabled_name = 'paymtypeHeaderEdit_isEditDisabled'
 		const fn_iseditdisabled = Extender[fn_iseditdisabled_name]
 		if (typeof fn_iseditdisabled === 'function') {
 			const editDisabled = fn_iseditdisabled(self, data)
@@ -102,10 +112,10 @@ export async function openSelectedData(self, params) {
 		frm.acceptChanges()
 		frm.lock()
 
-		const fn_formopened_name = 'paymenttypeHeaderEdit_formOpened'
+		const fn_formopened_name = 'paymtypeHeaderEdit_formOpened'
 		const fn_formopened = Extender[fn_formopened_name]
 		if (typeof fn_formopened === 'function') {
-			// export async function paymenttypeHeaderEdit_formOpened(self, frm, CurrentState)
+			// export async function paymtypeHeaderEdit_formOpened(self, frm, CurrentState)
 			await fn_formopened(self, frm, CurrentState)
 		}
 
@@ -236,7 +246,7 @@ async function backToList(self, evt) {
 
 	if (goback) {
 		frm.lock()
-		const listId =  Context.Sections.paymenttypeHeaderList
+		const listId =  Context.Sections.paymtypeHeaderList
 		const listSection = Crsl.Items[listId]
 		listSection.show({direction: 1})
 	}
@@ -258,7 +268,7 @@ async function  frm_locked(self, evt) {
 	
 	
 	// Extender untuk event locked
-	const fn_name = 'paymenttypeHeaderEdit_formLocked'
+	const fn_name = 'paymtypeHeaderEdit_formLocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
 		fn(self, frm, CurrentState)
@@ -293,7 +303,7 @@ async function  frm_unlocked(self, evt) {
 	
 
 	// Extender untuk event Unlocked
-	const fn_name = 'paymenttypeHeaderEdit_formUnlocked'
+	const fn_name = 'paymtypeHeaderEdit_formUnlocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
 		fn(self, frm, CurrentState)
@@ -334,8 +344,8 @@ async function btn_new_click(self, evt) {
 	console.log('btn_new_click')
 	const sourceSection = evt.target.getAttribute('data-sectionsource') 
 
-	const paymenttypeHeaderList = self.Modules.paymenttypeHeaderList
-	const listsecid = paymenttypeHeaderList.Section.Id
+	const paymtypeHeaderList = self.Modules.paymtypeHeaderList
+	const listsecid = paymtypeHeaderList.Section.Id
 	const fromListSection = sourceSection===listsecid
 	if (fromListSection) {
 		// klik new dari list (tidak perlu cek ada perubahan data)
@@ -369,7 +379,7 @@ async function btn_new_click(self, evt) {
 
 		// jika perlu modifikasi data initial,
 		// atau dialog untuk opsi data baru, dapat dibuat di Extender
-		const fn_newdata_name = 'paymenttypeHeaderEdit_newData'
+		const fn_newdata_name = 'paymtypeHeaderEdit_newData'
 		const fn_newdata = Extender[fn_newdata_name]
 		if (typeof fn_newdata === 'function') {
 			await fn_newdata(self, datainit, frm)
@@ -393,7 +403,7 @@ async function btn_new_click(self, evt) {
 		await $fgta5.MessageBox.error(err.message)
 		if (fromListSection) {
 			// jika saat tombol baru dipilih saat di list, tampilan kembalikan ke list
-			self.Modules.paymenttypeHeaderList.Section.show()
+			self.Modules.paymtypeHeaderList.Section.show()
 		}
 	}
 }
@@ -403,7 +413,7 @@ async function btn_save_click(self, evt) {
 
 
 	// Extender Autofill
-	const fn_autofill_name = 'paymenttypeHeaderEdit_autofill'
+	const fn_autofill_name = 'paymtypeHeaderEdit_autofill'
 	const fn_autofill = Extender[fn_autofill_name]
 	if (typeof fn_autofill === 'function') {
 		await fn_autofill(self, frm)
@@ -440,7 +450,7 @@ async function btn_save_click(self, evt) {
 	}
 
 	// Extender Saving
-	const fn_datasaving_name = 'paymenttypeHeaderEdit_dataSaving'
+	const fn_datasaving_name = 'paymtypeHeaderEdit_dataSaving'
 	const fn_datasaving = Extender[fn_datasaving_name]
 	if (typeof fn_datasaving === 'function') {
 		await fn_datasaving(self, dataToSave, frm)
@@ -495,7 +505,7 @@ async function btn_save_click(self, evt) {
 
 
 		// Extender Saving
-		const fn_datasaved_name = 'paymenttypeHeaderEdit_dataSaved'
+		const fn_datasaved_name = 'paymtypeHeaderEdit_dataSaved'
 		const fn_datasaved = Extender[fn_datasaved_name]
 		if (typeof fn_datasaved === 'function') {
 			await fn_datasaved(self, data, frm)
@@ -513,10 +523,10 @@ async function btn_save_click(self, evt) {
 
 			// buat baris baru di grid
 			console.log('tamabah baris baru di grid')
-			self.Modules.paymenttypeHeaderList.addNewRow(self, data)
+			self.Modules.paymtypeHeaderList.addNewRow(self, data)
 		} else {
 			console.log('update data baris yang dibuka')
-			self.Modules.paymenttypeHeaderList.updateCurrentRow(self, data)
+			self.Modules.paymtypeHeaderList.updateCurrentRow(self, data)
 		}
 
 	} catch (err) {
@@ -555,10 +565,10 @@ async function btn_del_click(self, evt) {
 		const result = await deleteData(self, idValue)
 		
 		// hapus current row yang dipilih di list
-		self.Modules.paymenttypeHeaderList.removeCurrentRow(self)
+		self.Modules.paymtypeHeaderList.removeCurrentRow(self)
 		
 		// kembali ke list
-		self.Modules.paymenttypeHeaderList.Section.show()
+		self.Modules.paymtypeHeaderList.Section.show()
 
 
 		// lock kembali form
@@ -603,12 +613,12 @@ async function btn_reset_click(self, evt) {
 
 async function btn_prev_click(self, evt) {
 	console.log('btn_prev_click')
-	self.Modules.paymenttypeHeaderList.selectPreviousRow(self)
+	self.Modules.paymtypeHeaderList.selectPreviousRow(self)
 }
 
 async function btn_next_click(self, evt) {
 	console.log('btn_next_click')
-	self.Modules.paymenttypeHeaderList.selectNextRow(self)
+	self.Modules.paymtypeHeaderList.selectNextRow(self)
 }
 
 
@@ -621,6 +631,12 @@ async function btn_recordstatus_click(self, evt) {
 		sectionReturn: CurrentSection
 	}
 	
+	if (frm.isNew()) {
+		console.warn('tidak bisa buka rescord status jika data baru')	
+		$fgta5.MessageBox.warning('Record Status bisa dibuka setelah data disimpan')
+		return;
+	}
+
 	pageHelper.openSection(self, 'fRecord-section', params, async ()=>{
 
 		let mask = $fgta5.Modal.createMask()
@@ -630,12 +646,13 @@ async function btn_recordstatus_click(self, evt) {
 			const id = pk.value
 			const data = await openData(self, id)
 
-			obj_createby.innerHTML = data._createby
-			obj_createdate.innerHTML = data._createdate
-			obj_modifyby.innerHTML = data._modifyby
-			obj_modifydate.innerHTML = data._modifydate
+			rec_id.innerHTML = id
+			rec_createby.innerHTML = data._createby
+			rec_createdate.innerHTML = data._createdate
+			rec_modifyby.innerHTML = data._modifyby
+			rec_modifydate.innerHTML = data._modifydate
 
-			const fn_addrecordinfo_name = 'paymenttypeHeaderEdit_addRecordInfo'
+			const fn_addrecordinfo_name = 'paymtypeHeaderEdit_addRecordInfo'
 			const fn_addrecordinfo = Extender[fn_addrecordinfo_name]
 			if (typeof fn_addrecordinfo === 'function') {
 				await fn_addrecordinfo(self, data)
@@ -658,6 +675,12 @@ async function btn_logs_click(self, evt) {
 		sectionReturn: CurrentSection
 	}
 
+	if (frm.isNew()) {
+		console.warn('tidak bisa buka logs jika data baru')	
+		$fgta5.MessageBox.warning('Logs bisa dibuka setelah data disimpan')
+		return;
+	}
+
 	pageHelper.openSection(self, 'fLogs-section', params, async ()=>{
 		// get log data
 		const pk = frm.getPrimaryInput()
@@ -670,7 +693,7 @@ async function btn_logs_click(self, evt) {
 			const url = `${Context.appsUrls.core.url}/logs/list`
 			const criteria = {
 				module: Context.moduleName,
-				table: 'act.paymenttype',
+				table: 'act.paymtype',
 				id: id
 			}
 
@@ -717,7 +740,7 @@ async function btn_about_click(self, evt) {
 			const divFooter = document.createElement('div')
 			divFooter.setAttribute('id', 'fAbout-section-footer')
 			divFooter.setAttribute('style', 'border-top: 1px solid #ccc; padding: 5px 0 0 0; margin-top: 50px')
-			divFooter.innerHTML = 'This module is generated by fgta5 generator at 27 Nov 2025 11:02'
+			divFooter.innerHTML = 'This module is generated by fgta5 generator at 28 Nov 2025 19:13'
 			section.appendChild(divFooter)
 		}
 		

@@ -1,7 +1,7 @@
-import Context from './paymenttype-context.mjs'  
-import * as paymenttypeHeaderList from './paymenttypeHeaderList.mjs' 
-import * as paymenttypeHeaderEdit from './paymenttypeHeaderEdit.mjs' 
-import * as Extender from './paymenttype-ext.mjs'
+import Context from './paymreqtype-context.mjs'  
+import * as paymreqtypeHeaderList from './paymreqtypeHeaderList.mjs' 
+import * as paymreqtypeHeaderEdit from './paymreqtypeHeaderEdit.mjs' 
+import * as Extender from './paymreqtype-ext.mjs'
 
 const app = Context.app
 const Crsl = Context.Crsl
@@ -15,7 +15,7 @@ export default class extends Module {
 	async main(args={}) {
 		
 		console.log('initializing module...')
-		app.setTitle('Payment Type')
+		app.setTitle('PaymReq Type')
 		app.showFooter(true)
 		
 		args.autoLoadGridData = true
@@ -26,8 +26,8 @@ export default class extends Module {
 		// jangan import lagi module-module ini di dalam mjs tersebut
 		// karena akan terjadi cyclic redudancy pada saat di rollup
 		self.Modules = { 
-			paymenttypeHeaderList, 
-			paymenttypeHeaderEdit, 
+			paymreqtypeHeaderList, 
+			paymreqtypeHeaderEdit, 
 		}
 
 		try {
@@ -47,8 +47,8 @@ export default class extends Module {
 			} 
 
 			await Promise.all([ 
-				paymenttypeHeaderList.init(self, args), 
-				paymenttypeHeaderEdit.init(self, args), 
+				paymreqtypeHeaderList.init(self, args), 
+				paymreqtypeHeaderEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -60,7 +60,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['paymenttypeHeaderEdit']
+			const modNameList = ['paymreqtypeHeaderEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false
@@ -141,7 +141,16 @@ async function render(self) {
 			const sectionTargetName = link.getAttribute('data-target-section')
 			const sectionCurrentName = link.getAttribute('data-current-section')
 			
+			// Detil bisa dibuka apabila data sudah di save
 			link.addEventListener('click', (evt)=>{
+				const moduleHeaderEdit = self.Modules[sectionCurrentName]
+				const form = moduleHeaderEdit.getForm()
+				if (form.isNew()) {
+					console.warn('tidak bisa buka detil jika data baru')	
+					$fgta5.MessageBox.warning('Detil bisa dibuka setelah data disimpan')
+					return;
+				}
+
 				openDetilSection(self, sectionTargetName, sectionCurrentName)
 			})
 
@@ -151,7 +160,7 @@ async function render(self) {
 		});
 
 		
-		// paymenttype-ext.mjs, export function extendPage(self) {} 
+		// paymreqtype-ext.mjs, export function extendPage(self) {} 
 		const fn_name = 'extendPage'
 		const fn_extendPage = Extender[fn_name]
 		if (typeof fn_extendPage === 'function') {

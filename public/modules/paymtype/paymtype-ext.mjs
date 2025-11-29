@@ -1,9 +1,9 @@
-import Context from './paymenttype-context.mjs'
+import Context from './paymtype-context.mjs'
 
 export async function init(self, args) {
-	console.log('initializing paymenttypeExtender ...')
+	console.log('initializing paymtypeExtender ...')
 
-	// tambahkan extender inisiasi module paymenttype
+	// tambahkan extender inisiasi module paymtype
 
 
 	/* // contoh menambahkan content dari template extender

@@ -207,8 +207,9 @@ async function jurnaltype_headerOpen(self, body) {
 		}
 		
 		// pasang extender untuk olah data
+		// export async function headerOpen(self, db, data) {}
 		if (typeof Extender.headerOpen === 'function') {
-			await Extender.headerOpen(self, data)
+			await Extender.headerOpen(self, db, data)
 		}
 
 		return data

@@ -72,9 +72,18 @@
 		grid-column: 2;
 	}
 
+	#jurnaltypeHeaderEdit-obj_isheadhaspaymtype-container {
+		grid-row: 13;
+		grid-column: 2;
+	}
+
+	#jurnaltypeHeaderEdit-obj_isheadhaspaymreq-container {
+		grid-row: 14;
+		grid-column: 2;
+	}
 
 	#jurnaltypeHeaderEdit-obj_jurnaltype_headcopyto-container {
-		grid-row: 13;
+		grid-row: 15;
 		grid-column: 2;
 	}
 

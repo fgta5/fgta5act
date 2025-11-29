@@ -6,11 +6,11 @@ import sqlUtil from '@agung_dhewe/pgsqlc'
 import context from '@agung_dhewe/webapps/src/context.js'  
 import logger from '@agung_dhewe/webapps/src/logger.js'
 
-import * as Extender from './extenders/paymenttype.apiext.js'
+import * as Extender from './extenders/paymreqtype.apiext.js'
 
-const moduleName = 'paymenttype'
+const moduleName = 'paymreqtype'
 const headerSectionName = 'header'
-const headerTableName = 'act.paymenttype' 	
+const headerTableName = 'act.paymreqtype' 	
 
 // api: account
 export default class extends Api {
@@ -23,20 +23,20 @@ export default class extends Api {
 	// dipanggil dengan model snake syntax
 	// contoh: header-list
 	//         header-open-data
-	async init(body) { return await paymenttype_init(this, body) }
+	async init(body) { return await paymreqtype_init(this, body) }
 
 	// header
-	async headerList(body) { return await paymenttype_headerList(this, body) }
-	async headerOpen(body) { return await paymenttype_headerOpen(this, body) }
-	async headerUpdate(body) { return await paymenttype_headerUpdate(this, body)}
-	async headerCreate(body) { return await paymenttype_headerCreate(this, body)}
-	async headerDelete(body) { return await paymenttype_headerDelete(this, body) }
+	async headerList(body) { return await paymreqtype_headerList(this, body) }
+	async headerOpen(body) { return await paymreqtype_headerOpen(this, body) }
+	async headerUpdate(body) { return await paymreqtype_headerUpdate(this, body)}
+	async headerCreate(body) { return await paymreqtype_headerCreate(this, body)}
+	async headerDelete(body) { return await paymreqtype_headerDelete(this, body) }
 	
 			
 }	
 
 // init module
-async function paymenttype_init(self, body) {
+async function paymreqtype_init(self, body) {
 	const req = self.req
 
 	// set sid untuk session ini, diperlukan ini agar session aktif
@@ -78,7 +78,7 @@ async function paymenttype_init(self, body) {
 
 
 // data logging
-async function paymenttype_log(self, body, startTime, tablename, id, action, data={}, remark='') {
+async function paymreqtype_log(self, body, startTime, tablename, id, action, data={}, remark='') {
 	const { source } = body
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -95,11 +95,11 @@ async function paymenttype_log(self, body, startTime, tablename, id, action, dat
 
 
 
-async function paymenttype_headerList(self, body) {
+async function paymreqtype_headerList(self, body) {
 	const tablename = headerTableName
 	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
 	const searchMap = {
-		searchtext: `paymenttype_name = \${searchtext}`,
+		searchtext: `paymreqtype_name ILIKE '%' || \${searchtext} || '%'`,
 	};
 
 	try {
@@ -160,13 +160,13 @@ async function paymenttype_headerList(self, body) {
 	}
 }
 
-async function paymenttype_headerOpen(self, body) {
+async function paymreqtype_headerOpen(self, body) {
 	const tablename = headerTableName
 
 	try {
 		const { id } = body 
-		const criteria = { paymenttype_id: id }
-		const searchMap = { paymenttype_id: `paymenttype_id = \${paymenttype_id}`}
+		const criteria = { paymreqtype_id: id }
+		const searchMap = { paymreqtype_id: `paymreqtype_id = \${paymreqtype_id}`}
 		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
 		const sql = sqlUtil.createSqlSelect({
 			tablename: tablename, 
@@ -208,8 +208,8 @@ async function paymenttype_headerOpen(self, body) {
 }
 
 
-async function paymenttype_headerCreate(self, body) {
-	const { source='paymenttype', data={} } = body
+async function paymreqtype_headerCreate(self, body) {
+	const { source='paymreqtype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint();
@@ -245,7 +245,7 @@ async function paymenttype_headerCreate(self, body) {
 			}
 
 			// record log
-			paymenttype_log(self, body, startTime, tablename, ret.paymenttype_id, 'CREATE', logMetadata)
+			paymreqtype_log(self, body, startTime, tablename, ret.paymreqtype_id, 'CREATE', logMetadata)
 
 			return ret
 		})
@@ -256,8 +256,8 @@ async function paymenttype_headerCreate(self, body) {
 	}
 }
 
-async function paymenttype_headerUpdate(self, body) {
-	const { source='paymenttype', data={} } = body
+async function paymreqtype_headerUpdate(self, body) {
+	const { source='paymreqtype', data={} } = body
 	const req = self.req
 	const user_id = req.session.user.userId
 	const startTime = process.hrtime.bigint()
@@ -282,7 +282,7 @@ async function paymenttype_headerUpdate(self, body) {
 			}
 
 			// eksekusi update
-			const cmd = sqlUtil.createUpdateCommand(tablename, data, ['paymenttype_id'])
+			const cmd = sqlUtil.createUpdateCommand(tablename, data, ['paymreqtype_id'])
 			const ret = await cmd.execute(data)
 
 			
@@ -294,7 +294,7 @@ async function paymenttype_headerUpdate(self, body) {
 			}			
 
 			// record log
-			paymenttype_log(self, body, startTime, tablename, data.paymenttype_id, 'UPDATE')
+			paymreqtype_log(self, body, startTime, tablename, data.paymreqtype_id, 'UPDATE')
 
 			return ret
 		})
@@ -307,7 +307,7 @@ async function paymenttype_headerUpdate(self, body) {
 }
 
 
-async function paymenttype_headerDelete(self, body) {
+async function paymreqtype_headerDelete(self, body) {
 	const { source, id } = body
 	const req = self.req
 	const user_id = req.session.user.userId
@@ -319,7 +319,7 @@ async function paymenttype_headerDelete(self, body) {
 		const deletedRow = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
-			const dataToRemove = {paymenttype_id: id}
+			const dataToRemove = {paymreqtype_id: id}
 
 			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender headerDeleting
 			if (typeof Extender.headerDeleting === 'function') {
@@ -329,7 +329,7 @@ async function paymenttype_headerDelete(self, body) {
 			
 
 			// hapus data header
-			const cmd = sqlUtil.createDeleteCommand(tablename, ['paymenttype_id'])
+			const cmd = sqlUtil.createDeleteCommand(tablename, ['paymreqtype_id'])
 			const deletedRow = await cmd.execute(dataToRemove)
 
 			const logMetadata = {}
@@ -340,7 +340,7 @@ async function paymenttype_headerDelete(self, body) {
 			}
 
 			// record log
-			paymenttype_log(self, body, startTime, tablename, id, 'DELETE', logMetadata)
+			paymreqtype_log(self, body, startTime, tablename, id, 'DELETE', logMetadata)
 
 			return deletedRow
 		})

@@ -1,16 +1,24 @@
-<section id="paymenttypeHeaderList-section" class="fgta5-carousell" data-title="Payment Type">
-<%- include(`${moduleDir}/paymenttypeHeaderList.html`) %>
+<section id="paymtypeHeaderList-section" class="fgta5-carousell" data-title="Payment Type">
+<%- include(`${moduleDir}/paymtypeHeaderList.html`) %>
 </section>
 
-<section id="paymenttypeHeaderEdit-section" class="fgta5-carousell" data-title="Edit Payment Type">
-<%- include(`${moduleDir}/paymenttypeHeaderEdit.html`) %>
+<section id="paymtypeHeaderEdit-section" class="fgta5-carousell" data-title="Edit Payment Type">
+<%- include(`${moduleDir}/paymtypeHeaderEdit.html`) %>
 </section>
 
 
 
 <section id="fRecord-section" class="fgta5-carousell" data-title="Record Status">
-	<div name="panel">
 
+	<div name="panel">
+		<div name="row">
+			<span name="caption">Id</span>
+			<span name="value" id="fRecord-section-id">-</span>
+		</div>
+	</div>	
+
+
+	<div name="panel">
 		<!-- LEFT: Standard Info -->
 		<div name="column">
 			<div name="row">
@@ -35,18 +43,18 @@
 
 		<!-- RIGHT: Extended Info -->
 		<div name="column" exteder>
-		<%- include(`${moduleDir}/paymenttype-ext-record.html`) %>	
+		<%- include(`${moduleDir}/paymtype-ext-record.html`) %>	
 		</div> 
 
 	</div>	
 </section>
 
 <section id="fLogs-section" class="fgta5-carousell" data-title="Logs">
-<%- include(`${moduleDir}/paymenttype-logs.html`) %>	
+<%- include(`${moduleDir}/paymtype-logs.html`) %>	
 </section>
 
 <section id="fAbout-section" class="fgta5-carousell" data-title="About">
-<%- include(`${moduleDir}/paymenttype-ext-about.html`) %>	
+<%- include(`${moduleDir}/paymtype-ext-about.html`) %>	
 </section>
 
 

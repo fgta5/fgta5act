@@ -137,8 +137,8 @@ comment on column act."jurnaltypecoa"._modifydate is 'waktu terakhir record dimo
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
-ALTER TABLE act."jurnaltypecoa" DROP CONSTRAINT fk$act$jurnaltypecoa$coa_id;
 ALTER TABLE act."jurnaltypecoa" DROP CONSTRAINT fk$act$jurnaltypecoa$jurnaltype_id;
+ALTER TABLE act."jurnaltypecoa" DROP CONSTRAINT fk$act$jurnaltypecoa$coa_id;
 
 
 -- Add Foreign Key Constraint  

@@ -342,6 +342,36 @@ comment on column act."jurnaltype".isdetilallowselectproject is '';
 
 
 -- =============================================
+-- FIELD: isheadhaspaymtype boolean
+-- =============================================
+-- ADD isheadhaspaymtype
+alter table act."jurnaltype" add isheadhaspaymtype boolean not null default false;
+comment on column act."jurnaltype".isheadhaspaymtype is '';
+
+-- MODIFY isheadhaspaymtype
+alter table act."jurnaltype"
+	alter column isheadhaspaymtype type boolean,
+	ALTER COLUMN isheadhaspaymtype SET DEFAULT false,
+	ALTER COLUMN isheadhaspaymtype SET NOT NULL;
+comment on column act."jurnaltype".isheadhaspaymtype is '';
+
+
+-- =============================================
+-- FIELD: isheadhaspaymreq boolean
+-- =============================================
+-- ADD isheadhaspaymreq
+alter table act."jurnaltype" add isheadhaspaymreq boolean not null default false;
+comment on column act."jurnaltype".isheadhaspaymreq is '';
+
+-- MODIFY isheadhaspaymreq
+alter table act."jurnaltype"
+	alter column isheadhaspaymreq type boolean,
+	ALTER COLUMN isheadhaspaymreq SET DEFAULT false,
+	ALTER COLUMN isheadhaspaymreq SET NOT NULL;
+comment on column act."jurnaltype".isheadhaspaymreq is '';
+
+
+-- =============================================
 -- FIELD: _createby integer
 -- =============================================
 -- ADD _createby

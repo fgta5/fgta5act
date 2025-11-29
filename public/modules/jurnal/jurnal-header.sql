@@ -42,6 +42,21 @@ comment on column act."jurnal".jurnaltype_id is '';
 
 
 -- =============================================
+-- FIELD: paymreqterm_id bigint
+-- =============================================
+-- ADD paymreqterm_id
+alter table act."jurnal" add paymreqterm_id bigint  ;
+comment on column act."jurnal".paymreqterm_id is '';
+
+-- MODIFY paymreqterm_id
+alter table act."jurnal"
+	alter column paymreqterm_id type bigint,
+	ALTER COLUMN paymreqterm_id DROP DEFAULT,
+	ALTER COLUMN paymreqterm_id DROP NOT NULL;
+comment on column act."jurnal".paymreqterm_id is '';
+
+
+-- =============================================
 -- FIELD: periode_id smallint
 -- =============================================
 -- ADD periode_id
@@ -102,6 +117,126 @@ comment on column act."jurnal".jurnal_descr is '';
 
 
 -- =============================================
+-- FIELD: partner_id int
+-- =============================================
+-- ADD partner_id
+alter table act."jurnal" add partner_id int  ;
+comment on column act."jurnal".partner_id is '';
+
+-- MODIFY partner_id
+alter table act."jurnal"
+	alter column partner_id type int,
+	ALTER COLUMN partner_id DROP DEFAULT,
+	ALTER COLUMN partner_id DROP NOT NULL;
+comment on column act."jurnal".partner_id is '';
+
+
+-- =============================================
+-- FIELD: paymtype_id smallint
+-- =============================================
+-- ADD paymtype_id
+alter table act."jurnal" add paymtype_id smallint  ;
+comment on column act."jurnal".paymtype_id is '';
+
+-- MODIFY paymtype_id
+alter table act."jurnal"
+	alter column paymtype_id type smallint,
+	ALTER COLUMN paymtype_id DROP DEFAULT,
+	ALTER COLUMN paymtype_id DROP NOT NULL;
+comment on column act."jurnal".paymtype_id is '';
+
+
+-- =============================================
+-- FIELD: partnerbank_id bigint
+-- =============================================
+-- ADD partnerbank_id
+alter table act."jurnal" add partnerbank_id bigint  ;
+comment on column act."jurnal".partnerbank_id is '';
+
+-- MODIFY partnerbank_id
+alter table act."jurnal"
+	alter column partnerbank_id type bigint,
+	ALTER COLUMN partnerbank_id DROP DEFAULT,
+	ALTER COLUMN partnerbank_id DROP NOT NULL;
+comment on column act."jurnal".partnerbank_id is '';
+
+
+-- =============================================
+-- FIELD: payment_bgno text
+-- =============================================
+-- ADD payment_bgno
+alter table act."jurnal" add payment_bgno text  ;
+comment on column act."jurnal".payment_bgno is '';
+
+-- MODIFY payment_bgno
+alter table act."jurnal"
+	alter column payment_bgno type text,
+	ALTER COLUMN payment_bgno DROP DEFAULT,
+	ALTER COLUMN payment_bgno DROP NOT NULL;
+comment on column act."jurnal".payment_bgno is '';
+
+
+-- =============================================
+-- FIELD: partnerbank_account text
+-- =============================================
+-- ADD partnerbank_account
+alter table act."jurnal" add partnerbank_account text  ;
+comment on column act."jurnal".partnerbank_account is '';
+
+-- MODIFY partnerbank_account
+alter table act."jurnal"
+	alter column partnerbank_account type text,
+	ALTER COLUMN partnerbank_account DROP DEFAULT,
+	ALTER COLUMN partnerbank_account DROP NOT NULL;
+comment on column act."jurnal".partnerbank_account is '';
+
+
+-- =============================================
+-- FIELD: partnerbank_bankname text
+-- =============================================
+-- ADD partnerbank_bankname
+alter table act."jurnal" add partnerbank_bankname text  ;
+comment on column act."jurnal".partnerbank_bankname is '';
+
+-- MODIFY partnerbank_bankname
+alter table act."jurnal"
+	alter column partnerbank_bankname type text,
+	ALTER COLUMN partnerbank_bankname DROP DEFAULT,
+	ALTER COLUMN partnerbank_bankname DROP NOT NULL;
+comment on column act."jurnal".partnerbank_bankname is '';
+
+
+-- =============================================
+-- FIELD: partnerbank_accountname text
+-- =============================================
+-- ADD partnerbank_accountname
+alter table act."jurnal" add partnerbank_accountname text  ;
+comment on column act."jurnal".partnerbank_accountname is '';
+
+-- MODIFY partnerbank_accountname
+alter table act."jurnal"
+	alter column partnerbank_accountname type text,
+	ALTER COLUMN partnerbank_accountname DROP DEFAULT,
+	ALTER COLUMN partnerbank_accountname DROP NOT NULL;
+comment on column act."jurnal".partnerbank_accountname is '';
+
+
+-- =============================================
+-- FIELD: partnercontact_id bigint
+-- =============================================
+-- ADD partnercontact_id
+alter table act."jurnal" add partnercontact_id bigint  ;
+comment on column act."jurnal".partnercontact_id is '';
+
+-- MODIFY partnercontact_id
+alter table act."jurnal"
+	alter column partnercontact_id type bigint,
+	ALTER COLUMN partnercontact_id DROP DEFAULT,
+	ALTER COLUMN partnercontact_id DROP NOT NULL;
+comment on column act."jurnal".partnercontact_id is '';
+
+
+-- =============================================
 -- FIELD: curr_id smallint
 -- =============================================
 -- ADD curr_id
@@ -114,6 +249,21 @@ alter table act."jurnal"
 	ALTER COLUMN curr_id DROP DEFAULT,
 	ALTER COLUMN curr_id DROP NOT NULL;
 comment on column act."jurnal".curr_id is '';
+
+
+-- =============================================
+-- FIELD: jurnal_value decimal(13, 2)
+-- =============================================
+-- ADD jurnal_value
+alter table act."jurnal" add jurnal_value decimal(13, 2) not null default 0;
+comment on column act."jurnal".jurnal_value is '';
+
+-- MODIFY jurnal_value
+alter table act."jurnal"
+	alter column jurnal_value type decimal(13, 2),
+	ALTER COLUMN jurnal_value SET DEFAULT 0,
+	ALTER COLUMN jurnal_value SET NOT NULL;
+comment on column act."jurnal".jurnal_value is '';
 
 
 -- =============================================
@@ -147,21 +297,6 @@ comment on column act."jurnal".jurnal_idr is '';
 
 
 -- =============================================
--- FIELD: jurnal_value decimal(13, 2)
--- =============================================
--- ADD jurnal_value
-alter table act."jurnal" add jurnal_value decimal(13, 2) not null default 0;
-comment on column act."jurnal".jurnal_value is '';
-
--- MODIFY jurnal_value
-alter table act."jurnal"
-	alter column jurnal_value type decimal(13, 2),
-	ALTER COLUMN jurnal_value SET DEFAULT 0,
-	ALTER COLUMN jurnal_value SET NOT NULL;
-comment on column act."jurnal".jurnal_value is '';
-
-
--- =============================================
 -- FIELD: coa_id int
 -- =============================================
 -- ADD coa_id
@@ -174,21 +309,6 @@ alter table act."jurnal"
 	ALTER COLUMN coa_id DROP DEFAULT,
 	ALTER COLUMN coa_id DROP NOT NULL;
 comment on column act."jurnal".coa_id is '';
-
-
--- =============================================
--- FIELD: unit_id int
--- =============================================
--- ADD unit_id
-alter table act."jurnal" add unit_id int  ;
-comment on column act."jurnal".unit_id is '';
-
--- MODIFY unit_id
-alter table act."jurnal"
-	alter column unit_id type int,
-	ALTER COLUMN unit_id DROP DEFAULT,
-	ALTER COLUMN unit_id DROP NOT NULL;
-comment on column act."jurnal".unit_id is '';
 
 
 -- =============================================
@@ -222,18 +342,18 @@ comment on column act."jurnal".dept_id is '';
 
 
 -- =============================================
--- FIELD: partner_id int
+-- FIELD: unit_id int
 -- =============================================
--- ADD partner_id
-alter table act."jurnal" add partner_id int  ;
-comment on column act."jurnal".partner_id is '';
+-- ADD unit_id
+alter table act."jurnal" add unit_id int  ;
+comment on column act."jurnal".unit_id is '';
 
--- MODIFY partner_id
+-- MODIFY unit_id
 alter table act."jurnal"
-	alter column partner_id type int,
-	ALTER COLUMN partner_id DROP DEFAULT,
-	ALTER COLUMN partner_id DROP NOT NULL;
-comment on column act."jurnal".partner_id is '';
+	alter column unit_id type int,
+	ALTER COLUMN unit_id DROP DEFAULT,
+	ALTER COLUMN unit_id DROP NOT NULL;
+comment on column act."jurnal".unit_id is '';
 
 
 -- =============================================
@@ -294,111 +414,6 @@ alter table act."jurnal"
 	ALTER COLUMN _postdate DROP DEFAULT,
 	ALTER COLUMN _postdate DROP NOT NULL;
 comment on column act."jurnal"._postdate is '';
-
-
--- =============================================
--- FIELD: paymenttype_id smallint
--- =============================================
--- ADD paymenttype_id
-alter table act."jurnal" add paymenttype_id smallint  ;
-comment on column act."jurnal".paymenttype_id is '';
-
--- MODIFY paymenttype_id
-alter table act."jurnal"
-	alter column paymenttype_id type smallint,
-	ALTER COLUMN paymenttype_id DROP DEFAULT,
-	ALTER COLUMN paymenttype_id DROP NOT NULL;
-comment on column act."jurnal".paymenttype_id is '';
-
-
--- =============================================
--- FIELD: partnercontact_id bigint
--- =============================================
--- ADD partnercontact_id
-alter table act."jurnal" add partnercontact_id bigint  ;
-comment on column act."jurnal".partnercontact_id is '';
-
--- MODIFY partnercontact_id
-alter table act."jurnal"
-	alter column partnercontact_id type bigint,
-	ALTER COLUMN partnercontact_id DROP DEFAULT,
-	ALTER COLUMN partnercontact_id DROP NOT NULL;
-comment on column act."jurnal".partnercontact_id is '';
-
-
--- =============================================
--- FIELD: partnerbank_id bigint
--- =============================================
--- ADD partnerbank_id
-alter table act."jurnal" add partnerbank_id bigint  ;
-comment on column act."jurnal".partnerbank_id is '';
-
--- MODIFY partnerbank_id
-alter table act."jurnal"
-	alter column partnerbank_id type bigint,
-	ALTER COLUMN partnerbank_id DROP DEFAULT,
-	ALTER COLUMN partnerbank_id DROP NOT NULL;
-comment on column act."jurnal".partnerbank_id is '';
-
-
--- =============================================
--- FIELD: partnerbank_bankname text
--- =============================================
--- ADD partnerbank_bankname
-alter table act."jurnal" add partnerbank_bankname text  ;
-comment on column act."jurnal".partnerbank_bankname is '';
-
--- MODIFY partnerbank_bankname
-alter table act."jurnal"
-	alter column partnerbank_bankname type text,
-	ALTER COLUMN partnerbank_bankname DROP DEFAULT,
-	ALTER COLUMN partnerbank_bankname DROP NOT NULL;
-comment on column act."jurnal".partnerbank_bankname is '';
-
-
--- =============================================
--- FIELD: partnerbank_account text
--- =============================================
--- ADD partnerbank_account
-alter table act."jurnal" add partnerbank_account text  ;
-comment on column act."jurnal".partnerbank_account is '';
-
--- MODIFY partnerbank_account
-alter table act."jurnal"
-	alter column partnerbank_account type text,
-	ALTER COLUMN partnerbank_account DROP DEFAULT,
-	ALTER COLUMN partnerbank_account DROP NOT NULL;
-comment on column act."jurnal".partnerbank_account is '';
-
-
--- =============================================
--- FIELD: partnerbank_accountname text
--- =============================================
--- ADD partnerbank_accountname
-alter table act."jurnal" add partnerbank_accountname text  ;
-comment on column act."jurnal".partnerbank_accountname is '';
-
--- MODIFY partnerbank_accountname
-alter table act."jurnal"
-	alter column partnerbank_accountname type text,
-	ALTER COLUMN partnerbank_accountname DROP DEFAULT,
-	ALTER COLUMN partnerbank_accountname DROP NOT NULL;
-comment on column act."jurnal".partnerbank_accountname is '';
-
-
--- =============================================
--- FIELD: payment_bgno text
--- =============================================
--- ADD payment_bgno
-alter table act."jurnal" add payment_bgno text  ;
-comment on column act."jurnal".payment_bgno is '';
-
--- MODIFY payment_bgno
-alter table act."jurnal"
-	alter column payment_bgno type text,
-	ALTER COLUMN payment_bgno DROP DEFAULT,
-	ALTER COLUMN payment_bgno DROP NOT NULL;
-comment on column act."jurnal".payment_bgno is '';
 
 
 -- =============================================
@@ -467,18 +482,19 @@ comment on column act."jurnal"._modifydate is 'waktu terakhir record dimodifikas
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$project_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$unit_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$dept_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$site_id;
-ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$unit_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$coa_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$curr_id;
-ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$periode_id;
-ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$jurnaltype_id;
-ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$partnerbank_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$partnercontact_id;
-ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$paymenttype_id;
-ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$project_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$partnerbank_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$paymtype_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$partner_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$periode_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$paymreqterm_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$jurnaltype_id;
 
 
 -- Add Foreign Key Constraint  
@@ -494,6 +510,17 @@ CREATE INDEX idx_fk$act$jurnal$jurnaltype_id ON act."jurnal"(jurnaltype_id);
 
 
 ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$paymreqterm_id
+	FOREIGN KEY (paymreqterm_id)
+	REFERENCES act."paymreqterm"(paymreqterm_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$paymreqterm_id;
+CREATE INDEX idx_fk$act$jurnal$paymreqterm_id ON act."jurnal"(paymreqterm_id);	
+
+
+ALTER TABLE act."jurnal"
 	ADD CONSTRAINT fk$act$jurnal$periode_id
 	FOREIGN KEY (periode_id)
 	REFERENCES act."periode"(periode_id);
@@ -502,6 +529,50 @@ ALTER TABLE act."jurnal"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS act.idx_fk$act$jurnal$periode_id;
 CREATE INDEX idx_fk$act$jurnal$periode_id ON act."jurnal"(periode_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$partner_id
+	FOREIGN KEY (partner_id)
+	REFERENCES ent."partner"(partner_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$partner_id;
+CREATE INDEX idx_fk$act$jurnal$partner_id ON act."jurnal"(partner_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$paymtype_id
+	FOREIGN KEY (paymtype_id)
+	REFERENCES act."paymtype"(paymtype_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$paymtype_id;
+CREATE INDEX idx_fk$act$jurnal$paymtype_id ON act."jurnal"(paymtype_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$partnerbank_id
+	FOREIGN KEY (partnerbank_id)
+	REFERENCES ent."partnerbank"(partnerbank_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$partnerbank_id;
+CREATE INDEX idx_fk$act$jurnal$partnerbank_id ON act."jurnal"(partnerbank_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$partnercontact_id
+	FOREIGN KEY (partnercontact_id)
+	REFERENCES ent."partnercontact"(partnercontact_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$partnercontact_id;
+CREATE INDEX idx_fk$act$jurnal$partnercontact_id ON act."jurnal"(partnercontact_id);	
 
 
 ALTER TABLE act."jurnal"
@@ -527,17 +598,6 @@ CREATE INDEX idx_fk$act$jurnal$coa_id ON act."jurnal"(coa_id);
 
 
 ALTER TABLE act."jurnal"
-	ADD CONSTRAINT fk$act$jurnal$unit_id
-	FOREIGN KEY (unit_id)
-	REFERENCES ent."unit"(unit_id);
-
-
--- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS act.idx_fk$act$jurnal$unit_id;
-CREATE INDEX idx_fk$act$jurnal$unit_id ON act."jurnal"(unit_id);	
-
-
-ALTER TABLE act."jurnal"
 	ADD CONSTRAINT fk$act$jurnal$site_id
 	FOREIGN KEY (site_id)
 	REFERENCES ent."site"(site_id);
@@ -560,14 +620,14 @@ CREATE INDEX idx_fk$act$jurnal$dept_id ON act."jurnal"(dept_id);
 
 
 ALTER TABLE act."jurnal"
-	ADD CONSTRAINT fk$act$jurnal$partner_id
-	FOREIGN KEY (partner_id)
-	REFERENCES ent."partner"(partner_id);
+	ADD CONSTRAINT fk$act$jurnal$unit_id
+	FOREIGN KEY (unit_id)
+	REFERENCES ent."unit"(unit_id);
 
 
 -- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS act.idx_fk$act$jurnal$partner_id;
-CREATE INDEX idx_fk$act$jurnal$partner_id ON act."jurnal"(partner_id);	
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$unit_id;
+CREATE INDEX idx_fk$act$jurnal$unit_id ON act."jurnal"(unit_id);	
 
 
 ALTER TABLE act."jurnal"
@@ -579,39 +639,6 @@ ALTER TABLE act."jurnal"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS act.idx_fk$act$jurnal$project_id;
 CREATE INDEX idx_fk$act$jurnal$project_id ON act."jurnal"(project_id);	
-
-
-ALTER TABLE act."jurnal"
-	ADD CONSTRAINT fk$act$jurnal$paymenttype_id
-	FOREIGN KEY (paymenttype_id)
-	REFERENCES act."paymenttype"(paymenttype_id);
-
-
--- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS act.idx_fk$act$jurnal$paymenttype_id;
-CREATE INDEX idx_fk$act$jurnal$paymenttype_id ON act."jurnal"(paymenttype_id);	
-
-
-ALTER TABLE act."jurnal"
-	ADD CONSTRAINT fk$act$jurnal$partnercontact_id
-	FOREIGN KEY (partnercontact_id)
-	REFERENCES ent."partnercontact"(partnercontact_id);
-
-
--- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS act.idx_fk$act$jurnal$partnercontact_id;
-CREATE INDEX idx_fk$act$jurnal$partnercontact_id ON act."jurnal"(partnercontact_id);	
-
-
-ALTER TABLE act."jurnal"
-	ADD CONSTRAINT fk$act$jurnal$partnerbank_id
-	FOREIGN KEY (partnerbank_id)
-	REFERENCES ent."partnerbank"(partnerbank_id);
-
-
--- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS act.idx_fk$act$jurnal$partnerbank_id;
-CREATE INDEX idx_fk$act$jurnal$partnerbank_id ON act."jurnal"(partnerbank_id);	
 
 	
 

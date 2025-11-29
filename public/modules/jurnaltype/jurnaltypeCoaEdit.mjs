@@ -1,6 +1,8 @@
 import Context from './jurnaltype-context.mjs'
-import * as Extender from './jurnaltype-ext.mjs'
+import * as Ext from './jurnaltype-ext.mjs'
 import * as pageHelper from '/public/libs/webmodule/pagehelper.mjs'
+
+const Extender = Ext.extenderCoa ?? Ext
 
 
 const CurrentState = {}
@@ -34,10 +36,11 @@ const obj_coa_id = frm.Inputs['jurnaltypeCoaEdit-obj_coa_id']
 const obj_jurnaltypecoa_isdebet = frm.Inputs['jurnaltypeCoaEdit-obj_jurnaltypecoa_isdebet']
 const obj_jurnaltypecoa_iscr = frm.Inputs['jurnaltypeCoaEdit-obj_jurnaltypecoa_iscr']
 const obj_jurnaltype_id = frm.Inputs['jurnaltypeCoaEdit-obj_jurnaltype_id']	
-const obj_createby = document.getElementById('fRecord-section-createby')
-const obj_createdate = document.getElementById('fRecord-section-createdate')
-const obj_modifyby = document.getElementById('fRecord-section-modifyby')
-const obj_modifydate = document.getElementById('fRecord-section-modifydate')
+const rec_createby = document.getElementById('fRecord-section-createby')
+const rec_createdate = document.getElementById('fRecord-section-createdate')
+const rec_modifyby = document.getElementById('fRecord-section-modifyby')
+const rec_modifydate = document.getElementById('fRecord-section-modifydate')
+const rec_id = document.getElementById('fRecord-section-id')
 
 export const Section = CurrentSection
 
@@ -83,19 +86,24 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = 'coa/header-list'
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			
+			// buat function di extender:
+			// export function obj_coa_id_selecting_criteria(self, obj_coa_id, criteria, sort) {}
 			const fn_selecting_criteria_name = 'obj_coa_id_selecting_criteria'
 			const fn_obj_coa_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_coa_id_selecting_criteria(self, obj_coa_id, criteria)
+				fn_obj_coa_id_selecting_criteria(self, obj_coa_id, criteria, sort)
 			}
 
 			cbo.wait()
 			try {
 				const result = await Module.apiCall(url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -683,6 +691,12 @@ async function btn_recordstatus_click(self, evt) {
 		sectionReturn: CurrentSection
 	}
 	
+	if (frm.isNew()) {
+		console.warn('tidak bisa buka rescord status jika data baru')	
+		$fgta5.MessageBox.warning('Record Status bisa dibuka setelah data disimpan')
+		return;
+	}
+
 	pageHelper.openSection(self, 'fRecord-section', params, async ()=>{
 
 		let mask = $fgta5.Modal.createMask()
@@ -692,10 +706,11 @@ async function btn_recordstatus_click(self, evt) {
 			const id = pk.value
 			const data = await openData(self, id)
 
-			obj_createby.innerHTML = data._createby
-			obj_createdate.innerHTML = data._createdate
-			obj_modifyby.innerHTML = data._modifyby
-			obj_modifydate.innerHTML = data._modifydate
+			rec_id.innerHTML = id
+			rec_createby.innerHTML = data._createby
+			rec_createdate.innerHTML = data._createdate
+			rec_modifyby.innerHTML = data._modifyby
+			rec_modifydate.innerHTML = data._modifydate
 
 
 			// jika mau menambah beberapa informasi mengenai record,
@@ -722,6 +737,12 @@ async function btn_logs_click(self, evt) {
 	const params = {
 		Context,
 		sectionReturn: CurrentSection
+	}
+
+	if (frm.isNew()) {
+		console.warn('tidak bisa buka logs jika data baru')	
+		$fgta5.MessageBox.warning('Logs bisa dibuka setelah data disimpan')
+		return;
 	}
 
 	pageHelper.openSection(self, 'fLogs-section', params, async ()=>{

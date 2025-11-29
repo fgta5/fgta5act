@@ -1,6 +1,8 @@
 import Context from './jurnal-context.mjs'
-import * as Extender from './jurnal-ext.mjs'
+import * as Ext from './jurnal-ext.mjs'
 import * as pageHelper from '/public/libs/webmodule/pagehelper.mjs'
+
+const Extender = Ext.extenderDetil ?? Ext
 
 
 const CurrentState = {}
@@ -44,10 +46,11 @@ const obj_project_id = frm.Inputs['jurnalDetilEdit-obj_project_id']
 const obj_jurnaldetil_ishead = frm.Inputs['jurnalDetilEdit-obj_jurnaldetil_ishead']
 const obj_jurnaldetil_order = frm.Inputs['jurnalDetilEdit-obj_jurnaldetil_order']
 const obj_jurnal_id = frm.Inputs['jurnalDetilEdit-obj_jurnal_id']	
-const obj_createby = document.getElementById('fRecord-section-createby')
-const obj_createdate = document.getElementById('fRecord-section-createdate')
-const obj_modifyby = document.getElementById('fRecord-section-modifyby')
-const obj_modifydate = document.getElementById('fRecord-section-modifydate')
+const rec_createby = document.getElementById('fRecord-section-createby')
+const rec_createdate = document.getElementById('fRecord-section-createdate')
+const rec_modifyby = document.getElementById('fRecord-section-modifyby')
+const rec_modifydate = document.getElementById('fRecord-section-modifydate')
+const rec_id = document.getElementById('fRecord-section-id')
 
 export const Section = CurrentSection
 
@@ -85,7 +88,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_obj_curr_id_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_curr_id_selecting(self, obj_curr_id, frm, evt)
+			// export async function obj_curr_id_selecting(self, obj_curr_id, frm, evt) {}
 			fn_obj_curr_id_selecting(self, obj_curr_id, frm, evt)
 		} else {
 			// default selecting
@@ -98,18 +101,19 @@ export async function init(self, args) {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
 			
 			// buat function di extender:
-			// export function obj_curr_id_selecting_criteria(self, obj_curr_id, criteria, sort) {}
+			// export function obj_curr_id_selecting_criteria(self, obj_curr_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_curr_id_selecting_criteria'
 			const fn_obj_curr_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_curr_id_selecting_criteria(self, obj_curr_id, criteria, sort)
+				fn_obj_curr_id_selecting_criteria(self, obj_curr_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
 					sort,
 					criteria,
 					offset: evt.detail.offset,
@@ -137,7 +141,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_obj_coa_id_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_coa_id_selecting(self, obj_coa_id, frm, evt)
+			// export async function obj_coa_id_selecting(self, obj_coa_id, frm, evt) {}
 			fn_obj_coa_id_selecting(self, obj_coa_id, frm, evt)
 		} else {
 			// default selecting
@@ -150,18 +154,19 @@ export async function init(self, args) {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
 			
 			// buat function di extender:
-			// export function obj_coa_id_selecting_criteria(self, obj_coa_id, criteria, sort) {}
+			// export function obj_coa_id_selecting_criteria(self, obj_coa_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_coa_id_selecting_criteria'
 			const fn_obj_coa_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_coa_id_selecting_criteria(self, obj_coa_id, criteria, sort)
+				fn_obj_coa_id_selecting_criteria(self, obj_coa_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
 					sort,
 					criteria,
 					offset: evt.detail.offset,
@@ -189,7 +194,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_obj_unit_id_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_unit_id_selecting(self, obj_unit_id, frm, evt)
+			// export async function obj_unit_id_selecting(self, obj_unit_id, frm, evt) {}
 			fn_obj_unit_id_selecting(self, obj_unit_id, frm, evt)
 		} else {
 			// default selecting
@@ -202,18 +207,19 @@ export async function init(self, args) {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
 			
 			// buat function di extender:
-			// export function obj_unit_id_selecting_criteria(self, obj_unit_id, criteria, sort) {}
+			// export function obj_unit_id_selecting_criteria(self, obj_unit_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_unit_id_selecting_criteria'
 			const fn_obj_unit_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_unit_id_selecting_criteria(self, obj_unit_id, criteria, sort)
+				fn_obj_unit_id_selecting_criteria(self, obj_unit_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
 					sort,
 					criteria,
 					offset: evt.detail.offset,
@@ -241,7 +247,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_obj_site_id_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_site_id_selecting(self, obj_site_id, frm, evt)
+			// export async function obj_site_id_selecting(self, obj_site_id, frm, evt) {}
 			fn_obj_site_id_selecting(self, obj_site_id, frm, evt)
 		} else {
 			// default selecting
@@ -254,18 +260,19 @@ export async function init(self, args) {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
 			
 			// buat function di extender:
-			// export function obj_site_id_selecting_criteria(self, obj_site_id, criteria, sort) {}
+			// export function obj_site_id_selecting_criteria(self, obj_site_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_site_id_selecting_criteria'
 			const fn_obj_site_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_site_id_selecting_criteria(self, obj_site_id, criteria, sort)
+				fn_obj_site_id_selecting_criteria(self, obj_site_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
 					sort,
 					criteria,
 					offset: evt.detail.offset,
@@ -293,7 +300,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_obj_dept_id_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_dept_id_selecting(self, obj_dept_id, frm, evt)
+			// export async function obj_dept_id_selecting(self, obj_dept_id, frm, evt) {}
 			fn_obj_dept_id_selecting(self, obj_dept_id, frm, evt)
 		} else {
 			// default selecting
@@ -306,18 +313,19 @@ export async function init(self, args) {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
 			
 			// buat function di extender:
-			// export function obj_dept_id_selecting_criteria(self, obj_dept_id, criteria, sort) {}
+			// export function obj_dept_id_selecting_criteria(self, obj_dept_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_dept_id_selecting_criteria'
 			const fn_obj_dept_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_dept_id_selecting_criteria(self, obj_dept_id, criteria, sort)
+				fn_obj_dept_id_selecting_criteria(self, obj_dept_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
 					sort,
 					criteria,
 					offset: evt.detail.offset,
@@ -345,7 +353,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_obj_partner_id_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_partner_id_selecting(self, obj_partner_id, frm, evt)
+			// export async function obj_partner_id_selecting(self, obj_partner_id, frm, evt) {}
 			fn_obj_partner_id_selecting(self, obj_partner_id, frm, evt)
 		} else {
 			// default selecting
@@ -358,18 +366,19 @@ export async function init(self, args) {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
 			
 			// buat function di extender:
-			// export function obj_partner_id_selecting_criteria(self, obj_partner_id, criteria, sort) {}
+			// export function obj_partner_id_selecting_criteria(self, obj_partner_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_partner_id_selecting_criteria'
 			const fn_obj_partner_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_partner_id_selecting_criteria(self, obj_partner_id, criteria, sort)
+				fn_obj_partner_id_selecting_criteria(self, obj_partner_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
 					sort,
 					criteria,
 					offset: evt.detail.offset,
@@ -397,7 +406,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_obj_project_id_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_project_id_selecting(self, obj_project_id, frm, evt)
+			// export async function obj_project_id_selecting(self, obj_project_id, frm, evt) {}
 			fn_obj_project_id_selecting(self, obj_project_id, frm, evt)
 		} else {
 			// default selecting
@@ -410,18 +419,19 @@ export async function init(self, args) {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
 			
 			// buat function di extender:
-			// export function obj_project_id_selecting_criteria(self, obj_project_id, criteria, sort) {}
+			// export function obj_project_id_selecting_criteria(self, obj_project_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_project_id_selecting_criteria'
 			const fn_obj_project_id_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_project_id_selecting_criteria(self, obj_project_id, criteria, sort)
+				fn_obj_project_id_selecting_criteria(self, obj_project_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
 					sort,
 					criteria,
 					offset: evt.detail.offset,
@@ -1039,10 +1049,11 @@ async function btn_recordstatus_click(self, evt) {
 			const id = pk.value
 			const data = await openData(self, id)
 
-			obj_createby.innerHTML = data._createby
-			obj_createdate.innerHTML = data._createdate
-			obj_modifyby.innerHTML = data._modifyby
-			obj_modifydate.innerHTML = data._modifydate
+			rec_id.innerHTML = id
+			rec_createby.innerHTML = data._createby
+			rec_createdate.innerHTML = data._createdate
+			rec_modifyby.innerHTML = data._modifyby
+			rec_modifydate.innerHTML = data._modifydate
 
 
 			// jika mau menambah beberapa informasi mengenai record,

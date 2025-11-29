@@ -407,6 +407,9 @@ comment on column act."jurnaldetil"._modifydate is 'waktu terakhir record dimodi
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
+ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$unit_id;
+ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$coa_id;
+ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$curr_id;
 ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$jurnal_id;
 ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$jurnaldetil_id_ref;
 ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$periode_id;
@@ -414,9 +417,6 @@ ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$project_id;
 ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$partner_id;
 ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$dept_id;
 ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$site_id;
-ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$unit_id;
-ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$coa_id;
-ALTER TABLE act."jurnaldetil" DROP CONSTRAINT fk$act$jurnaldetil$curr_id;
 
 
 -- Add Foreign Key Constraint  

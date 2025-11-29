@@ -1,6 +1,7 @@
 import Context from './jurnaltype-context.mjs'
-import * as Extender from './jurnaltype-ext.mjs'
+import * as Ext from './jurnaltype-ext.mjs'
 
+const Extender = Ext.extenderHeader ?? Ext
 
 const Crsl =  Context.Crsl
 const CurrentSectionId = Context.Sections.jurnaltypeHeaderList

@@ -1,5 +1,7 @@
 import Context from './jurnal-context.mjs'
-import * as Extender from './jurnal-ext.mjs'
+import * as Ext from './jurnal-ext.mjs'
+
+const Extender = Ext.extenderDetil ?? Ext
 
 const Crsl =  Context.Crsl
 const CurrentSectionId = Context.Sections.jurnalDetilList
