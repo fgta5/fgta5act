@@ -11,9 +11,9 @@ const CurrentSectionId = Context.Sections.jurnaltypeCoaEdit
 const CurrentSection = Crsl.Items[CurrentSectionId]
 const Source = Context.Source
 
-const TitleWhenNew = 'New Jurnal Type'
-const TitleWhenView = 'View Jurnal Type'
-const TitleWhenEdit = 'Edit Jurnal Type'
+const TitleWhenNew = 'New Coa'
+const TitleWhenView = 'View Coa'
+const TitleWhenEdit = 'Edit Coa'
 const EditModeText = 'Edit'
 const LockModeText = 'Lock'
 
@@ -33,7 +33,7 @@ const btn_logs = document.getElementById('jurnaltypeCoa-btn_logs')
 const frm = new $fgta5.Form('jurnaltypeCoaEdit-frm');
 const obj_jurnaltypecoa_id = frm.Inputs['jurnaltypeCoaEdit-obj_jurnaltypecoa_id']
 const obj_coa_id = frm.Inputs['jurnaltypeCoaEdit-obj_coa_id']
-const obj_jurnaltypecoa_isdebet = frm.Inputs['jurnaltypeCoaEdit-obj_jurnaltypecoa_isdebet']
+const obj_jurnaltypecoa_isdr = frm.Inputs['jurnaltypeCoaEdit-obj_jurnaltypecoa_isdr']
 const obj_jurnaltypecoa_iscr = frm.Inputs['jurnaltypeCoaEdit-obj_jurnaltypecoa_iscr']
 const obj_jurnaltype_id = frm.Inputs['jurnaltypeCoaEdit-obj_jurnaltype_id']	
 const rec_createby = document.getElementById('fRecord-section-createby')
@@ -69,17 +69,33 @@ export async function init(self, args) {
 
 	CurrentState.headerFormLocked = true 
 	CurrentState.editDisabled = false
+	CurrentState.getHeaderForm = () => {
+		const jurnaltypeHeaderEdit = self.Modules.jurnaltypeHeaderEdit
+		const frmHeader = jurnaltypeHeaderEdit.getHeaderForm()
+		return frmHeader
+	}
 
 
 	
 	// Combobox: obj_coa_id
+	obj_coa_id.addEventListener('selected', (evt)=>{
+		const fn_selected_name = 'obj_coa_id_selected'
+		const fn_selected = Extender[fn_selected_name]
+		if (typeof fn_selected === 'function') {
+			// create function di Extender:
+			// export async function obj_coa_id_selected(self, obj_coa_id, frm, evt) {}
+			fn_selected(self, obj_coa_id, frm, evt)
+		} else {	
+			console.warn('Extender.obj_coa_id_selected is not implemented')
+		}		
+	})
 	obj_coa_id.addEventListener('selecting', async (evt)=>{
 		const fn_selecting_name = 'obj_coa_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
-		if (typeof fn_obj_coa_id_selecting === 'function') {
+		if (typeof fn_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_coa_id_selecting(self, obj_coa_id, frm, evt)
-			fn_obj_coa_id_selecting(self, obj_coa_id, frm, evt)
+			// export async function obj_coa_id_selecting(self, obj_coa_id, frm, evt) {}
+			fn_selecting(self, obj_coa_id, frm, evt)
 		} else {
 			// default selecting
 			const cbo = evt.detail.sender
@@ -91,18 +107,20 @@ export async function init(self, args) {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
+			evt.detail.CurrentState = CurrentState
 			
 			// buat function di extender:
-			// export function obj_coa_id_selecting_criteria(self, obj_coa_id, criteria, sort) {}
+			// export function obj_coa_id_selecting_criteria(self, obj_coa_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_coa_id_selecting_criteria'
-			const fn_obj_coa_id_selecting_criteria = Extender[fn_selecting_criteria_name]
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_obj_coa_id_selecting_criteria(self, obj_coa_id, criteria, sort)
+				fn_selecting_criteria(self, obj_coa_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
 					sort,
 					criteria,
 					offset: evt.detail.offset,
@@ -159,6 +177,8 @@ export async function openSelectedData(self, params) {
 		frm.acceptChanges()
 		frm.lock()
 
+
+		// export function jurnaltypeCoaEdit_formOpened(self, frm, CurrentState) {}
 		const fn_formopened_name = 'jurnaltypeCoaEdit_formOpened'
 		const fn_formopened = Extender[fn_formopened_name]
 		if (typeof fn_formopened === 'function') {
@@ -322,6 +342,7 @@ async function  frm_locked(self, evt) {
 
 
 	// Extender untuk event locked
+	// export function jurnaltypeCoaEdit_formLocked(self, frm, CurrentState) {}
 	const fn_name = 'jurnaltypeCoaEdit_formLocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
@@ -358,6 +379,7 @@ async function  frm_unlocked(self, evt) {
 	btn_next.disabled = true
 
 	// Extender untuk event Unlocked
+	// export function jurnaltypeCoaEdit_formUnlocked(self, frm) {}
 	const fn_name = 'jurnaltypeCoaEdit_formUnlocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
@@ -436,17 +458,19 @@ async function btn_new_click(self, evt) {
 		const jurnaltype_id = header_pk.value
 
 		// inisiasi data baru
-		let datainit = {
-			jurnaltype_id,}
+		const datainit = {
+			jurnaltype_id,
+		}
 
 
 		// jika perlu modifikasi data initial,
 		// atau dialog untuk opsi data baru, 
 		// dapat dibuat di Extender.newData
+		// export async function jurnaltypeCoaEdit_newData(self, datainit, frm, CurrentState) {}
 		const fn_newdata_name = 'jurnaltypeCoaEdit_newData'
 		const fn_newdata = Extender[fn_newdata_name]
 		if (typeof fn_newdata === 'function') {
-			await fn_newdata(self, datainit, frm)
+			await fn_newdata(self, datainit, frm, CurrentState)
 		}
 
 		// buat data baru
@@ -473,6 +497,7 @@ async function btn_save_click(self, evt) {
 	console.log('btn_save_click')
 
 	// Extender Autofill
+	// export async function jurnaltypeCoaEdit_autofill(self, frm) {}
 	const fn_autofill_name = 'jurnaltypeCoaEdit_autofill'
 	const fn_autofill = Extender[fn_autofill_name]
 	if (typeof fn_autofill === 'function') {
@@ -523,6 +548,7 @@ async function btn_save_click(self, evt) {
 
 
 	// Extender Saving
+	// export async function jurnaltypeCoaEdit_dataSaving(self, dataToSave, frm) {}
 	const fn_datasaving_name = 'jurnaltypeCoaEdit_dataSaving'
 	const fn_datasaving = Extender[fn_datasaving_name]
 	if (typeof fn_datasaving === 'function') {
@@ -568,6 +594,7 @@ async function btn_save_click(self, evt) {
 
 
 		// Extender Saving
+		// export async function jurnaltypeCoaEdit_dataSaved(self, data, frm) {}
 		const fn_datasaved_name = 'jurnaltypeCoaEdit_dataSaved'
 		const fn_datasaved = Extender[fn_datasaved_name]
 		if (typeof fn_datasaved === 'function') {
@@ -716,6 +743,7 @@ async function btn_recordstatus_click(self, evt) {
 			// jika mau menambah beberapa informasi mengenai record,
 			// misalnya commit by, postby, dll
 			// melalui extender jurnaltypeCoaEdit_addRecordInfo
+			// export async function jurnaltypeCoaEdit_addRecordInfo(self,  data) {}
 			const fn_addrecordinfo_name = 'jurnaltypeCoaEdit_addRecordInfo'
 			const fn_addrecordinfo = Extender[fn_addrecordinfo_name]
 			if (typeof fn_addrecordinfo === 'function') {

@@ -184,25 +184,20 @@ async function jurnal_headerList(self, body) {
 				const { partnercontact_name } = await sqlUtil.lookupdb(db, 'ent.partnercontact', 'partnercontact_id', row.partnercontact_id)
 				row.partnercontact_name = partnercontact_name
 			}
-			// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.jurnal.curr_id)
-			{
-				const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', row.curr_id)
-				row.curr_code = curr_code
-			}
 			// lookup: coa_name dari field coa_name pada table act.coa dimana (act.coa.coa_id = act.jurnal.coa_id)
 			{
 				const { coa_name } = await sqlUtil.lookupdb(db, 'act.coa', 'coa_id', row.coa_id)
 				row.coa_name = coa_name
 			}
-			// lookup: site_name dari field site_name pada table ent.site dimana (ent.site.site_id = act.jurnal.site_id)
-			{
-				const { site_name } = await sqlUtil.lookupdb(db, 'ent.site', 'site_id', row.site_id)
-				row.site_name = site_name
-			}
 			// lookup: dept_name dari field dept_name pada table ent.dept dimana (ent.dept.dept_id = act.jurnal.dept_id)
 			{
 				const { dept_name } = await sqlUtil.lookupdb(db, 'ent.dept', 'dept_id', row.dept_id)
 				row.dept_name = dept_name
+			}
+			// lookup: site_name dari field site_name pada table ent.site dimana (ent.site.site_id = act.jurnal.site_id)
+			{
+				const { site_name } = await sqlUtil.lookupdb(db, 'ent.site', 'site_id', row.site_id)
+				row.site_name = site_name
 			}
 			// lookup: unit_name dari field unit_name pada table ent.unit dimana (ent.unit.unit_id = act.jurnal.unit_id)
 			{
@@ -213,6 +208,11 @@ async function jurnal_headerList(self, body) {
 			{
 				const { project_name } = await sqlUtil.lookupdb(db, 'prj.project', 'project_id', row.project_id)
 				row.project_name = project_name
+			}
+			// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.jurnal.curr_id)
+			{
+				const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', row.curr_id)
+				row.curr_code = curr_code
 			}
 			
 			// pasang extender di sini
@@ -298,25 +298,20 @@ async function jurnal_headerOpen(self, body) {
 			const { partnercontact_name } = await sqlUtil.lookupdb(db, 'ent.partnercontact', 'partnercontact_id', data.partnercontact_id)
 			data.partnercontact_name = partnercontact_name
 		}
-		// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.jurnal.curr_id)
-		{
-			const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', data.curr_id)
-			data.curr_code = curr_code
-		}
 		// lookup: coa_name dari field coa_name pada table act.coa dimana (act.coa.coa_id = act.jurnal.coa_id)
 		{
 			const { coa_name } = await sqlUtil.lookupdb(db, 'act.coa', 'coa_id', data.coa_id)
 			data.coa_name = coa_name
 		}
-		// lookup: site_name dari field site_name pada table ent.site dimana (ent.site.site_id = act.jurnal.site_id)
-		{
-			const { site_name } = await sqlUtil.lookupdb(db, 'ent.site', 'site_id', data.site_id)
-			data.site_name = site_name
-		}
 		// lookup: dept_name dari field dept_name pada table ent.dept dimana (ent.dept.dept_id = act.jurnal.dept_id)
 		{
 			const { dept_name } = await sqlUtil.lookupdb(db, 'ent.dept', 'dept_id', data.dept_id)
 			data.dept_name = dept_name
+		}
+		// lookup: site_name dari field site_name pada table ent.site dimana (ent.site.site_id = act.jurnal.site_id)
+		{
+			const { site_name } = await sqlUtil.lookupdb(db, 'ent.site', 'site_id', data.site_id)
+			data.site_name = site_name
 		}
 		// lookup: unit_name dari field unit_name pada table ent.unit dimana (ent.unit.unit_id = act.jurnal.unit_id)
 		{
@@ -327,6 +322,11 @@ async function jurnal_headerOpen(self, body) {
 		{
 			const { project_name } = await sqlUtil.lookupdb(db, 'prj.project', 'project_id', data.project_id)
 			data.project_name = project_name
+		}
+		// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.jurnal.curr_id)
+		{
+			const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', data.curr_id)
+			data.curr_code = curr_code
 		}
 		
 
@@ -375,6 +375,12 @@ async function jurnal_headerCreate(self, body) {
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
+
+			const args = { section: 'header' }
+
+			// set default document prefix
+			args.prefix = 'XX'	
+				
 			// buat sequencer document	
 			const sequencer = createSequencerDocument(tx, { 
 				COMPANY_CODE: req.app.locals.appConfig.COMPANY_CODE,
@@ -385,18 +391,18 @@ async function jurnal_headerCreate(self, body) {
 			if (typeof Extender.sequencerSetup === 'function') {
 				// jika ada keperluan menambahkan code block/cluster di sequencer
 				// dapat diimplementasikan di exterder sequencerSetup 
-				// export async function sequencerSetup(self, tx, sequencer, data) {}
-				await Extender.sequencerSetup(self, tx, sequencer, data)
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
 			}
 
-			// generate data XX reset perbulan
-			const seqdata = await sequencer.monthly('XX')	
+			// generate data sesuai prefix (default: XX) reset perbulan
+			const seqdata = await sequencer.monthly(args.prefix)	
 			data.jurnal_id = seqdata.id
 
 			// apabila ada keperluan pengelohan data sebelum disimpan, lakukan di extender headerCreating
 			if (typeof Extender.headerCreating === 'function') {
-				// export async function headerCreating(self, tx, data, seqdata) {}
-				await Extender.headerCreating(self, tx, data, seqdata)
+				// export async function headerCreating(self, tx, data, seqdata, args) {}
+				await Extender.headerCreating(self, tx, data, seqdata, args)
 			}			
 			
 			
@@ -409,8 +415,8 @@ async function jurnal_headerCreate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.headerCreated === 'function') {
-				// export async function headerCreated(self, tx, ret, data, logMetadata) {}
-				await Extender.headerCreated(self, tx, ret, data, logMetadata)
+				// export async function headerCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.headerCreated(self, tx, ret, data, logMetadata, args)
 			}
 
 			// record log
@@ -596,40 +602,40 @@ async function jurnal_detilList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
-			// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.jurnal.curr_id)
-			{
-				const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', row.curr_id)
-				row.curr_code = curr_code
-			}
 			// lookup: coa_name dari field coa_name pada table act.coa dimana (act.coa.coa_id = act.jurnal.coa_id)
 			{
 				const { coa_name } = await sqlUtil.lookupdb(db, 'act.coa', 'coa_id', row.coa_id)
 				row.coa_name = coa_name
-			}
-			// lookup: unit_name dari field unit_name pada table ent.unit dimana (ent.unit.unit_id = act.jurnal.unit_id)
-			{
-				const { unit_name } = await sqlUtil.lookupdb(db, 'ent.unit', 'unit_id', row.unit_id)
-				row.unit_name = unit_name
-			}
-			// lookup: site_name dari field site_name pada table ent.site dimana (ent.site.site_id = act.jurnal.site_id)
-			{
-				const { site_name } = await sqlUtil.lookupdb(db, 'ent.site', 'site_id', row.site_id)
-				row.site_name = site_name
-			}
-			// lookup: dept_name dari field dept_name pada table ent.dept dimana (ent.dept.dept_id = act.jurnal.dept_id)
-			{
-				const { dept_name } = await sqlUtil.lookupdb(db, 'ent.dept', 'dept_id', row.dept_id)
-				row.dept_name = dept_name
 			}
 			// lookup: partner_name dari field partner_name pada table ent.partner dimana (ent.partner.partner_id = act.jurnal.partner_id)
 			{
 				const { partner_name } = await sqlUtil.lookupdb(db, 'ent.partner', 'partner_id', row.partner_id)
 				row.partner_name = partner_name
 			}
+			// lookup: dept_name dari field dept_name pada table ent.dept dimana (ent.dept.dept_id = act.jurnal.dept_id)
+			{
+				const { dept_name } = await sqlUtil.lookupdb(db, 'ent.dept', 'dept_id', row.dept_id)
+				row.dept_name = dept_name
+			}
+			// lookup: site_name dari field site_name pada table ent.site dimana (ent.site.site_id = act.jurnal.site_id)
+			{
+				const { site_name } = await sqlUtil.lookupdb(db, 'ent.site', 'site_id', row.site_id)
+				row.site_name = site_name
+			}
+			// lookup: unit_name dari field unit_name pada table ent.unit dimana (ent.unit.unit_id = act.jurnal.unit_id)
+			{
+				const { unit_name } = await sqlUtil.lookupdb(db, 'ent.unit', 'unit_id', row.unit_id)
+				row.unit_name = unit_name
+			}
 			// lookup: project_name dari field project_name pada table prj.project dimana (prj.project.project_id = act.jurnal.project_id)
 			{
 				const { project_name } = await sqlUtil.lookupdb(db, 'prj.project', 'project_id', row.project_id)
 				row.project_name = project_name
+			}
+			// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.jurnal.curr_id)
+			{
+				const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', row.curr_id)
+				row.curr_code = curr_code
 			}
 			// lookup: periode_name dari field periode_name pada table act.periode dimana (act.periode.periode_id = act.jurnal.periode_id)
 			{
@@ -687,40 +693,40 @@ async function jurnal_detilOpen(self, body) {
 		}	
 
 
-		// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.jurnal.curr_id)
-		{
-			const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', data.curr_id)
-			data.curr_code = curr_code
-		}
 		// lookup: coa_name dari field coa_name pada table act.coa dimana (act.coa.coa_id = act.jurnal.coa_id)
 		{
 			const { coa_name } = await sqlUtil.lookupdb(db, 'act.coa', 'coa_id', data.coa_id)
 			data.coa_name = coa_name
-		}
-		// lookup: unit_name dari field unit_name pada table ent.unit dimana (ent.unit.unit_id = act.jurnal.unit_id)
-		{
-			const { unit_name } = await sqlUtil.lookupdb(db, 'ent.unit', 'unit_id', data.unit_id)
-			data.unit_name = unit_name
-		}
-		// lookup: site_name dari field site_name pada table ent.site dimana (ent.site.site_id = act.jurnal.site_id)
-		{
-			const { site_name } = await sqlUtil.lookupdb(db, 'ent.site', 'site_id', data.site_id)
-			data.site_name = site_name
-		}
-		// lookup: dept_name dari field dept_name pada table ent.dept dimana (ent.dept.dept_id = act.jurnal.dept_id)
-		{
-			const { dept_name } = await sqlUtil.lookupdb(db, 'ent.dept', 'dept_id', data.dept_id)
-			data.dept_name = dept_name
 		}
 		// lookup: partner_name dari field partner_name pada table ent.partner dimana (ent.partner.partner_id = act.jurnal.partner_id)
 		{
 			const { partner_name } = await sqlUtil.lookupdb(db, 'ent.partner', 'partner_id', data.partner_id)
 			data.partner_name = partner_name
 		}
+		// lookup: dept_name dari field dept_name pada table ent.dept dimana (ent.dept.dept_id = act.jurnal.dept_id)
+		{
+			const { dept_name } = await sqlUtil.lookupdb(db, 'ent.dept', 'dept_id', data.dept_id)
+			data.dept_name = dept_name
+		}
+		// lookup: site_name dari field site_name pada table ent.site dimana (ent.site.site_id = act.jurnal.site_id)
+		{
+			const { site_name } = await sqlUtil.lookupdb(db, 'ent.site', 'site_id', data.site_id)
+			data.site_name = site_name
+		}
+		// lookup: unit_name dari field unit_name pada table ent.unit dimana (ent.unit.unit_id = act.jurnal.unit_id)
+		{
+			const { unit_name } = await sqlUtil.lookupdb(db, 'ent.unit', 'unit_id', data.unit_id)
+			data.unit_name = unit_name
+		}
 		// lookup: project_name dari field project_name pada table prj.project dimana (prj.project.project_id = act.jurnal.project_id)
 		{
 			const { project_name } = await sqlUtil.lookupdb(db, 'prj.project', 'project_id', data.project_id)
 			data.project_name = project_name
+		}
+		// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.jurnal.curr_id)
+		{
+			const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', data.curr_id)
+			data.curr_code = curr_code
 		}
 		// lookup: periode_name dari field periode_name pada table act.periode dimana (act.periode.periode_id = act.jurnal.periode_id)
 		{
@@ -766,14 +772,30 @@ async function jurnal_detilCreate(self, body) {
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
+
+			const args = { 
+				section: 'detil', 
+				prefix: 'XX'	
+			}
+
 			const sequencer = createSequencerLine(tx, {})
-			const seqdata = await sequencer.increment('XX')
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.prefix)
 			data.jurnaldetil_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
 			if (typeof Extender.detilCreating === 'function') {
-				// export async function detilCreating(self, tx, data, seqdata) {}
-				await Extender.detilCreating(self, tx, data, seqdata)
+				// export async function detilCreating(self, tx, data, seqdata, args) {}
+				await Extender.detilCreating(self, tx, data, seqdata, args)
 			}
 
 			const cmd = sqlUtil.createInsertCommand(tablename, data)
@@ -783,8 +805,8 @@ async function jurnal_detilCreate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.detilCreated === 'function') {
-				// export async function detilCreated(self, tx, ret, data, logMetadata) {}
-				await Extender.detilCreated(self, tx, ret, data, logMetadata)
+				// export async function detilCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.detilCreated(self, tx, ret, data, logMetadata, args)
 			}
 
 			// record log

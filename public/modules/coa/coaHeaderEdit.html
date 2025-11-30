@@ -41,17 +41,34 @@
 	</div>
 
 
-	<!-- Numberbox: coa_normalposition-->	
-	<div id="coaHeaderEdit-obj_coa_normal-container" class="input-field" field="coaHeaderEdit-obj_coa_normal">
-		<label for="coaHeaderEdit-obj_coa_normal">Normal</label>
-		<input id="coaHeaderEdit-obj_coa_normal"  fgta5-component="Numberbox" placeholder="normal balance position" autocomplete="off" spellcheck="false" 
-			binding="coa_normalposition"
-			value="0" 
+	<!-- Numberbox: coa_signfactor-->	
+	<div id="coaHeaderEdit-obj_coa_signfactor-container" class="input-field" field="coaHeaderEdit-obj_coa_signfactor">
+		<label for="coaHeaderEdit-obj_coa_signfactor">Sign Factor</label>
+		<input id="coaHeaderEdit-obj_coa_signfactor"  fgta5-component="Numberbox" placeholder="sign factor" autocomplete="off" spellcheck="false" 
+			binding="coa_signfactor"
+			value="1" 
 			data-tabindex="4" 
 			description="masukkan nilai -1 untuk Kredit, dan 1 untuk Debet" 
 			maxlength="9" 
+			digitgrouping="false" 
 			validator="valueIs:['-1', '1']" 
 			invalid-message="invalid value, masukkan -1 untuk kredit, 1 untuk debit" 
+		>
+	</div>
+
+
+	<!-- Textbox: coa_normal-->	
+	<div id="coaHeaderEdit-obj_coa_normal-container" class="input-field" field="coaHeaderEdit-obj_coa_normal">
+		<label for="coaHeaderEdit-obj_coa_normal">Normal</label>
+		<input id="coaHeaderEdit-obj_coa_normal"  fgta5-component="Textbox" placeholder="normal" autocomplete="off" spellcheck="false" 
+			binding="coa_normal"
+			data-tabindex="5" 
+			required 
+			invalid-message-required="posisi normal harus diisi" 
+			description="D, K" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="1" 
+			validator="valueIs:['D', 'K']" 
 		>
 	</div>
 
@@ -61,7 +78,7 @@
 		<label for="coaHeaderEdit-obj_coa_descr">Descr</label>
 		<input id="coaHeaderEdit-obj_coa_descr"  fgta5-component="Textbox" placeholder="descr" autocomplete="off" spellcheck="false" 
 			binding="coa_descr"
-			data-tabindex="5" 
+			data-tabindex="6" 
 			autocomplete="off" spellcheck="false" 
 			maxlength="90" 
 		>
@@ -73,7 +90,7 @@
 		<label for="coaHeaderEdit-obj_coagroup_id">Group</label>
 		<input id="coaHeaderEdit-obj_coagroup_id"  fgta5-component="Combobox" placeholder="group" autocomplete="off" spellcheck="false" 
 			binding="coagroup_id"
-			data-tabindex="6" 
+			data-tabindex="7" 
 			data-display="coagroup_name" 
 		>
 	</div>
@@ -84,7 +101,7 @@
 		<label for="coaHeaderEdit-obj_agingtype_id">Aging</label>
 		<input id="coaHeaderEdit-obj_agingtype_id"  fgta5-component="Combobox" placeholder="non aging" autocomplete="off" spellcheck="false" 
 			binding="agingtype_id"
-			data-tabindex="7" 
+			data-tabindex="8" 
 			data-display="agingtype_name" 
 		>
 	</div>
@@ -95,7 +112,7 @@
 		<label for="coaHeaderEdit-obj_coareporttype_id">Report</label>
 		<input id="coaHeaderEdit-obj_coareporttype_id"  fgta5-component="Combobox" placeholder="report type" autocomplete="off" spellcheck="false" 
 			binding="coareporttype_id"
-			data-tabindex="8" 
+			data-tabindex="9" 
 			data-display="coareporttype_name" 
 		>
 	</div>
@@ -106,7 +123,7 @@
 		<label for="coaHeaderEdit-obj_coa_istax">Tax Account</label>
 		<input id="coaHeaderEdit-obj_coa_istax"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
 			binding="coa_istax"
-			data-tabindex="9" 
+			data-tabindex="10" 
 			type="checkbox" 
 		>
 	</div>
@@ -117,7 +134,7 @@
 		<label for="coaHeaderEdit-obj_taxtype_id">Tax Type</label>
 		<input id="coaHeaderEdit-obj_taxtype_id"  fgta5-component="Combobox" placeholder="non tax" autocomplete="off" spellcheck="false" 
 			binding="taxtype_id"
-			data-tabindex="10" 
+			data-tabindex="11" 
 			data-display="taxtype_name" 
 		>
 	</div>
@@ -128,8 +145,19 @@
 		<label for="coaHeaderEdit-obj_curr_id">Curr</label>
 		<input id="coaHeaderEdit-obj_curr_id"  fgta5-component="Combobox" placeholder="multi currency" autocomplete="off" spellcheck="false" 
 			binding="curr_id"
-			data-tabindex="11" 
+			data-tabindex="12" 
 			data-display="curr_code" 
+		>
+	</div>
+
+
+	<!-- Checkbox: coa_iscurradj-->	
+	<div id="coaHeaderEdit-obj_coa_iscurradj-container" class="input-field" field="coaHeaderEdit-obj_coa_iscurradj">
+		<label for="coaHeaderEdit-obj_coa_iscurradj">Currency Adjustment</label>
+		<input id="coaHeaderEdit-obj_coa_iscurradj"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
+			binding="coa_iscurradj"
+			data-tabindex="13" 
+			type="checkbox" 
 		>
 	</div>
 	

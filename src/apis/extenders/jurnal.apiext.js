@@ -54,3 +54,45 @@ export async function headerOpen(self, db, data) {
 	const paymtype = await sqlUtil.lookupdb(db, 'act.paymtype', 'paymtype_id', data.paymtype_id)
 }
 
+
+// async function getJurnaltype(tx, data, section) {
+// 	if (section==='header') {
+// 		const { jurnaltype_id } = data
+// 		return jurnaltype_id
+// 	} else {
+// 		// jika berasal dari section detil, jurnaltype_id harus diambil dari headernya
+// 		const { jurnal_id } = data
+// 		const sql = 'select jurnaltype_id from act.jurnal where jurnal_id=${jurnal_id}'
+// 		const row = await tx.oneOrNone(sql, { jurnal_id })
+// 		if (row==null) {
+// 			return null
+// 		} 
+
+// 		return row.jurnaltype_id
+// 	}
+// }
+
+
+export async function sequencerSetup(self, tx, sequencer, data, args) {
+	try {
+		// const jurnaltype_id = await getJurnaltype(tx, data, args.section)
+		// args.jurnaltype_id = jurnaltype_id
+
+
+		const { jurnaltype_id } = data
+
+		const sql = 'select jurnaltype_code from act.jurnaltype where jurnaltype_id=${jurnaltype_id}'
+		const row = await tx.oneOrNone(sql, { jurnaltype_id })
+		if (row!=null) {
+			args.prefix = row.jurnaltype_code
+		}
+	} catch (err) {
+		throw err
+	}
+}
+
+ export async function detilCreating(self, tx, data, seqdata, args) {
+	// data.jurnaltype_id = args.jurnaltype_id
+
+	delete data.jurnaldetil_id_ref
+ }

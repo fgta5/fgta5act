@@ -27,6 +27,21 @@ comment on column act."jurnaltype".jurnaltype_code is '';
 
 
 -- =============================================
+-- FIELD: jurnaltype_isallowselect boolean
+-- =============================================
+-- ADD jurnaltype_isallowselect
+alter table act."jurnaltype" add jurnaltype_isallowselect boolean not null default false;
+comment on column act."jurnaltype".jurnaltype_isallowselect is '';
+
+-- MODIFY jurnaltype_isallowselect
+alter table act."jurnaltype"
+	alter column jurnaltype_isallowselect type boolean,
+	ALTER COLUMN jurnaltype_isallowselect SET DEFAULT false,
+	ALTER COLUMN jurnaltype_isallowselect SET NOT NULL;
+comment on column act."jurnaltype".jurnaltype_isallowselect is '';
+
+
+-- =============================================
 -- FIELD: jurnaltype_name text
 -- =============================================
 -- ADD jurnaltype_name
@@ -192,6 +207,96 @@ comment on column act."jurnaltype".isheadhasproject is '';
 
 
 -- =============================================
+-- FIELD: isheadhaspaymtype boolean
+-- =============================================
+-- ADD isheadhaspaymtype
+alter table act."jurnaltype" add isheadhaspaymtype boolean not null default false;
+comment on column act."jurnaltype".isheadhaspaymtype is '';
+
+-- MODIFY isheadhaspaymtype
+alter table act."jurnaltype"
+	alter column isheadhaspaymtype type boolean,
+	ALTER COLUMN isheadhaspaymtype SET DEFAULT false,
+	ALTER COLUMN isheadhaspaymtype SET NOT NULL;
+comment on column act."jurnaltype".isheadhaspaymtype is '';
+
+
+-- =============================================
+-- FIELD: isheadhaspaymreq boolean
+-- =============================================
+-- ADD isheadhaspaymreq
+alter table act."jurnaltype" add isheadhaspaymreq boolean not null default false;
+comment on column act."jurnaltype".isheadhaspaymreq is '';
+
+-- MODIFY isheadhaspaymreq
+alter table act."jurnaltype"
+	alter column isheadhaspaymreq type boolean,
+	ALTER COLUMN isheadhaspaymreq SET DEFAULT false,
+	ALTER COLUMN isheadhaspaymreq SET NOT NULL;
+comment on column act."jurnaltype".isheadhaspaymreq is '';
+
+
+-- =============================================
+-- FIELD: isheadunitmandatory boolean
+-- =============================================
+-- ADD isheadunitmandatory
+alter table act."jurnaltype" add isheadunitmandatory boolean not null default false;
+comment on column act."jurnaltype".isheadunitmandatory is '';
+
+-- MODIFY isheadunitmandatory
+alter table act."jurnaltype"
+	alter column isheadunitmandatory type boolean,
+	ALTER COLUMN isheadunitmandatory SET DEFAULT false,
+	ALTER COLUMN isheadunitmandatory SET NOT NULL;
+comment on column act."jurnaltype".isheadunitmandatory is '';
+
+
+-- =============================================
+-- FIELD: isheadsitemandatory boolean
+-- =============================================
+-- ADD isheadsitemandatory
+alter table act."jurnaltype" add isheadsitemandatory boolean not null default false;
+comment on column act."jurnaltype".isheadsitemandatory is '';
+
+-- MODIFY isheadsitemandatory
+alter table act."jurnaltype"
+	alter column isheadsitemandatory type boolean,
+	ALTER COLUMN isheadsitemandatory SET DEFAULT false,
+	ALTER COLUMN isheadsitemandatory SET NOT NULL;
+comment on column act."jurnaltype".isheadsitemandatory is '';
+
+
+-- =============================================
+-- FIELD: isheaddeptmandatory boolean
+-- =============================================
+-- ADD isheaddeptmandatory
+alter table act."jurnaltype" add isheaddeptmandatory boolean not null default false;
+comment on column act."jurnaltype".isheaddeptmandatory is '';
+
+-- MODIFY isheaddeptmandatory
+alter table act."jurnaltype"
+	alter column isheaddeptmandatory type boolean,
+	ALTER COLUMN isheaddeptmandatory SET DEFAULT false,
+	ALTER COLUMN isheaddeptmandatory SET NOT NULL;
+comment on column act."jurnaltype".isheaddeptmandatory is '';
+
+
+-- =============================================
+-- FIELD: isheadprojectmandatory boolean
+-- =============================================
+-- ADD isheadprojectmandatory
+alter table act."jurnaltype" add isheadprojectmandatory boolean not null default false;
+comment on column act."jurnaltype".isheadprojectmandatory is '';
+
+-- MODIFY isheadprojectmandatory
+alter table act."jurnaltype"
+	alter column isheadprojectmandatory type boolean,
+	ALTER COLUMN isheadprojectmandatory SET DEFAULT false,
+	ALTER COLUMN isheadprojectmandatory SET NOT NULL;
+comment on column act."jurnaltype".isheadprojectmandatory is '';
+
+
+-- =============================================
 -- FIELD: isdetilhasunit boolean
 -- =============================================
 -- ADD isdetilhasunit
@@ -339,36 +444,6 @@ alter table act."jurnaltype"
 	ALTER COLUMN isdetilallowselectproject SET DEFAULT false,
 	ALTER COLUMN isdetilallowselectproject SET NOT NULL;
 comment on column act."jurnaltype".isdetilallowselectproject is '';
-
-
--- =============================================
--- FIELD: isheadhaspaymtype boolean
--- =============================================
--- ADD isheadhaspaymtype
-alter table act."jurnaltype" add isheadhaspaymtype boolean not null default false;
-comment on column act."jurnaltype".isheadhaspaymtype is '';
-
--- MODIFY isheadhaspaymtype
-alter table act."jurnaltype"
-	alter column isheadhaspaymtype type boolean,
-	ALTER COLUMN isheadhaspaymtype SET DEFAULT false,
-	ALTER COLUMN isheadhaspaymtype SET NOT NULL;
-comment on column act."jurnaltype".isheadhaspaymtype is '';
-
-
--- =============================================
--- FIELD: isheadhaspaymreq boolean
--- =============================================
--- ADD isheadhaspaymreq
-alter table act."jurnaltype" add isheadhaspaymreq boolean not null default false;
-comment on column act."jurnaltype".isheadhaspaymreq is '';
-
--- MODIFY isheadhaspaymreq
-alter table act."jurnaltype"
-	alter column isheadhaspaymreq type boolean,
-	ALTER COLUMN isheadhaspaymreq SET DEFAULT false,
-	ALTER COLUMN isheadhaspaymreq SET NOT NULL;
-comment on column act."jurnaltype".isheadhaspaymreq is '';
 
 
 -- =============================================

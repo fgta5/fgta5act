@@ -42,18 +42,33 @@ comment on column act."coa".coa_name is '';
 
 
 -- =============================================
--- FIELD: coa_normalposition int
+-- FIELD: coa_signfactor smallint
 -- =============================================
--- ADD coa_normalposition
-alter table act."coa" add coa_normalposition int not null default 0;
-comment on column act."coa".coa_normalposition is '';
+-- ADD coa_signfactor
+alter table act."coa" add coa_signfactor smallint not null default 1;
+comment on column act."coa".coa_signfactor is '';
 
--- MODIFY coa_normalposition
+-- MODIFY coa_signfactor
 alter table act."coa"
-	alter column coa_normalposition type int,
-	ALTER COLUMN coa_normalposition SET DEFAULT 0,
-	ALTER COLUMN coa_normalposition SET NOT NULL;
-comment on column act."coa".coa_normalposition is '';
+	alter column coa_signfactor type smallint,
+	ALTER COLUMN coa_signfactor SET DEFAULT 1,
+	ALTER COLUMN coa_signfactor SET NOT NULL;
+comment on column act."coa".coa_signfactor is '';
+
+
+-- =============================================
+-- FIELD: coa_normal varchar(1)
+-- =============================================
+-- ADD coa_normal
+alter table act."coa" add coa_normal varchar(1)  ;
+comment on column act."coa".coa_normal is '';
+
+-- MODIFY coa_normal
+alter table act."coa"
+	alter column coa_normal type varchar(1),
+	ALTER COLUMN coa_normal DROP DEFAULT,
+	ALTER COLUMN coa_normal DROP NOT NULL;
+comment on column act."coa".coa_normal is '';
 
 
 -- =============================================
@@ -162,15 +177,30 @@ comment on column act."coa".curr_id is '';
 
 
 -- =============================================
--- FIELD: _createby bigint
+-- FIELD: coa_iscurradj boolean
+-- =============================================
+-- ADD coa_iscurradj
+alter table act."coa" add coa_iscurradj boolean not null default false;
+comment on column act."coa".coa_iscurradj is '';
+
+-- MODIFY coa_iscurradj
+alter table act."coa"
+	alter column coa_iscurradj type boolean,
+	ALTER COLUMN coa_iscurradj SET DEFAULT false,
+	ALTER COLUMN coa_iscurradj SET NOT NULL;
+comment on column act."coa".coa_iscurradj is '';
+
+
+-- =============================================
+-- FIELD: _createby integer
 -- =============================================
 -- ADD _createby
-alter table act."coa" add _createby bigint not null ;
+alter table act."coa" add _createby integer not null ;
 comment on column act."coa"._createby is 'user yang pertama kali membuat record ini';
 
 -- MODIFY _createby
 alter table act."coa"
-	alter column _createby type bigint,
+	alter column _createby type integer,
 	ALTER COLUMN _createby DROP DEFAULT,
 	ALTER COLUMN _createby SET NOT NULL;
 comment on column act."coa"._createby is 'user yang pertama kali membuat record ini';
@@ -180,27 +210,27 @@ comment on column act."coa"._createby is 'user yang pertama kali membuat record 
 -- FIELD: _createdate timestamp with time zone
 -- =============================================
 -- ADD _createdate
-alter table act."coa" add _createdate timestamp with time zone not null ;
+alter table act."coa" add _createdate timestamp with time zone not null default now();
 comment on column act."coa"._createdate is 'waktu record dibuat pertama kali';
 
 -- MODIFY _createdate
 alter table act."coa"
 	alter column _createdate type timestamp with time zone,
-	ALTER COLUMN _createdate DROP DEFAULT,
+	ALTER COLUMN _createdate SET DEFAULT now(),
 	ALTER COLUMN _createdate SET NOT NULL;
 comment on column act."coa"._createdate is 'waktu record dibuat pertama kali';
 
 
 -- =============================================
--- FIELD: _modifyby bigint
+-- FIELD: _modifyby integer
 -- =============================================
 -- ADD _modifyby
-alter table act."coa" add _modifyby bigint  ;
+alter table act."coa" add _modifyby integer  ;
 comment on column act."coa"._modifyby is 'user yang terakhir modifikasi record ini';
 
 -- MODIFY _modifyby
 alter table act."coa"
-	alter column _modifyby type bigint,
+	alter column _modifyby type integer,
 	ALTER COLUMN _modifyby DROP DEFAULT,
 	ALTER COLUMN _modifyby DROP NOT NULL;
 comment on column act."coa"._modifyby is 'user yang terakhir modifikasi record ini';
@@ -227,11 +257,11 @@ comment on column act."coa"._modifydate is 'waktu terakhir record dimodifikasi';
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
-ALTER TABLE act."coa" DROP CONSTRAINT fk$act$coa$coagroup_id;
-ALTER TABLE act."coa" DROP CONSTRAINT fk$act$coa$agingtype_id;
-ALTER TABLE act."coa" DROP CONSTRAINT fk$act$coa$coareporttype_id;
-ALTER TABLE act."coa" DROP CONSTRAINT fk$act$coa$taxtype_id;
 ALTER TABLE act."coa" DROP CONSTRAINT fk$act$coa$curr_id;
+ALTER TABLE act."coa" DROP CONSTRAINT fk$act$coa$taxtype_id;
+ALTER TABLE act."coa" DROP CONSTRAINT fk$act$coa$coareporttype_id;
+ALTER TABLE act."coa" DROP CONSTRAINT fk$act$coa$agingtype_id;
+ALTER TABLE act."coa" DROP CONSTRAINT fk$act$coa$coagroup_id;
 
 
 -- Add Foreign Key Constraint  

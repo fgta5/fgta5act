@@ -1,6 +1,9 @@
 import Context from './coa-context.mjs'
-import * as Extender from './coa-ext.mjs'
+import * as Ext from './coa-ext.mjs'
 import * as pageHelper from '/public/libs/webmodule/pagehelper.mjs'
+
+const Extender = Ext.extenderHeader ?? Ext
+
 
 const CurrentState = {}
 const Crsl =  Context.Crsl
@@ -32,6 +35,7 @@ const frm = new $fgta5.Form('coaHeaderEdit-frm');
 const obj_coa_id = frm.Inputs['coaHeaderEdit-obj_coa_id']
 const obj_coa_isdisabled = frm.Inputs['coaHeaderEdit-obj_coa_isdisabled']
 const obj_coa_name = frm.Inputs['coaHeaderEdit-obj_coa_name']
+const obj_coa_signfactor = frm.Inputs['coaHeaderEdit-obj_coa_signfactor']
 const obj_coa_normal = frm.Inputs['coaHeaderEdit-obj_coa_normal']
 const obj_coa_descr = frm.Inputs['coaHeaderEdit-obj_coa_descr']
 const obj_coagroup_id = frm.Inputs['coaHeaderEdit-obj_coagroup_id']
@@ -39,11 +43,13 @@ const obj_agingtype_id = frm.Inputs['coaHeaderEdit-obj_agingtype_id']
 const obj_coareporttype_id = frm.Inputs['coaHeaderEdit-obj_coareporttype_id']
 const obj_coa_istax = frm.Inputs['coaHeaderEdit-obj_coa_istax']
 const obj_taxtype_id = frm.Inputs['coaHeaderEdit-obj_taxtype_id']
-const obj_curr_id = frm.Inputs['coaHeaderEdit-obj_curr_id']	
-const obj_createby = document.getElementById('fRecord-section-createby')
-const obj_createdate = document.getElementById('fRecord-section-createdate')
-const obj_modifyby = document.getElementById('fRecord-section-modifyby')
-const obj_modifydate = document.getElementById('fRecord-section-modifydate')
+const obj_curr_id = frm.Inputs['coaHeaderEdit-obj_curr_id']
+const obj_coa_iscurradj = frm.Inputs['coaHeaderEdit-obj_coa_iscurradj']	
+const rec_createby = document.getElementById('fRecord-section-createby')
+const rec_createdate = document.getElementById('fRecord-section-createdate')
+const rec_modifyby = document.getElementById('fRecord-section-modifyby')
+const rec_modifydate = document.getElementById('fRecord-section-modifydate')
+const rec_id = document.getElementById('fRecord-section-id')
 
 
 export const Section = CurrentSection
@@ -87,7 +93,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_coagroup_id_selecting(self, obj_coagroup_id, frm, evt)
+			// export async function obj_coagroup_id_selecting(self, obj_coagroup_id, frm, evt) {}
 			fn_selecting(self, obj_coagroup_id, frm, evt)
 		} else {
 			// default selecting
@@ -95,19 +101,25 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = 'coagroup/header-list'
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_coagroup_id_selecting_criteria(self, obj_coagroup_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_coagroup_id_selecting_criteria'
 			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_selecting_criteria(self, obj_coagroup_id, criteria)
+				fn_selecting_criteria(self, obj_coagroup_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -135,7 +147,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_agingtype_id_selecting(self, obj_agingtype_id, frm, evt)
+			// export async function obj_agingtype_id_selecting(self, obj_agingtype_id, frm, evt) {}
 			fn_selecting(self, obj_agingtype_id, frm, evt)
 		} else {
 			// default selecting
@@ -143,19 +155,25 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = 'agingtype/header-list'
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_agingtype_id_selecting_criteria(self, obj_agingtype_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_agingtype_id_selecting_criteria'
 			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_selecting_criteria(self, obj_agingtype_id, criteria)
+				fn_selecting_criteria(self, obj_agingtype_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -183,7 +201,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_coareporttype_id_selecting(self, obj_coareporttype_id, frm, evt)
+			// export async function obj_coareporttype_id_selecting(self, obj_coareporttype_id, frm, evt) {}
 			fn_selecting(self, obj_coareporttype_id, frm, evt)
 		} else {
 			// default selecting
@@ -191,19 +209,25 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = 'coareporttype/header-list'
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_coareporttype_id_selecting_criteria(self, obj_coareporttype_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_coareporttype_id_selecting_criteria'
 			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_selecting_criteria(self, obj_coareporttype_id, criteria)
+				fn_selecting_criteria(self, obj_coareporttype_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -231,7 +255,7 @@ export async function init(self, args) {
 		const fn_checked = Extender[fn_checked_name]
 		if (typeof fn_checked === 'function') {
 			// create function di Extender:
-			// export async function obj_coa_istax_checked(self, obj_coa_istax, frm, evt)
+			// export async function obj_coa_istax_checked(self, obj_coa_istax, frm, evt) {}
 			fn_checked(self, obj_coa_istax, frm, evt)
 		} else {	
 			console.warn('Extender.obj_coa_istax_checked is not implemented')
@@ -245,7 +269,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_taxtype_id_selecting(self, obj_taxtype_id, frm, evt)
+			// export async function obj_taxtype_id_selecting(self, obj_taxtype_id, frm, evt) {}
 			fn_selecting(self, obj_taxtype_id, frm, evt)
 		} else {
 			// default selecting
@@ -253,19 +277,25 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = 'taxtype/header-list'
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_taxtype_id_selecting_criteria(self, obj_taxtype_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_taxtype_id_selecting_criteria'
 			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_selecting_criteria(self, obj_taxtype_id, criteria)
+				fn_selecting_criteria(self, obj_taxtype_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -293,7 +323,7 @@ export async function init(self, args) {
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_curr_id_selecting(self, obj_curr_id, frm, evt)
+			// export async function obj_curr_id_selecting(self, obj_curr_id, frm, evt) {}
 			fn_selecting(self, obj_curr_id, frm, evt)
 		} else {
 			// default selecting
@@ -301,19 +331,25 @@ export async function init(self, args) {
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
 			const url = `${Context.appsUrls.ent.url}/curr/header-list`
+			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
 			}
 
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_curr_id_selecting_criteria(self, obj_curr_id, frm, criteria, sort, evt) {}
 			const fn_selecting_criteria_name = 'obj_curr_id_selecting_criteria'
 			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_selecting_criteria(self, obj_curr_id, criteria)
+				fn_selecting_criteria(self, obj_curr_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
 			try {
-				const result = await Module.apiCall(url, {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
 					criteria,
 					offset: evt.detail.offset,
 					limit: evt.detail.limit,
@@ -632,8 +668,8 @@ async function btn_new_click(self, evt) {
 	try {
 
 		// inisiasi data baru
-		let datainit = {
-			coa_normalposition: 0,
+		const datainit = {
+			coa_signfactor: 1,
 		}
 
 
@@ -642,6 +678,7 @@ async function btn_new_click(self, evt) {
 		const fn_newdata_name = 'coaHeaderEdit_newData'
 		const fn_newdata = Extender[fn_newdata_name]
 		if (typeof fn_newdata === 'function') {
+			// export async function coaHeaderEdit_newData(self, datainit, frm) {}
 			await fn_newdata(self, datainit, frm)
 		}
 
@@ -713,6 +750,7 @@ async function btn_save_click(self, evt) {
 	const fn_datasaving_name = 'coaHeaderEdit_dataSaving'
 	const fn_datasaving = Extender[fn_datasaving_name]
 	if (typeof fn_datasaving === 'function') {
+		// export async function coaHeaderEdit_dataSaving(self, dataToSave, frm) {}
 		await fn_datasaving(self, dataToSave, frm)
 	}
 
@@ -768,6 +806,7 @@ async function btn_save_click(self, evt) {
 		const fn_datasaved_name = 'coaHeaderEdit_dataSaved'
 		const fn_datasaved = Extender[fn_datasaved_name]
 		if (typeof fn_datasaved === 'function') {
+			// export async function coaHeaderEdit_dataSaved(self, data, frm) {}
 			await fn_datasaved(self, data, frm)
 		}
 
@@ -891,6 +930,12 @@ async function btn_recordstatus_click(self, evt) {
 		sectionReturn: CurrentSection
 	}
 	
+	if (frm.isNew()) {
+		console.warn('tidak bisa buka rescord status jika data baru')	
+		$fgta5.MessageBox.warning('Record Status bisa dibuka setelah data disimpan')
+		return;
+	}
+
 	pageHelper.openSection(self, 'fRecord-section', params, async ()=>{
 
 		let mask = $fgta5.Modal.createMask()
@@ -900,10 +945,11 @@ async function btn_recordstatus_click(self, evt) {
 			const id = pk.value
 			const data = await openData(self, id)
 
-			obj_createby.innerHTML = data._createby
-			obj_createdate.innerHTML = data._createdate
-			obj_modifyby.innerHTML = data._modifyby
-			obj_modifydate.innerHTML = data._modifydate
+			rec_id.innerHTML = id
+			rec_createby.innerHTML = data._createby
+			rec_createdate.innerHTML = data._createdate
+			rec_modifyby.innerHTML = data._modifyby
+			rec_modifydate.innerHTML = data._modifydate
 
 			const fn_addrecordinfo_name = 'coaHeaderEdit_addRecordInfo'
 			const fn_addrecordinfo = Extender[fn_addrecordinfo_name]
@@ -926,6 +972,12 @@ async function btn_logs_click(self, evt) {
 	const params = {
 		Context,
 		sectionReturn: CurrentSection
+	}
+
+	if (frm.isNew()) {
+		console.warn('tidak bisa buka logs jika data baru')	
+		$fgta5.MessageBox.warning('Logs bisa dibuka setelah data disimpan')
+		return;
 	}
 
 	pageHelper.openSection(self, 'fLogs-section', params, async ()=>{
@@ -987,7 +1039,7 @@ async function btn_about_click(self, evt) {
 			const divFooter = document.createElement('div')
 			divFooter.setAttribute('id', 'fAbout-section-footer')
 			divFooter.setAttribute('style', 'border-top: 1px solid #ccc; padding: 5px 0 0 0; margin-top: 50px')
-			divFooter.innerHTML = 'This module is generated by fgta5 generator at 2 Nov 2025 11:46'
+			divFooter.innerHTML = 'This module is generated by fgta5 generator at 30 Nov 2025 22:27'
 			section.appendChild(divFooter)
 		}
 		

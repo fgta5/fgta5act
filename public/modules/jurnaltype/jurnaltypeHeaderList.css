@@ -1,0 +1,8 @@
+/* Desktop */
+@media screen and (min-width: 501px) {
+	#jurnaltypeHeaderList-tbl [data-name="jurnaltype_code"] { width: 80px; }
+	#jurnaltypeHeaderList-tbl [data-name="jurnaltype_isallowselect"] { width: 100px; }
+
+}
+
+

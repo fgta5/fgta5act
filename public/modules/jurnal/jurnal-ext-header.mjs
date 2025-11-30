@@ -1,3 +1,5 @@
+import Context from './jurnal-context.mjs'
+
 export function headerList_initSearchParams(self, SearchParams) {
 	
 	// periode
@@ -104,8 +106,14 @@ function recalculateCurrency(self, frm) {
 }
 
 
+export function headerList_dataLoad(self, criteria, sort, evt) {
+	sort.jurnal_date = 'desc'
+}
+
+
 export function obj_jurnaltype_id_selecting_criteria(self, obj_jurnaltype_id, frm, criteria, sort, evt) {
 	sort.jurnaltype_name = 'asc' 
+	criteria.jurnaltype_isallowselect = true
 }
 
 export function obj_periode_id_selecting_criteria(self, obj_periode_id, frm, criteria, sort, evt) {
@@ -133,8 +141,13 @@ export async function obj_curr_id_populating(self, obj_curr_id, frm, evt) {
 }
 
 export function obj_curr_id_selecting_criteria(self, obj_curr_id, frm, criteria, sort, evt) {
+	const curr_id = frm.Inputs['jurnalHeaderEdit-obj_coacurr'].value
 	const bookdate = frm.Inputs['jurnalHeaderEdit-obj_jurnal_date'].value
-	criteria.curr_date = bookdate	
+	criteria.curr_date = bookdate
+
+	if (curr_id!='') {
+		criteria.curr_id =  curr_id
+	}
 
 	sort.curr_code = 'asc' 
 }
@@ -158,9 +171,30 @@ export async function obj_frgrate_changed(self, obj_frgrate, frm, evt) {
 }
 
 export function obj_coa_id_selecting_criteria(self, obj_coa_id, frm, criteria, sort, evt) {
+	evt.detail.url = 'coa-byjurnaltype/list'
+
+	const jurnaltype_id = frm.Inputs['jurnalHeaderEdit-obj_jurnaltype_id'].value
+	const copyto = frm.Inputs['jurnalHeaderEdit-obj_copyto'].value
+
+	criteria.jurnaltype_id = jurnaltype_id
 	criteria.coa_isdisabled = false
-	sort.coa_name = 'asc'
+	criteria.isdebet = copyto=='D' 
+	criteria.iskredit = copyto=='K'
+
 }
+
+export async function obj_coa_id_selected(self, obj_coa_id, frm, evt) {
+	const { curr_id } = evt.detail.data
+	frm.Inputs['jurnalHeaderEdit-obj_coacurr'].value = curr_id
+
+	frm.Inputs['jurnalHeaderEdit-obj_curr_id'].clear()
+	if (curr_id!=null) {
+		if (frm.Inputs['jurnalHeaderEdit-obj_curr_id'].value != curr_id) {
+			frm.Inputs['jurnalHeaderEdit-obj_curr_id'].setSelected(null, '')
+		}
+	}
+}
+
 
 export function obj_unit_id_selecting_criteria(self, obj_unit_id, frm, criteria, sort, evt) {
 	criteria.unit_isdisabled = false
@@ -208,7 +242,6 @@ function setVisibility(el_name, visible) {
 
 
 function jurnaltype_changed(jurnaltype, frm) {
-	return
 	if (jurnaltype==null) {
 		jurnaltype = {}
 	} 
@@ -227,6 +260,13 @@ function jurnaltype_changed(jurnaltype, frm) {
 	setVisibility('jurnalHeaderEdit-obj_curr_id-container', jurnaltype.isheadhasvalue)
 	setVisibility('jurnalHeaderEdit-obj_jurnal_datedue-container', jurnaltype.isheadhasduedate)
 
+	const blockDivValue = document.getElementById('jurnalHeaderEdit-div_value')
+	if (jurnaltype.isheadhasvalue) {
+		blockDivValue.classList.remove('hidden')
+	} else {
+		blockDivValue.classList.add('hidden')
+	}
+
 	
 	// set mandatofy field
 	frm.Inputs['jurnalHeaderEdit-obj_partner_id'].markAsRequired(jurnaltype.isheadhaspartner)
@@ -238,7 +278,6 @@ function jurnaltype_changed(jurnaltype, frm) {
 
 
 function paymtype_changed(paymtype, frm) {
-	return
 	if (paymtype==null) {
 		paymtype = {}
 	}
@@ -269,7 +308,17 @@ export async function obj_jurnaltype_id_selected(self, obj_jurnaltype_id, frm, e
 	jurnaltype_changed(jurnaltype, frm)
 	paymtype_changed(null, frm)
 	
+	frm.Inputs['jurnalHeaderEdit-obj_paymtype_id'].clear()
 	frm.Inputs['jurnalHeaderEdit-obj_paymtype_id'].setSelected(null, '')
+	frm.Inputs['jurnalHeaderEdit-obj_copyto'].value = jurnaltype.jurnaltype_headcopyto
+
+	frm.Inputs['jurnalHeaderEdit-obj_coa_id'].clear()
+	frm.Inputs['jurnalHeaderEdit-obj_coa_id'].setSelected(null, '')
+
+	frm.Inputs['jurnalHeaderEdit-obj_curr_id'].clear()
+	frm.Inputs['jurnalHeaderEdit-obj_curr_id'].setSelected(null, '')
+
+
 }
 
 export async function obj_paymtype_id_selected(self, obj_paymtype_id, frm, evt) {
@@ -341,8 +390,12 @@ export async function jurnalHeaderEdit_dataSaved(self, data, frm) {
 }
 
 export async function jurnalHeaderEdit_newData(self, datainit, frm) {
+	datainit.jurnal_source = Context.sourceName
+	
 	frm.Inputs['jurnalHeaderEdit-obj_jurnaltype_id'].disabled = false
 	jurnaltype_changed(null, frm)
 	paymtype_changed(null, frm)
 }
+
+
 

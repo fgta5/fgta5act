@@ -4,13 +4,19 @@
 	white-space: nowrap;
 }
 
-/* Desktop */
-@media screen and (min-width: 501px) {
-
-	#jurnalDetilList-tbl [data-name="coa_name"] { width: 200px; max-width: 200px;} 
-	
-	#jurnalDetilList-tbl [data-name="jurnaldetil_value"] { width: 150px; max-width: 150px; min-width: 150px;} 
-	#jurnalDetilList-tbl [data-name="jurnaldetil_idr"] { width: 150px; max-width: 150px; min-width: 150px;} 
+/* Mobile */
+@media screen and (max-width: 500px) {
 
 }
 
+
+/* Desktop */
+@media screen and (min-width: 501px) {
+
+	#jurnalDetilList-tbl [data-name="coa_name"] { width: 200px;} 
+	
+	#jurnalDetilList-tbl [data-name="jurnaldetil_value"] { width: 150px;} 
+	#jurnalDetilList-tbl [data-name="curr_code"] { width: 100px; } 
+	#jurnalDetilList-tbl [data-name="jurnaldetil_idr"] { width: 150px;} 
+
+}

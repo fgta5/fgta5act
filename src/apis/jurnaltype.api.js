@@ -75,8 +75,9 @@ async function jurnaltype_init(self, body) {
 			setting: {}
 		}
 		
-		if (typeof Extender.coa_init === 'function') {
-			await Extender.coa_init(self, initialData)
+		if (typeof Extender.jurnaltype_init === 'function') {
+			// export async function jurnaltype_init(self, initialData) {}
+			await Extender.jurnaltype_init(self, initialData)
 		}
 
 		return initialData
@@ -127,9 +128,12 @@ async function jurnaltype_headerList(self, body) {
 			}
 		}
 
+		const args = { db, criteria }
+
 		// apabila ada keperluan untuk recompose criteria
 		if (typeof Extender.headerListCriteria === 'function') {
-			await Extender.headerListCriteria(self, db, searchMap, criteria, sort, columns)
+			// export async function headerListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.headerListCriteria(self, db, searchMap, criteria, sort, columns, args)
 		}
 
 		var max_rows = limit==0 ? 10 : limit
@@ -147,7 +151,8 @@ async function jurnaltype_headerList(self, body) {
 			
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
-				await Extender.headerListRow(self, row)
+				// export async function headerListRow(self, row, args) {}
+				await Extender.headerListRow(self, row, args)
 			}
 
 			data.push(row)
@@ -209,6 +214,7 @@ async function jurnaltype_headerOpen(self, body) {
 		// pasang extender untuk olah data
 		// export async function headerOpen(self, db, data) {}
 		if (typeof Extender.headerOpen === 'function') {
+			// export async function headerOpen(self, db, data) {}
 			await Extender.headerOpen(self, db, data)
 		}
 
@@ -238,10 +244,14 @@ async function jurnaltype_headerCreate(self, body) {
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
+
+			const args = { section: 'header' }
+
 				
 			// apabila ada keperluan pengelohan data sebelum disimpan, lakukan di extender headerCreating
 			if (typeof Extender.headerCreating === 'function') {
-				await Extender.headerCreating(self, tx, data)
+				// export async function headerCreating(self, tx, data, seqdata, args) {}
+				await Extender.headerCreating(self, tx, data, null, args)
 			}
 
 			const cmd = sqlUtil.createInsertCommand(tablename, data)
@@ -252,7 +262,8 @@ async function jurnaltype_headerCreate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.headerCreated === 'function') {
-				await Extender.headerCreated(self, tx, ret, data, logMetadata)
+				// export async function headerCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.headerCreated(self, tx, ret, data, logMetadata, args)
 			}
 
 			// record log
@@ -289,6 +300,7 @@ async function jurnaltype_headerUpdate(self, body) {
 
 			// apabila ada keperluan pengelohan data sebelum disimpan, lakukan di extender headerCreating
 			if (typeof Extender.headerUpdating === 'function') {
+				// export async function headerUpdating(self, tx, data) {}
 				await Extender.headerUpdating(self, tx, data)
 			}
 
@@ -301,6 +313,7 @@ async function jurnaltype_headerUpdate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.headerUpdated === 'function') {
+				// export async function headerUpdated(self, tx, ret, data, logMetadata) {}
 				await Extender.headerUpdated(self, tx, ret, data, logMetadata)
 			}			
 
@@ -334,6 +347,7 @@ async function jurnaltype_headerDelete(self, body) {
 
 			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender headerDeleting
 			if (typeof Extender.headerDeleting === 'function') {
+				// export async function headerDeleting(self, tx, dataToRemove) {}
 				await Extender.headerDeleting(self, tx, dataToRemove)
 			}
 
@@ -345,6 +359,7 @@ async function jurnaltype_headerDelete(self, body) {
 				for (let rowcoa of rows) {
 					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
 					if (typeof Extender.coaDeleting === 'function') {
+						// export async function coaDeleting(self, tx, rowcoa, logMetadata) {}
 						await Extender.coaDeleting(self, tx, rowcoa, logMetadata)
 					}
 
@@ -354,6 +369,7 @@ async function jurnaltype_headerDelete(self, body) {
 
 					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
 					if (typeof Extender.coaDeleted === 'function') {
+						// export async function coaDeleted(self, tx, deletedRow, logMetadata) {}
 						await Extender.coaDeleted(self, tx, deletedRow, logMetadata)
 					}					
 
@@ -375,6 +391,7 @@ async function jurnaltype_headerDelete(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender headerDeleted
 			if (typeof Extender.headerDeleted === 'function') {
+				// export async function headerDeleted(self, tx, ret, logMetadata) {}
 				await Extender.headerDeleted(self, tx, ret, logMetadata)
 			}
 
@@ -412,9 +429,12 @@ async function jurnaltype_coaList(self, body) {
 			}
 		}
 
+		const args = { db, criteria }
+
 		// apabila ada keperluan untuk recompose criteria
-		if (typeof Extender.jurnaltypeListCriteria === 'function') {
-			await Extender.jurnaltypeListCriteria(self, db, searchMap, criteria, sort, columns)
+		if (typeof Extender.coaListCriteria === 'function') {
+			// export async function coaListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.coaListCriteria(self, db, searchMap, criteria, sort, columns, args)
 		}
 
 		var max_rows = limit==0 ? 10 : limit
@@ -438,7 +458,8 @@ async function jurnaltype_coaList(self, body) {
 
 			// pasang extender di sini
 			if (typeof Extender.detilListRow === 'function') {
-				await Extender.detilListRow(row)
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
 			}
 
 			data.push(row)
@@ -528,13 +549,30 @@ async function jurnaltype_coaCreate(self, body) {
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
+
+			const args = { 
+				section: 'coa', 
+				prefix: ''	
+			}
+
 			const sequencer = createSequencerLine(tx, {})
-			const seqdata = await sequencer.increment('')
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.prefix)
 			data.jurnaltypecoa_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
 			if (typeof Extender.coaCreating === 'function') {
-				await Extender.coaCreating(self, tx, data, seqdata)
+				// export async function coaCreating(self, tx, data, seqdata, args) {}
+				await Extender.coaCreating(self, tx, data, seqdata, args)
 			}
 
 			const cmd = sqlUtil.createInsertCommand(tablename, data)
@@ -544,7 +582,8 @@ async function jurnaltype_coaCreate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.coaCreated === 'function') {
-				await Extender.coaCreated(self, tx, ret, data, logMetadata)
+				// export async function coaCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.coaCreated(self, tx, ret, data, logMetadata, args)
 			}
 
 			// record log
@@ -581,6 +620,7 @@ async function jurnaltype_coaUpdate(self, body) {
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
 			if (typeof Extender.coaUpdating === 'function') {
+				// export async function coaUpdating(self, tx, data) {}
 				await Extender.coaUpdating(self, tx, data)
 			}			
 			
@@ -591,6 +631,7 @@ async function jurnaltype_coaUpdate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.coaUpdated === 'function') {
+				// export async function coaUpdated(self, tx, ret, data, logMetadata) {}
 				await Extender.coaUpdated(self, tx, ret, data, logMetadata)
 			}
 
@@ -625,6 +666,7 @@ async function jurnaltype_coaDelete(self, body) {
 
 			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
 			if (typeof Extender.coaDeleting === 'function') {
+				// export async function coaDeleting(self, tx, rowcoa, logMetadata) {}
 				await Extender.coaDeleting(self, tx, rowcoa, logMetadata)
 			}
 
@@ -634,6 +676,7 @@ async function jurnaltype_coaDelete(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
 			if (typeof Extender.coaDeleted === 'function') {
+				// export async function coaDeleted(self, tx, deletedRow, logMetadata) {}
 				await Extender.coaDeleted(self, tx, deletedRow, logMetadata)
 			}					
 
@@ -669,6 +712,7 @@ async function jurnaltype_coaDeleteRows(self, body) {
 
 				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
 				if (typeof Extender.coaDeleting === 'function') {
+					// async function coaDeleting(self, tx, rowcoa, logMetadata) {}
 					await Extender.coaDeleting(self, tx, rowcoa, logMetadata)
 				}
 
@@ -678,6 +722,7 @@ async function jurnaltype_coaDeleteRows(self, body) {
 
 				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
 				if (typeof Extender.coaDeleted === 'function') {
+					// export async function coaDeleted(self, tx, deletedRow, logMetadata) {}
 					await Extender.coaDeleted(self, tx, deletedRow, logMetadata)
 				}					
 

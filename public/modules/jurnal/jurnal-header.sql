@@ -27,6 +27,36 @@ comment on column act."jurnal".jurnal_doc is '';
 
 
 -- =============================================
+-- FIELD: ispost boolean
+-- =============================================
+-- ADD ispost
+alter table act."jurnal" add ispost boolean not null default false;
+comment on column act."jurnal".ispost is '';
+
+-- MODIFY ispost
+alter table act."jurnal"
+	alter column ispost type boolean,
+	ALTER COLUMN ispost SET DEFAULT false,
+	ALTER COLUMN ispost SET NOT NULL;
+comment on column act."jurnal".ispost is '';
+
+
+-- =============================================
+-- FIELD: jurnal_source text
+-- =============================================
+-- ADD jurnal_source
+alter table act."jurnal" add jurnal_source text  ;
+comment on column act."jurnal".jurnal_source is '';
+
+-- MODIFY jurnal_source
+alter table act."jurnal"
+	alter column jurnal_source type text,
+	ALTER COLUMN jurnal_source DROP DEFAULT,
+	ALTER COLUMN jurnal_source DROP NOT NULL;
+comment on column act."jurnal".jurnal_source is '';
+
+
+-- =============================================
 -- FIELD: jurnaltype_id smallint
 -- =============================================
 -- ADD jurnaltype_id
@@ -237,66 +267,6 @@ comment on column act."jurnal".partnercontact_id is '';
 
 
 -- =============================================
--- FIELD: curr_id smallint
--- =============================================
--- ADD curr_id
-alter table act."jurnal" add curr_id smallint  ;
-comment on column act."jurnal".curr_id is '';
-
--- MODIFY curr_id
-alter table act."jurnal"
-	alter column curr_id type smallint,
-	ALTER COLUMN curr_id DROP DEFAULT,
-	ALTER COLUMN curr_id DROP NOT NULL;
-comment on column act."jurnal".curr_id is '';
-
-
--- =============================================
--- FIELD: jurnal_value decimal(13, 2)
--- =============================================
--- ADD jurnal_value
-alter table act."jurnal" add jurnal_value decimal(13, 2) not null default 0;
-comment on column act."jurnal".jurnal_value is '';
-
--- MODIFY jurnal_value
-alter table act."jurnal"
-	alter column jurnal_value type decimal(13, 2),
-	ALTER COLUMN jurnal_value SET DEFAULT 0,
-	ALTER COLUMN jurnal_value SET NOT NULL;
-comment on column act."jurnal".jurnal_value is '';
-
-
--- =============================================
--- FIELD: curr_rate decimal(5, 0)
--- =============================================
--- ADD curr_rate
-alter table act."jurnal" add curr_rate decimal(5, 0) not null default 0;
-comment on column act."jurnal".curr_rate is '';
-
--- MODIFY curr_rate
-alter table act."jurnal"
-	alter column curr_rate type decimal(5, 0),
-	ALTER COLUMN curr_rate SET DEFAULT 0,
-	ALTER COLUMN curr_rate SET NOT NULL;
-comment on column act."jurnal".curr_rate is '';
-
-
--- =============================================
--- FIELD: jurnal_idr decimal(18, 2)
--- =============================================
--- ADD jurnal_idr
-alter table act."jurnal" add jurnal_idr decimal(18, 2) not null default 0;
-comment on column act."jurnal".jurnal_idr is '';
-
--- MODIFY jurnal_idr
-alter table act."jurnal"
-	alter column jurnal_idr type decimal(18, 2),
-	ALTER COLUMN jurnal_idr SET DEFAULT 0,
-	ALTER COLUMN jurnal_idr SET NOT NULL;
-comment on column act."jurnal".jurnal_idr is '';
-
-
--- =============================================
 -- FIELD: coa_id int
 -- =============================================
 -- ADD coa_id
@@ -312,21 +282,6 @@ comment on column act."jurnal".coa_id is '';
 
 
 -- =============================================
--- FIELD: site_id int
--- =============================================
--- ADD site_id
-alter table act."jurnal" add site_id int  ;
-comment on column act."jurnal".site_id is '';
-
--- MODIFY site_id
-alter table act."jurnal"
-	alter column site_id type int,
-	ALTER COLUMN site_id DROP DEFAULT,
-	ALTER COLUMN site_id DROP NOT NULL;
-comment on column act."jurnal".site_id is '';
-
-
--- =============================================
 -- FIELD: dept_id int
 -- =============================================
 -- ADD dept_id
@@ -339,6 +294,21 @@ alter table act."jurnal"
 	ALTER COLUMN dept_id DROP DEFAULT,
 	ALTER COLUMN dept_id DROP NOT NULL;
 comment on column act."jurnal".dept_id is '';
+
+
+-- =============================================
+-- FIELD: site_id int
+-- =============================================
+-- ADD site_id
+alter table act."jurnal" add site_id int  ;
+comment on column act."jurnal".site_id is '';
+
+-- MODIFY site_id
+alter table act."jurnal"
+	alter column site_id type int,
+	ALTER COLUMN site_id DROP DEFAULT,
+	ALTER COLUMN site_id DROP NOT NULL;
+comment on column act."jurnal".site_id is '';
 
 
 -- =============================================
@@ -372,18 +342,63 @@ comment on column act."jurnal".project_id is '';
 
 
 -- =============================================
--- FIELD: ispost boolean
+-- FIELD: curr_id smallint
 -- =============================================
--- ADD ispost
-alter table act."jurnal" add ispost boolean not null default false;
-comment on column act."jurnal".ispost is '';
+-- ADD curr_id
+alter table act."jurnal" add curr_id smallint  ;
+comment on column act."jurnal".curr_id is '';
 
--- MODIFY ispost
+-- MODIFY curr_id
 alter table act."jurnal"
-	alter column ispost type boolean,
-	ALTER COLUMN ispost SET DEFAULT false,
-	ALTER COLUMN ispost SET NOT NULL;
-comment on column act."jurnal".ispost is '';
+	alter column curr_id type smallint,
+	ALTER COLUMN curr_id DROP DEFAULT,
+	ALTER COLUMN curr_id DROP NOT NULL;
+comment on column act."jurnal".curr_id is '';
+
+
+-- =============================================
+-- FIELD: jurnal_value decimal(13, 2)
+-- =============================================
+-- ADD jurnal_value
+alter table act."jurnal" add jurnal_value decimal(13, 2) not null default 0;
+comment on column act."jurnal".jurnal_value is '';
+
+-- MODIFY jurnal_value
+alter table act."jurnal"
+	alter column jurnal_value type decimal(13, 2),
+	ALTER COLUMN jurnal_value SET DEFAULT 0,
+	ALTER COLUMN jurnal_value SET NOT NULL;
+comment on column act."jurnal".jurnal_value is '';
+
+
+-- =============================================
+-- FIELD: curr_rate decimal(5, 0)
+-- =============================================
+-- ADD curr_rate
+alter table act."jurnal" add curr_rate decimal(5, 0) not null default 1;
+comment on column act."jurnal".curr_rate is '';
+
+-- MODIFY curr_rate
+alter table act."jurnal"
+	alter column curr_rate type decimal(5, 0),
+	ALTER COLUMN curr_rate SET DEFAULT 1,
+	ALTER COLUMN curr_rate SET NOT NULL;
+comment on column act."jurnal".curr_rate is '';
+
+
+-- =============================================
+-- FIELD: jurnal_idr decimal(18, 2)
+-- =============================================
+-- ADD jurnal_idr
+alter table act."jurnal" add jurnal_idr decimal(18, 2) not null default 0;
+comment on column act."jurnal".jurnal_idr is '';
+
+-- MODIFY jurnal_idr
+alter table act."jurnal"
+	alter column jurnal_idr type decimal(18, 2),
+	ALTER COLUMN jurnal_idr SET DEFAULT 0,
+	ALTER COLUMN jurnal_idr SET NOT NULL;
+comment on column act."jurnal".jurnal_idr is '';
 
 
 -- =============================================
@@ -414,6 +429,36 @@ alter table act."jurnal"
 	ALTER COLUMN _postdate DROP DEFAULT,
 	ALTER COLUMN _postdate DROP NOT NULL;
 comment on column act."jurnal"._postdate is '';
+
+
+-- =============================================
+-- FIELD: copyto varchar(1)
+-- =============================================
+-- ADD copyto
+alter table act."jurnal" add copyto varchar(1)  ;
+comment on column act."jurnal".copyto is '';
+
+-- MODIFY copyto
+alter table act."jurnal"
+	alter column copyto type varchar(1),
+	ALTER COLUMN copyto DROP DEFAULT,
+	ALTER COLUMN copyto DROP NOT NULL;
+comment on column act."jurnal".copyto is '';
+
+
+-- =============================================
+-- FIELD: coacurr text
+-- =============================================
+-- ADD coacurr
+alter table act."jurnal" add coacurr text  ;
+comment on column act."jurnal".coacurr is '';
+
+-- MODIFY coacurr
+alter table act."jurnal"
+	alter column coacurr type text,
+	ALTER COLUMN coacurr DROP DEFAULT,
+	ALTER COLUMN coacurr DROP NOT NULL;
+comment on column act."jurnal".coacurr is '';
 
 
 -- =============================================
@@ -482,12 +527,12 @@ comment on column act."jurnal"._modifydate is 'waktu terakhir record dimodifikas
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$curr_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$project_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$unit_id;
-ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$dept_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$site_id;
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$dept_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$coa_id;
-ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$curr_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$partnercontact_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$partnerbank_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$paymtype_id;
@@ -576,17 +621,6 @@ CREATE INDEX idx_fk$act$jurnal$partnercontact_id ON act."jurnal"(partnercontact_
 
 
 ALTER TABLE act."jurnal"
-	ADD CONSTRAINT fk$act$jurnal$curr_id
-	FOREIGN KEY (curr_id)
-	REFERENCES ent."curr"(curr_id);
-
-
--- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS act.idx_fk$act$jurnal$curr_id;
-CREATE INDEX idx_fk$act$jurnal$curr_id ON act."jurnal"(curr_id);	
-
-
-ALTER TABLE act."jurnal"
 	ADD CONSTRAINT fk$act$jurnal$coa_id
 	FOREIGN KEY (coa_id)
 	REFERENCES act."coa"(coa_id);
@@ -598,17 +632,6 @@ CREATE INDEX idx_fk$act$jurnal$coa_id ON act."jurnal"(coa_id);
 
 
 ALTER TABLE act."jurnal"
-	ADD CONSTRAINT fk$act$jurnal$site_id
-	FOREIGN KEY (site_id)
-	REFERENCES ent."site"(site_id);
-
-
--- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS act.idx_fk$act$jurnal$site_id;
-CREATE INDEX idx_fk$act$jurnal$site_id ON act."jurnal"(site_id);	
-
-
-ALTER TABLE act."jurnal"
 	ADD CONSTRAINT fk$act$jurnal$dept_id
 	FOREIGN KEY (dept_id)
 	REFERENCES ent."dept"(dept_id);
@@ -617,6 +640,17 @@ ALTER TABLE act."jurnal"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS act.idx_fk$act$jurnal$dept_id;
 CREATE INDEX idx_fk$act$jurnal$dept_id ON act."jurnal"(dept_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$site_id
+	FOREIGN KEY (site_id)
+	REFERENCES ent."site"(site_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$site_id;
+CREATE INDEX idx_fk$act$jurnal$site_id ON act."jurnal"(site_id);	
 
 
 ALTER TABLE act."jurnal"
@@ -639,6 +673,17 @@ ALTER TABLE act."jurnal"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS act.idx_fk$act$jurnal$project_id;
 CREATE INDEX idx_fk$act$jurnal$project_id ON act."jurnal"(project_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$curr_id
+	FOREIGN KEY (curr_id)
+	REFERENCES ent."curr"(curr_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$curr_id;
+CREATE INDEX idx_fk$act$jurnal$curr_id ON act."jurnal"(curr_id);	
 
 	
 
