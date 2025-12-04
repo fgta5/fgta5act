@@ -1,5 +1,9 @@
 import Context from './jurnal-context.mjs'
 
+const elPostby = document.getElementById('fRecord-section-postby')
+const elPostdate = document.getElementById('fRecord-section-postdate')
+
+
 export function headerList_initSearchParams(self, SearchParams) {
 	
 	// periode
@@ -87,13 +91,89 @@ export function headerList_initSearchParams(self, SearchParams) {
 	})	
 }
 
+export function setupActionButtonEvent(self, frm, CurrentState, buttons) {
+	buttons.btn_actionPost.hide()
+	buttons.btn_actionUnpost.hide()
 
+	buttons.btn_actionPost.addEventListener('click', (evt)=>{ btn_actionPost_click(self, frm, buttons, evt) })
+	buttons.btn_actionUnpost.addEventListener('click', (evt)=>{ btn_actionUnpost_click(self, frm, buttons, evt) })
+	buttons.btn_actionPrint.addEventListener('click', (evt)=>{ btn_actionPrint_click(self, frm, buttons, evt) })
+}
 
 function formatNumber(num) {
   return new Intl.NumberFormat("en-EN", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   }).format(num);
+}
+
+async function btn_actionPost_click(self, frm, buttons, evt) {
+	const { jurnal_id, jurnal_doc } = frm.getData();
+
+	jurnalPost(self, frm, buttons, true, jurnal_id, jurnal_doc)
+}
+
+async function btn_actionUnpost_click(self, frm, buttons, evt) {
+	const { jurnal_id, jurnal_doc } = frm.getData();
+	const resp = await $fgta5.MessageBox.confirm(`Apakah anda yakin akan UNPOST jurnal '${jurnal_doc}'`)
+	if (resp!='ok') {
+		return
+	}
+	jurnalPost(self, frm, buttons, false, jurnal_id, jurnal_doc)
+}
+
+async function btn_actionPrint_click(self, frm, buttons, evt) {
+	console.log('print')
+}
+
+async function jurnalPost(self, frm, buttons, isposting, jurnal_id, jurnal_doc) {
+	let mask = $fgta5.Modal.createMask()
+
+	try {
+
+		const url = 'jurnal-action/posting'
+		const param = {
+			jurnal_id,
+			isposting
+		}
+
+		const { success, postby, postdate, message } = await Module.apiCall(url, param)
+		if (!success) {
+			throw new Error(message)
+		}
+
+		// set postby dan postdate
+		elPostby.innerHTML = postby
+		elPostdate.innerHTML = postdate
+
+		// update checkbox post
+		frm.Inputs['jurnalHeaderEdit-obj_ispost'].value = isposting
+		frm.acceptChanges()
+
+
+		if (isposting) {
+			// matikan tombol posting, nyalakan tombol unposting
+			buttons.btn_actionPost.disabled = true
+			buttons.btn_actionUnpost.disabled = false
+			$fgta5.MessageBox.info(`Jurnal ${jurnal_doc} berhasil di posting`)
+		} else {
+			// kealikannya
+			buttons.btn_actionPost.disabled = false
+			buttons.btn_actionUnpost.disabled = true
+			$fgta5.MessageBox.info(`Jurnal ${jurnal_doc} berhasil di un-posting`)
+		}
+
+
+		// update header
+		self.Modules.jurnalHeaderList.updateCurrentRow(self, { ispost: isposting })
+
+	} catch (err) {
+		console.error(err)
+		$fgta5.MessageBox.error(err.message)
+	} finally {
+		mask.close()
+		mask = null
+	}
 }
 
 
@@ -112,12 +192,15 @@ export function headerList_dataLoad(self, criteria, sort, evt) {
 
 
 export function obj_jurnaltype_id_selecting_criteria(self, obj_jurnaltype_id, frm, criteria, sort, evt) {
+	evt.detail.url = 'jurnaltype-byuser/list'
+
 	sort.jurnaltype_name = 'asc' 
 	criteria.jurnaltype_isallowselect = true
 }
 
 export function obj_periode_id_selecting_criteria(self, obj_periode_id, frm, criteria, sort, evt) {
 	criteria.periode_isclosed = false
+	criteria.periode_isactive = true
 	sort.periode_id = 'desc' 
 }
 
@@ -319,6 +402,12 @@ export async function obj_jurnaltype_id_selected(self, obj_jurnaltype_id, frm, e
 	frm.Inputs['jurnalHeaderEdit-obj_curr_id'].setSelected(null, '')
 
 
+	const CurrentState = evt.detail.CurrentState
+	const {isallowposting=false, isallowunposting=false} = jurnaltype
+
+	CurrentState.Actions.post.hide(!isallowposting)
+	CurrentState.Actions.unpost.hide(!isallowunposting)
+
 }
 
 export async function obj_paymtype_id_selected(self, obj_paymtype_id, frm, evt) {
@@ -380,9 +469,42 @@ export async function obj_partner_id_selected(self, obj_partner_id, frm, evt) {
 export async function jurnalHeaderEdit_formOpened(self, frm, CurrentState) {
 	frm.Inputs['jurnalHeaderEdit-obj_jurnaltype_id'].disabled = true
 	
-	const {jurnaltype, paymtype} = frm.getOriginalData()
+	const {jurnaltype, paymtype, periode_isclosed, ispost, jurnal_source, _postby, _postdate, isallowposting, isallowunposting} = frm.getOriginalData()
 	jurnaltype_changed(jurnaltype, frm)
 	paymtype_changed(paymtype, frm)
+
+
+	let locked = periode_isclosed || ispost || jurnal_source!=Context.sourceName 
+	if (locked) {
+		// matikan button edit
+		CurrentState.Actions.edit.disabled = true
+	} else {
+		// nyalakan button edit
+		CurrentState.Actions.edit.disabled = false
+	}	
+	
+
+	// set tombol posting, unposting
+	if (periode_isclosed) {
+		CurrentState.Actions.post.disabled = true 
+		CurrentState.Actions.unpost.disabled = true
+	} else if (ispost) {
+		CurrentState.Actions.post.disabled = true 
+		CurrentState.Actions.unpost.disabled = false
+	} else {
+		CurrentState.Actions.post.disabled = false 
+		CurrentState.Actions.unpost.disabled = true
+	}
+
+	// pakah user boleh melakukan posting/unposting
+	CurrentState.Actions.post.hide(!isallowposting)
+	CurrentState.Actions.unpost.hide(!isallowunposting)
+
+
+	// set record info
+	elPostby.innerHTML = _postby
+	elPostdate.innerHTML = _postdate
+
 }
 
 export async function jurnalHeaderEdit_dataSaved(self, data, frm) {

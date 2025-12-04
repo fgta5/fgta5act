@@ -222,15 +222,15 @@ comment on column act."jurnaldetil".coacurr is '';
 
 
 -- =============================================
--- FIELD: agingtype_id text
+-- FIELD: agingtype_id smallint
 -- =============================================
 -- ADD agingtype_id
-alter table act."jurnaldetil" add agingtype_id text  ;
+alter table act."jurnaldetil" add agingtype_id smallint  ;
 comment on column act."jurnaldetil".agingtype_id is '';
 
 -- MODIFY agingtype_id
 alter table act."jurnaldetil"
-	alter column agingtype_id type text,
+	alter column agingtype_id type smallint,
 	ALTER COLUMN agingtype_id DROP DEFAULT,
 	ALTER COLUMN agingtype_id DROP NOT NULL;
 comment on column act."jurnaldetil".agingtype_id is '';

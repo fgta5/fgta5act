@@ -47,38 +47,43 @@ export async function headerUpdating(self, tx, data) {
 }
 
 export async function headerOpen(self, db, data) {
+	const req = self.req
+	const user_id = req.session.user.userId
+	const jurnaltype_id = data.jurnaltype_id
+
 	// ambil data tipe jurnal
-	const jurnaltype = await sqlUtil.lookupdb(db, 'act.jurnaltype', 'jurnaltype_id', data.jurnaltype_id)
-	data.jurnaltype = jurnaltype
+	data.jurnaltype = await sqlUtil.lookupdb(db, 'act.jurnaltype', 'jurnaltype_id', jurnaltype_id)
 
-	const paymtype = await sqlUtil.lookupdb(db, 'act.paymtype', 'paymtype_id', data.paymtype_id)
+	// dapatkan informasi payment type
+	data.paymtype = await sqlUtil.lookupdb(db, 'act.paymtype', 'paymtype_id', data.paymtype_id)
+
+
+	// dapatkan informasi closing periode
+	const periode = await sqlUtil.lookupdb(db, 'act.periode', 'periode_id', data.periode_id)
+	data.periode_isclosed = periode.periode_isclosed
+
+
+	// dapatkan informasi postby
+	const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._postby)
+	data._postby = user_fullname ?? ''
+
+
+	// dapatkan informasi apakah boleh posting, unposting
+	const sqlJurnaltypeuser = 'select isallowposting, isallowunposting from act.jurnaltypeuser where jurnaltype_id=${jurnaltype_id} and user_id=${user_id}'
+	const row = await db.oneOrNone(sqlJurnaltypeuser, {jurnaltype_id, user_id})
+	if (row==null) {
+		data.isallowposting = false
+		data.isallowunposting = false
+	} else {
+		data.isallowposting = row.isallowposting
+		data.isallowunposting = row.isallowunposting	
+	}
+
+
 }
-
-
-// async function getJurnaltype(tx, data, section) {
-// 	if (section==='header') {
-// 		const { jurnaltype_id } = data
-// 		return jurnaltype_id
-// 	} else {
-// 		// jika berasal dari section detil, jurnaltype_id harus diambil dari headernya
-// 		const { jurnal_id } = data
-// 		const sql = 'select jurnaltype_id from act.jurnal where jurnal_id=${jurnal_id}'
-// 		const row = await tx.oneOrNone(sql, { jurnal_id })
-// 		if (row==null) {
-// 			return null
-// 		} 
-
-// 		return row.jurnaltype_id
-// 	}
-// }
-
 
 export async function sequencerSetup(self, tx, sequencer, data, args) {
 	try {
-		// const jurnaltype_id = await getJurnaltype(tx, data, args.section)
-		// args.jurnaltype_id = jurnaltype_id
-
-
 		const { jurnaltype_id } = data
 
 		const sql = 'select jurnaltype_code from act.jurnaltype where jurnaltype_id=${jurnaltype_id}'
@@ -91,8 +96,17 @@ export async function sequencerSetup(self, tx, sequencer, data, args) {
 	}
 }
 
- export async function detilCreating(self, tx, data, seqdata, args) {
-	// data.jurnaltype_id = args.jurnaltype_id
+export async function detilCreating(self, tx, data, seqdata, args) {
 
+	// exclude jurnaldetil_id_ref dari proses penyimpanan
 	delete data.jurnaldetil_id_ref
- }
+
+	// jika agingtype_id='' set jadi null
+	if (data.agingtype_id=='') {
+		data.agingtype_id = null
+	}
+
+
+}
+
+

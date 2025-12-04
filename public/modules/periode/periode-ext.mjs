@@ -102,3 +102,53 @@ export async function periodeHeaderEdit_newData(self, datainit, frm) {
 export async function periodeHeaderEdit_addRecordInfo(self, data) {
 	// TODO: isi data close by
 }
+
+
+
+export function headerList_dataLoad(self, criteria, sort, evt) {
+	sort.periode_id = 'desc'
+
+}
+
+
+export function setupActionButtonEvent(self, frm, CurrentState, buttons) { 
+	CurrentState.Actions.newdata.suspend(true)
+
+	buttons.btn_actionClose.addEventListener('click', (evt)=>{ btn_actionClose_click(evt, frm, CurrentState) })
+	buttons.btn_actionReopen.addEventListener('click', (evt)=>{ btn_actionReopen_click(evt, frm, CurrentState) })
+}
+
+
+export async function periodeHeaderEdit_formOpened(self, frm, CurrentState) {
+	const data = frm.getOriginalData()
+	console.log(data)
+
+	const { periode_isclosed, previous_periode_isclosed=false, next_periode_isclosed=false } = data
+	if (periode_isclosed) {
+		CurrentState.Actions.close.disabled = true
+		CurrentState.Actions.reopen.disabled = next_periode_isclosed ? true : false
+		CurrentState.Actions.edit.disabled = true
+	} else {
+		CurrentState.Actions.close.disabled = previous_periode_isclosed ? false : true  // bisa di close apabila periode sebelumnya closed
+		CurrentState.Actions.reopen.disabled = true
+		CurrentState.Actions.edit.disabled = false
+	}
+}
+
+async function btn_actionClose_click(evt, frm, CurrentState) {
+	periodeClose(evt, frm, CurrentState, true)
+}
+
+async function btn_actionReopen_click(evt, frm, CurrentState) {
+	const { periode_name } = frm.getData()
+	const resp = await $fgta5.MessageBox.confirm(`Apakah anda yakin akan re-open periode '${periode_name}'`)
+	if (resp!='ok') {
+		return
+	}
+
+	periodeClose(evt, frm, CurrentState, false)
+}
+
+async function periodeClose(evt, frm, CurrentState, isclosing) {
+
+}

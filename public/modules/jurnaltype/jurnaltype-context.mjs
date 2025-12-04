@@ -12,11 +12,15 @@ export default {
 		jurnaltypeHeaderEdit: 'jurnaltypeHeaderEdit-section', 
 		jurnaltypeCoaList: 'jurnaltypeCoaList-section', 
 		jurnaltypeCoaEdit: 'jurnaltypeCoaEdit-section', 
+		jurnaltypeUserList: 'jurnaltypeUserList-section', 
+		jurnaltypeUserEdit: 'jurnaltypeUserEdit-section', 
 	},
 	SectionMap: { 
 		'jurnaltypeHeaderList-section' : 'jurnaltypeHeaderList', 
 		'jurnaltypeHeaderEdit-section' : 'jurnaltypeHeaderEdit', 
 		'jurnaltypeCoaList-section' : 'jurnaltypeCoaList', 
 		'jurnaltypeCoaEdit-section' : 'jurnaltypeCoaEdit', 
+		'jurnaltypeUserList-section' : 'jurnaltypeUserList', 
+		'jurnaltypeUserEdit-section' : 'jurnaltypeUserEdit', 
 	}
 }

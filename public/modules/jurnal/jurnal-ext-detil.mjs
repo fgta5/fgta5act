@@ -121,9 +121,16 @@ export function obj_curr_id_selecting_criteria(self, obj_curr_id, frm, criteria,
 	const bookdate = headerData.jurnal_date
 	criteria.curr_date = bookdate
 
+
+	console.log('CURR',  curr_id)
+
+
 	if (curr_id!='') {
 		criteria.curr_id =  curr_id
-		criteria.coa_iscurradj = frm.Inputs['jurnalDetilEdit-obj_iscurradj'].value
+		const coa_iscurradj = frm.Inputs['jurnalDetilEdit-obj_iscurradj'].value
+		if (coa_iscurradj) {
+			criteria.coa_iscurradj = true
+		}
 	}
 
 	sort.curr_code = 'asc' 
@@ -144,4 +151,26 @@ export async function obj_jurnaldetil_value_changed(self, obj_jurnaldetil_value,
 
 export async function obj_curr_rate_changed(self, obj_curr_rate, frm, evt) {
 	recalculateCurrency(self, frm)
+}
+
+
+
+
+
+export async function showOutstandingReceivable(self, dlg) {
+	const param = {}
+	const ret = await dlg.show('Receivable', param, ()=>{
+		// program untuk mengambil data outstanding dari API
+	})
+}
+
+export async function showOutstandingPayable(self, dlg) {
+	const param = {}
+	const ret = await dlg.show('Payable', param, ()=>{
+		// program untuk mengambil data outstanding dari API
+	})
+
+
+	// hasilnya di ret
+
 }

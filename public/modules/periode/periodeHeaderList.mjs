@@ -1,6 +1,7 @@
 import Context from './periode-context.mjs'
-import * as Extender from './periode-ext.mjs'
+import * as Ext from './periode-ext.mjs'
 
+const Extender = Ext.extenderHeader ?? Ext
 
 const Crsl =  Context.Crsl
 const CurrentSectionId = Context.Sections.periodeHeaderList
@@ -222,15 +223,26 @@ async function openRow(self, tr) {
 	setPagingButton(self, periodeHeaderEdit)
 }
 
-async function listRows(self, criteria, offset,limit, sort) {
+async function listRows(self, criteria, offset, limit, sort) {
+
 	const url = `/${Context.moduleName}/header-list`
+	const evt = { url, limit }
+
+	// export function headerList_dataLoad(self, criteria, sort, evt) {}
+	const fn_dataLoad_name = 'headerList_dataLoad'
+	const fn_dataLoad = Extender[fn_dataLoad_name]
+	if (typeof fn_dataLoad === 'function') {
+		fn_dataLoad(self, criteria, sort, evt)
+	}
+
+	
 	try {
 		const columns = []
-		const result = await Module.apiCall(url, {  
+		const result = await Module.apiCall(evt.url, {  
 			columns,
 			criteria,
 			offset,
-			limit,
+			limit: evt.limit,
 			sort
 		}) 
 		return result 

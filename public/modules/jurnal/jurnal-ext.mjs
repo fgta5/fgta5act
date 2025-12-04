@@ -1,6 +1,7 @@
 import Context from './jurnal-context.mjs'
 import * as ExtHeader from './jurnal-ext-header.mjs'
 import * as ExtDetil from './jurnal-ext-detil.mjs'
+import outstandingDialog from './jurnal-outstandingdialog.mjs'
 
 
 export const extenderHeader = ExtHeader;
@@ -13,34 +14,9 @@ export async function init(self, args) {
 
 	Context.sourceName = 'non-modul'
 
-	// tambahkan extender inisiasi module jurnal
-
-	/* // contoh menambahkan content dari template extender
-	{
-		const target = secRec.querySelector('#fRecord-section div[name="column"][exteder]')
-		const tpl = document.querySelector('template[name="record-panel"]')
-		if (tpl!=null) {
-			const clone = tpl.content.cloneNode(true); // salin isi template
-			target.prepend(clone)
-		}
-	}
-	*/	
-	
-	/* // contoh menambahkan custom validator
-	// pada html, tambahkan validator="cobaFunction:paramValue"
-	const frm = self.Modules.coaHeaderEdit.getHeaderForm()
-	const obj_coa_normal = frm.Inputs['coaHeaderEdit-obj_coa_normal']
-	$validators.addCustomValidator('cobaFunction', (v, param)=>{
-	 	console.log(v)
-	 	setTimeout(()=>{
-	 		obj_coa_normal.setError('ini error')
-	 	}, 500)
-	})	
-	*/
-
 	// form header
 	const elFrmHeaderEdit = document.getElementById('jurnalHeaderEdit-frm')
-
+	
 	// tambahkan 1 div ke form headerEdit
 	const blockDivValue = document.createElement('div')
 	blockDivValue.id = 'jurnalHeaderEdit-div_value'
@@ -70,10 +46,38 @@ export async function init(self, args) {
 	elFrmDetilEdit.appendChild(blockDivDetilInfo)
 
 
+	// tambahkan tombol untuk tarik outstanding AR/AP
+	const dlg = new outstandingDialog()
+	
+	
+	// const elDetilEditHead = document.getElementById('jurnalDetilEdit-head')
+	// const elDetilEditHead = document.getElementById('jurnalHeaderList-header') // sementara taruh di depan biar gampang diakses
+	const elDetilEditHead = document.getElementById('jurnalHeaderEdit-panelaction');	
+	
+	const btnOutstandingPayable = document.createElement('button')
+	const btnOutstandingReceivable = document.createElement('button')
+	elDetilEditHead.appendChild(btnOutstandingPayable)
+	elDetilEditHead.appendChild(btnOutstandingReceivable)
 
-	// tambahkan header info di detilListHead
-	// jurnalDetilList-head
+	btnOutstandingPayable.classList.add('outstanding-button')
+	btnOutstandingPayable.innerHTML = 'Payable'
+	btnOutstandingPayable.addEventListener('click', (evt)=>{
+		if (dlg==null) {
+			console.error('Template dialog-outstanding belum dibuat')
+			return
+		}
+		dlg.show('AP')
+	})
 
+	btnOutstandingReceivable.classList.add('outstanding-button')
+	btnOutstandingReceivable.innerHTML = 'Receivable'
+	btnOutstandingReceivable.addEventListener('click', (evt)=>{
+		if (dlg==null) {
+			console.error('Template dialog-outstanding belum dibuat')
+			return
+		}
+		dlg.show('AR')
+	})
 	
 }
 

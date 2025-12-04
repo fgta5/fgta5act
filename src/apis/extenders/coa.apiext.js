@@ -5,5 +5,6 @@ export async function coa_init(self, initialData) {
 
 export async function headerListCriteria(self, db, searchMap, criteria, sort, columns) {
 	searchMap.coa_isdisabled = 'coa_isdisabled=${coa_isdisabled}'
+	searchMap.agingtype_id = 'agingtype_id=${agingtype_id}'
 }
 

@@ -1,6 +1,9 @@
 import Context from './periode-context.mjs'
-import * as Extender from './periode-ext.mjs'
+import * as Ext from './periode-ext.mjs'
 import * as pageHelper from '/public/libs/webmodule/pagehelper.mjs'
+
+const Extender = Ext.extenderHeader ?? Ext
+
 
 const CurrentState = {}
 const Crsl =  Context.Crsl
@@ -23,6 +26,8 @@ const btn_reset = new $fgta5.ActionButton('periodeHeaderEdit-btn_reset')
 const btn_prev = new $fgta5.ActionButton('periodeHeaderEdit-btn_prev')
 const btn_next = new $fgta5.ActionButton('periodeHeaderEdit-btn_next')
 
+const btn_actionClose = new $fgta5.ActionButton('periodeHeaderEdit-btn_actionClose')
+const btn_actionReopen = new $fgta5.ActionButton('periodeHeaderEdit-btn_actionReopen')
 
 const btn_recordstatus = document.getElementById('periodeHeader-btn_recordstatus')
 const btn_logs = document.getElementById('periodeHeader-btn_logs')
@@ -38,10 +43,11 @@ const obj_periode_end = frm.Inputs['periodeHeaderEdit-obj_periode_end']
 const obj_previous_periode_id = frm.Inputs['periodeHeaderEdit-obj_previous_periode_id']
 const obj_periode_isclosed = frm.Inputs['periodeHeaderEdit-obj_periode_isclosed']
 const obj_periode_isactive = frm.Inputs['periodeHeaderEdit-obj_periode_isactive']	
-const obj_createby = document.getElementById('fRecord-section-createby')
-const obj_createdate = document.getElementById('fRecord-section-createdate')
-const obj_modifyby = document.getElementById('fRecord-section-modifyby')
-const obj_modifydate = document.getElementById('fRecord-section-modifydate')
+const rec_createby = document.getElementById('fRecord-section-createby')
+const rec_createdate = document.getElementById('fRecord-section-createdate')
+const rec_modifyby = document.getElementById('fRecord-section-modifyby')
+const rec_modifydate = document.getElementById('fRecord-section-modifydate')
+const rec_id = document.getElementById('fRecord-section-id')
 
 
 export const Section = CurrentSection
@@ -73,10 +79,24 @@ export async function init(self, args) {
 
 	// set actions
 	CurrentState.Actions = {
-		edit: btn_edit,	
+		newdata: btn_new,
+		edit: btn_edit,
+		close: btn_actionClose,
+		reopen: btn_actionReopen,	
 	}
 
-	
+	// buat di Extender: export function setupActionButtonEvent(self, frm, CurrentState, buttons) { }
+	const fn_setupactionbuttonevent_name = 'setupActionButtonEvent'
+	const fn_setupactionbuttonevent = Extender[fn_setupactionbuttonevent_name]
+	if (typeof fn_setupactionbuttonevent === 'function') {
+		fn_setupactionbuttonevent(self, frm, CurrentState, {
+			btn_actionClose,
+			btn_actionReopen,
+		})
+	} else {
+		console.warn('Extender.setupActionButtonEvent is not implemented')
+		console.log('buat function di extender: export function setupActionButtonEvent(self, buttons)')
+	}
 
 		
 	
@@ -262,7 +282,9 @@ async function  frm_locked(self, evt) {
 	btn_prev.disabled = false
 	btn_next.disabled = false
 
-	
+	// Enable action: action hanya bisa dilakukan saat posisi edit off
+	btn_actionClose.disabled = false
+	btn_actionReopen.disabled = false
 	
 	// Extender untuk event locked
 	const fn_name = 'periodeHeaderEdit_formLocked'
@@ -297,7 +319,9 @@ async function  frm_unlocked(self, evt) {
 	btn_prev.disabled = true
 	btn_next.disabled = true
 
-	
+	// Disable action: action hanya bisa dilakukan saat posisi edit off
+	btn_actionClose.disabled = true
+	btn_actionReopen.disabled = true
 
 	// Extender untuk event Unlocked
 	const fn_name = 'periodeHeaderEdit_formUnlocked'
@@ -371,13 +395,10 @@ async function btn_new_click(self, evt) {
 	try {
 
 		// inisiasi data baru
-		let datainit = {
+		const datainit = {
 			periode_year: 0,
-		
 			periode_month: 0,
-		
 			periode_start: new Date(),
-		
 			periode_end: new Date(),
 		}
 
@@ -387,6 +408,7 @@ async function btn_new_click(self, evt) {
 		const fn_newdata_name = 'periodeHeaderEdit_newData'
 		const fn_newdata = Extender[fn_newdata_name]
 		if (typeof fn_newdata === 'function') {
+			// export async function periodeHeaderEdit_newData(self, datainit, frm) {}
 			await fn_newdata(self, datainit, frm)
 		}
 
@@ -458,6 +480,7 @@ async function btn_save_click(self, evt) {
 	const fn_datasaving_name = 'periodeHeaderEdit_dataSaving'
 	const fn_datasaving = Extender[fn_datasaving_name]
 	if (typeof fn_datasaving === 'function') {
+		// export async function periodeHeaderEdit_dataSaving(self, dataToSave, frm) {}
 		await fn_datasaving(self, dataToSave, frm)
 	}
 
@@ -513,6 +536,7 @@ async function btn_save_click(self, evt) {
 		const fn_datasaved_name = 'periodeHeaderEdit_dataSaved'
 		const fn_datasaved = Extender[fn_datasaved_name]
 		if (typeof fn_datasaved === 'function') {
+			// export async function periodeHeaderEdit_dataSaved(self, data, frm) {}
 			await fn_datasaved(self, data, frm)
 		}
 
@@ -636,6 +660,12 @@ async function btn_recordstatus_click(self, evt) {
 		sectionReturn: CurrentSection
 	}
 	
+	if (frm.isNew()) {
+		console.warn('tidak bisa buka rescord status jika data baru')	
+		$fgta5.MessageBox.warning('Record Status bisa dibuka setelah data disimpan')
+		return;
+	}
+
 	pageHelper.openSection(self, 'fRecord-section', params, async ()=>{
 
 		let mask = $fgta5.Modal.createMask()
@@ -645,10 +675,11 @@ async function btn_recordstatus_click(self, evt) {
 			const id = pk.value
 			const data = await openData(self, id)
 
-			obj_createby.innerHTML = data._createby
-			obj_createdate.innerHTML = data._createdate
-			obj_modifyby.innerHTML = data._modifyby
-			obj_modifydate.innerHTML = data._modifydate
+			rec_id.innerHTML = id
+			rec_createby.innerHTML = data._createby
+			rec_createdate.innerHTML = data._createdate
+			rec_modifyby.innerHTML = data._modifyby
+			rec_modifydate.innerHTML = data._modifydate
 
 			const fn_addrecordinfo_name = 'periodeHeaderEdit_addRecordInfo'
 			const fn_addrecordinfo = Extender[fn_addrecordinfo_name]
@@ -671,6 +702,12 @@ async function btn_logs_click(self, evt) {
 	const params = {
 		Context,
 		sectionReturn: CurrentSection
+	}
+
+	if (frm.isNew()) {
+		console.warn('tidak bisa buka logs jika data baru')	
+		$fgta5.MessageBox.warning('Logs bisa dibuka setelah data disimpan')
+		return;
 	}
 
 	pageHelper.openSection(self, 'fLogs-section', params, async ()=>{
@@ -732,7 +769,7 @@ async function btn_about_click(self, evt) {
 			const divFooter = document.createElement('div')
 			divFooter.setAttribute('id', 'fAbout-section-footer')
 			divFooter.setAttribute('style', 'border-top: 1px solid #ccc; padding: 5px 0 0 0; margin-top: 50px')
-			divFooter.innerHTML = 'This module is generated by fgta5 generator at 22 Nov 2025 01:42'
+			divFooter.innerHTML = 'This module is generated by fgta5 generator at 1 Dec 2025 13:41'
 			section.appendChild(divFooter)
 		}
 		

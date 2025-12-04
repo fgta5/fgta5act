@@ -100,17 +100,18 @@ export async function init(self, args) {
 
 	// set actions
 	CurrentState.Actions = {
+		newdata: btn_new,
 		edit: btn_edit,
 		post: btn_actionPost,
 		unpost: btn_actionUnpost,
 		print: btn_actionPrint,	
 	}
 
-	// buat di Extender: export function setupActionButtonEvent(self, buttons)
+	// buat di Extender: export function setupActionButtonEvent(self, frm, CurrentState, buttons) { }
 	const fn_setupactionbuttonevent_name = 'setupActionButtonEvent'
 	const fn_setupactionbuttonevent = Extender[fn_setupactionbuttonevent_name]
 	if (typeof fn_setupactionbuttonevent === 'function') {
-		fn_setupactionbuttonevent(self, {
+		fn_setupactionbuttonevent(self, frm, CurrentState, {
 			btn_actionPost,
 			btn_actionUnpost,
 			btn_actionPrint,
@@ -123,6 +124,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_jurnaltype_id
 	obj_jurnaltype_id.addEventListener('selected', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selected_name = 'obj_jurnaltype_id_selected'
 		const fn_selected = Extender[fn_selected_name]
 		if (typeof fn_selected === 'function') {
@@ -135,6 +139,9 @@ export async function init(self, args) {
 	})
 	
 	obj_jurnaltype_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_jurnaltype_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -189,6 +196,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_paymreqterm_id
 	obj_paymreqterm_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_paymreqterm_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -243,6 +253,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_periode_id
 	obj_periode_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_periode_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -297,6 +310,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_partner_id
 	obj_partner_id.addEventListener('selected', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selected_name = 'obj_partner_id_selected'
 		const fn_selected = Extender[fn_selected_name]
 		if (typeof fn_selected === 'function') {
@@ -309,6 +325,9 @@ export async function init(self, args) {
 	})
 	
 	obj_partner_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_partner_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -363,6 +382,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_paymtype_id
 	obj_paymtype_id.addEventListener('selected', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selected_name = 'obj_paymtype_id_selected'
 		const fn_selected = Extender[fn_selected_name]
 		if (typeof fn_selected === 'function') {
@@ -375,6 +397,9 @@ export async function init(self, args) {
 	})
 	
 	obj_paymtype_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_paymtype_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -429,6 +454,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_partnerbank_id
 	obj_partnerbank_id.addEventListener('selected', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selected_name = 'obj_partnerbank_id_selected'
 		const fn_selected = Extender[fn_selected_name]
 		if (typeof fn_selected === 'function') {
@@ -441,6 +469,9 @@ export async function init(self, args) {
 	})
 	
 	obj_partnerbank_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_partnerbank_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -495,6 +526,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_partnercontact_id
 	obj_partnercontact_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_partnercontact_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -549,6 +583,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_coa_id
 	obj_coa_id.addEventListener('selected', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selected_name = 'obj_coa_id_selected'
 		const fn_selected = Extender[fn_selected_name]
 		if (typeof fn_selected === 'function') {
@@ -561,6 +598,9 @@ export async function init(self, args) {
 	})
 	
 	obj_coa_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_coa_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -615,6 +655,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_dept_id
 	obj_dept_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_dept_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -669,6 +712,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_site_id
 	obj_site_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_site_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -723,6 +769,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_unit_id
 	obj_unit_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_unit_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -777,6 +826,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_project_id
 	obj_project_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_project_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -831,6 +883,9 @@ export async function init(self, args) {
 	
 	// Combobox: obj_curr_id
 	obj_curr_id.addEventListener('selected', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selected_name = 'obj_curr_id_selected'
 		const fn_selected = Extender[fn_selected_name]
 		if (typeof fn_selected === 'function') {
@@ -843,6 +898,9 @@ export async function init(self, args) {
 	})
 	
 	obj_curr_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_selecting_name = 'obj_curr_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
@@ -895,6 +953,9 @@ export async function init(self, args) {
 	})
 	
 	obj_curr_id.addEventListener('populating', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_populating_name = 'obj_curr_id_populating'
 		const fn_populating = Extender[fn_populating_name]
 		if (typeof fn_populating === 'function') {
@@ -909,6 +970,9 @@ export async function init(self, args) {
 	
 	// Numberbox: obj_jurnal_value
 	obj_jurnal_value.addEventListener('changed', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_changed_name = 'obj_jurnal_value_changed'
 		const fn_changed = Extender[fn_changed_name]
 		if (typeof fn_changed === 'function') {
@@ -923,6 +987,9 @@ export async function init(self, args) {
 	
 	// Numberbox: obj_frgrate
 	obj_frgrate.addEventListener('changed', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
 		const fn_changed_name = 'obj_frgrate_changed'
 		const fn_changed = Extender[fn_changed_name]
 		if (typeof fn_changed === 'function') {
@@ -1629,7 +1696,7 @@ async function btn_about_click(self, evt) {
 			const divFooter = document.createElement('div')
 			divFooter.setAttribute('id', 'fAbout-section-footer')
 			divFooter.setAttribute('style', 'border-top: 1px solid #ccc; padding: 5px 0 0 0; margin-top: 50px')
-			divFooter.innerHTML = 'This module is generated by fgta5 generator at 30 Nov 2025 22:31'
+			divFooter.innerHTML = 'This module is generated by fgta5 generator at 4 Dec 2025 17:18'
 			section.appendChild(divFooter)
 		}
 		

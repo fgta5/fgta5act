@@ -12,7 +12,8 @@ import * as Extender from './extenders/jurnaltype.apiext.js'
 const moduleName = 'jurnaltype'
 const headerSectionName = 'header'
 const headerTableName = 'act.jurnaltype' 
-const coaTableName = 'act.jurnaltypecoa'  	
+const coaTableName = 'act.jurnaltypecoa'  
+const userTableName = 'act.jurnaltypeuser'  	
 
 // api: account
 export default class extends Api {
@@ -42,6 +43,14 @@ export default class extends Api {
 	async coaCreate(body) { return await jurnaltype_coaCreate(this, body) }
 	async coaDelete(body) { return await jurnaltype_coaDelete(this, body) }
 	async coaDeleteRows(body) { return await jurnaltype_coaDeleteRows(this, body) }
+	
+	// user	
+	async userList(body) { return await jurnaltype_userList(this, body) }
+	async userOpen(body) { return await jurnaltype_userOpen(this, body) }
+	async userUpdate(body) { return await jurnaltype_userUpdate(this, body)}
+	async userCreate(body) { return await jurnaltype_userCreate(this, body) }
+	async userDelete(body) { return await jurnaltype_userDelete(this, body) }
+	async userDeleteRows(body) { return await jurnaltype_userDeleteRows(this, body) }
 			
 }	
 
@@ -375,6 +384,34 @@ async function jurnaltype_headerDelete(self, body) {
 
 					jurnaltype_log(self, body, startTime, coaTableName, rowcoa.jurnaltypecoa_id, 'DELETE', {rowdata: deletedRow})
 					jurnaltype_log(self, body, startTime, headerTableName, rowcoa.jurnaltype_id, 'DELETE ROW COA', {jurnaltypecoa_id: rowcoa.jurnaltypecoa_id, tablename: coaTableName}, `removed: ${rowcoa.jurnaltypecoa_id}`)
+
+
+				}	
+			}
+
+			// hapus data user
+			{
+				const sql = `select * from ${userTableName} where jurnaltype_id=\${jurnaltype_id}`
+				const rows = await tx.any(sql, dataToRemove)
+				for (let rowuser of rows) {
+					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+					if (typeof Extender.userDeleting === 'function') {
+						// export async function userDeleting(self, tx, rowuser, logMetadata) {}
+						await Extender.userDeleting(self, tx, rowuser, logMetadata)
+					}
+
+					const param = {jurnaltypeuser_id: rowuser.jurnaltypeuser_id}
+					const cmd = sqlUtil.createDeleteCommand(userTableName, ['jurnaltypeuser_id'])
+					const deletedRow = await cmd.execute(param)
+
+					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+					if (typeof Extender.userDeleted === 'function') {
+						// export async function userDeleted(self, tx, deletedRow, logMetadata) {}
+						await Extender.userDeleted(self, tx, deletedRow, logMetadata)
+					}					
+
+					jurnaltype_log(self, body, startTime, userTableName, rowuser.jurnaltypeuser_id, 'DELETE', {rowdata: deletedRow})
+					jurnaltype_log(self, body, startTime, headerTableName, rowuser.jurnaltype_id, 'DELETE ROW USER', {jurnaltypeuser_id: rowuser.jurnaltypeuser_id, tablename: userTableName}, `removed: ${rowuser.jurnaltypeuser_id}`)
 
 
 				}	
@@ -728,6 +765,338 @@ async function jurnaltype_coaDeleteRows(self, body) {
 
 				jurnaltype_log(self, body, startTime, coaTableName, rowcoa.jurnaltypecoa_id, 'DELETE', {rowdata: deletedRow})
 				jurnaltype_log(self, body, startTime, headerTableName, rowcoa.jurnaltype_id, 'DELETE ROW COA', {jurnaltypecoa_id: rowcoa.jurnaltypecoa_id, tablename: coaTableName}, `removed: ${rowcoa.jurnaltypecoa_id}`)
+			}
+		})
+
+		const res = {
+			deleted: true,
+			message: ''
+		}
+		return res
+	} catch (err) {
+		throw err
+	}	
+}
+
+
+// user	
+
+async function jurnaltype_userList(self, body) {
+	const tablename = userTableName
+	const { criteria={}, limit=0, offset=0, columns=[], sort={} } = body
+	const searchMap = {
+		jurnaltype_id: `jurnaltype_id=try_cast_bigint(\${jurnaltype_id}, 0)`,
+	};
+
+
+	try {
+	
+		// hilangkan criteria '' atau null
+		for (var cname in criteria) {
+			if (criteria[cname]==='' || criteria[cname]===null) {
+				delete criteria[cname]
+			}
+		}
+
+		const args = { db, criteria }
+
+		// apabila ada keperluan untuk recompose criteria
+		if (typeof Extender.userListCriteria === 'function') {
+			// export async function userListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.userListCriteria(self, db, searchMap, criteria, sort, columns, args)
+		}
+
+		var max_rows = limit==0 ? 10 : limit
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({tablename, columns, whereClause, sort, limit:max_rows+1, offset, queryParams})
+		const rows = await db.any(sql, queryParams);
+
+		
+		var i = 0
+		const data = []
+		for (var row of rows) {
+			i++
+			if (i>max_rows) { break }
+
+			// lookup: user_fullname dari field user_fullname pada table core.user dimana (core.user.user_id = act.jurnaltype.user_id)
+			{
+				const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', row.user_id)
+				row.user_fullname = user_fullname
+			}
+			
+
+			// pasang extender di sini
+			if (typeof Extender.detilListRow === 'function') {
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
+			}
+
+			data.push(row)
+		}
+
+		var nextoffset = null
+		if (rows.length>max_rows) {
+			nextoffset = offset+max_rows
+		}
+
+		return {
+			criteria: criteria,
+			limit:  max_rows,
+			nextoffset: nextoffset,
+			data: data
+		}
+
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_userOpen(self, body) {
+	const tablename = userTableName
+
+	try {
+		const { id } = body 
+		const criteria = { jurnaltypeuser_id: id }
+		const searchMap = { jurnaltypeuser_id: `jurnaltypeuser_id = \${jurnaltypeuser_id}`}
+		const {whereClause, queryParams} = sqlUtil.createWhereClause(criteria, searchMap) 
+		const sql = sqlUtil.createSqlSelect({
+			tablename, 
+			columns:[], 
+			whereClause, 
+			sort:{}, 
+			limit:0, 
+			offset:0, 
+			queryParams
+		})
+		const data = await db.one(sql, queryParams);
+		if (data==null) { 
+			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
+		}	
+
+
+		// lookup: user_fullname dari field user_fullname pada table core.user dimana (core.user.user_id = act.jurnaltype.user_id)
+		{
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data.user_id)
+			data.user_fullname = user_fullname
+		}
+		
+
+		// lookup data createby
+		{
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._createby)
+			data._createby = user_fullname ?? ''
+		}
+
+		// lookup data modifyby
+		{
+			const { user_fullname } = await sqlUtil.lookupdb(db, 'core.user', 'user_id', data._modifyby)
+			data._modifyby = user_fullname ?? ''
+		}	
+
+		return data
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_userCreate(self, body) {
+	const { source='jurnaltype', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = userTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+
+		data._createby = user_id
+		data._createdate = (new Date()).toISOString()
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			const args = { 
+				section: 'user', 
+				prefix: ''	
+			}
+
+			const sequencer = createSequencerLine(tx, {})
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.prefix)
+			data.jurnaltypeuser_id = seqdata.id
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.userCreating === 'function') {
+				// export async function userCreating(self, tx, data, seqdata, args) {}
+				await Extender.userCreating(self, tx, data, seqdata, args)
+			}
+
+			const cmd = sqlUtil.createInsertCommand(tablename, data)
+			const ret = await cmd.execute(data)
+			
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.userCreated === 'function') {
+				// export async function userCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.userCreated(self, tx, ret, data, logMetadata, args)
+			}
+
+			// record log
+			jurnaltype_log(self, body, startTime, tablename, ret.jurnaltypeuser_id, 'CREATE', logMetadata)
+
+			return ret
+		})
+
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_userUpdate(self, body) {
+	const { source='jurnaltype', data={} } = body
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = userTableName
+
+	try {
+
+		// parse uploaded data
+		const files = Api.parseUploadData(data, req.files)
+
+
+		data._modifyby = user_id
+		data._modifydate = (new Date()).toISOString()
+
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+
+			// apabila ada keperluan pengolahan data SEBELUM disimpan
+			if (typeof Extender.userUpdating === 'function') {
+				// export async function userUpdating(self, tx, data) {}
+				await Extender.userUpdating(self, tx, data)
+			}			
+			
+			const cmd =  sqlUtil.createUpdateCommand(tablename, data, ['jurnaltypeuser_id'])
+			const ret = await cmd.execute(data)
+			
+			const logMetadata = {}
+
+			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
+			if (typeof Extender.userUpdated === 'function') {
+				// export async function userUpdated(self, tx, ret, data, logMetadata) {}
+				await Extender.userUpdated(self, tx, ret, data, logMetadata)
+			}
+
+			// record log
+			jurnaltype_log(self, body, startTime, tablename, data.jurnaltypeuser_id, 'UPDATE', logMetadata)
+
+			return ret
+		})
+	
+		return result
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_userDelete(self, body) {
+	const { source, id } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint()
+	const tablename = userTableName
+
+	try {
+
+		const deletedRow = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			const dataToRemove = {jurnaltypeuser_id: id}
+			const sql = `select * from ${userTableName} where jurnaltypeuser_id=\${jurnaltypeuser_id}`
+			const rowuser = await tx.oneOrNone(sql, dataToRemove)
+
+
+			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+			if (typeof Extender.userDeleting === 'function') {
+				// export async function userDeleting(self, tx, rowuser, logMetadata) {}
+				await Extender.userDeleting(self, tx, rowuser, logMetadata)
+			}
+
+			const param = {jurnaltypeuser_id: rowuser.jurnaltypeuser_id}
+			const cmd = sqlUtil.createDeleteCommand(userTableName, ['jurnaltypeuser_id'])
+			const deletedRow = await cmd.execute(param)
+
+			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+			if (typeof Extender.userDeleted === 'function') {
+				// export async function userDeleted(self, tx, deletedRow, logMetadata) {}
+				await Extender.userDeleted(self, tx, deletedRow, logMetadata)
+			}					
+
+			jurnaltype_log(self, body, startTime, userTableName, rowuser.jurnaltypeuser_id, 'DELETE', {rowdata: deletedRow})
+			jurnaltype_log(self, body, startTime, headerTableName, rowuser.jurnaltype_id, 'DELETE ROW USER', {jurnaltypeuser_id: rowuser.jurnaltypeuser_id, tablename: userTableName}, `removed: ${rowuser.jurnaltypeuser_id}`)
+
+			return deletedRow
+		})
+	
+
+		return deletedRow
+	} catch (err) {
+		throw err
+	}
+}
+
+async function jurnaltype_userDeleteRows(self, body) {
+	const { data } = body 
+	const req = self.req
+	const user_id = req.session.user.userId
+	const startTime = process.hrtime.bigint();
+	const tablename = userTableName
+
+
+	try {
+		const result = await db.tx(async tx=>{
+			sqlUtil.connect(tx)
+
+			for (let id of data) {
+				const dataToRemove = {jurnaltypeuser_id: id}
+				const sql = `select * from ${userTableName} where jurnaltypeuser_id=\${jurnaltypeuser_id}`
+				const rowuser = await tx.oneOrNone(sql, dataToRemove)
+
+				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
+				if (typeof Extender.userDeleting === 'function') {
+					// async function userDeleting(self, tx, rowuser, logMetadata) {}
+					await Extender.userDeleting(self, tx, rowuser, logMetadata)
+				}
+
+				const param = {jurnaltypeuser_id: rowuser.jurnaltypeuser_id}
+				const cmd = sqlUtil.createDeleteCommand(userTableName, ['jurnaltypeuser_id'])
+				const deletedRow = await cmd.execute(param)
+
+				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
+				if (typeof Extender.userDeleted === 'function') {
+					// export async function userDeleted(self, tx, deletedRow, logMetadata) {}
+					await Extender.userDeleted(self, tx, deletedRow, logMetadata)
+				}					
+
+				jurnaltype_log(self, body, startTime, userTableName, rowuser.jurnaltypeuser_id, 'DELETE', {rowdata: deletedRow})
+				jurnaltype_log(self, body, startTime, headerTableName, rowuser.jurnaltype_id, 'DELETE ROW USER', {jurnaltypeuser_id: rowuser.jurnaltypeuser_id, tablename: userTableName}, `removed: ${rowuser.jurnaltypeuser_id}`)
 			}
 		})
 

@@ -3,6 +3,8 @@ import * as jurnaltypeHeaderList from './jurnaltypeHeaderList.mjs'
 import * as jurnaltypeHeaderEdit from './jurnaltypeHeaderEdit.mjs' 
 import * as jurnaltypeCoaList from './jurnaltypeCoaList.mjs' 
 import * as jurnaltypeCoaEdit from './jurnaltypeCoaEdit.mjs' 
+import * as jurnaltypeUserList from './jurnaltypeUserList.mjs' 
+import * as jurnaltypeUserEdit from './jurnaltypeUserEdit.mjs' 
 import * as Extender from './jurnaltype-ext.mjs'
 
 const app = Context.app
@@ -32,6 +34,8 @@ export default class extends Module {
 			jurnaltypeHeaderEdit, 
 			jurnaltypeCoaList, 
 			jurnaltypeCoaEdit, 
+			jurnaltypeUserList, 
+			jurnaltypeUserEdit, 
 		}
 
 		try {
@@ -55,6 +59,8 @@ export default class extends Module {
 				jurnaltypeHeaderEdit.init(self, args), 
 				jurnaltypeCoaList.init(self, args), 
 				jurnaltypeCoaEdit.init(self, args), 
+				jurnaltypeUserList.init(self, args), 
+				jurnaltypeUserEdit.init(self, args), 
 				Extender.init(self, args)
 			])
 
@@ -66,7 +72,7 @@ export default class extends Module {
 			
 
 			// kalau user melakukan reload, konfirm dulu
-			const modNameList = ['jurnaltypeHeaderEdit', 'jurnaltypeCoaEdit']
+			const modNameList = ['jurnaltypeHeaderEdit', 'jurnaltypeCoaEdit', 'jurnaltypeUserEdit']
 			window.onbeforeunload = (evt)=>{ 
 				// cek dulu semua form
 				let isFormDirty = false
