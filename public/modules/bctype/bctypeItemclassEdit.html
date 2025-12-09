@@ -1,0 +1,73 @@
+<div id="bctypeItemclassEdit-head">
+	<div id="bctypeItemclassEdit-head-title" class="section-detil-title"></div>
+	<div id="bctypeItemclassEdit-head-descr" class="section-detil-descr"></div>
+</div>
+
+<form id="bctypeItemclassEdit-frm" class="module-form" locked="true" autoid="true" primarykey="bctypeItemclassEdit-obj_bctypeitemclass_id">
+
+	<!-- Textbox: bctypeitemclass_id-->	
+	<div id="bctypeItemclassEdit-obj_bctypeitemclass_id-container" class="input-field hidden" field="bctypeItemclassEdit-obj_bctypeitemclass_id">
+		<label for="bctypeItemclassEdit-obj_bctypeitemclass_id">LineId</label>
+		<input id="bctypeItemclassEdit-obj_bctypeitemclass_id"  fgta5-component="Textbox" placeholder="line id" autocomplete="off" spellcheck="false" 
+			binding="bctypeitemclass_id"
+			data-tabindex="1" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+
+
+	<!-- Combobox: itemclass_id-->	
+	<div id="bctypeItemclassEdit-obj_itemclass_id-container" class="input-field" field="bctypeItemclassEdit-obj_itemclass_id">
+		<label for="bctypeItemclassEdit-obj_itemclass_id">ItemClass</label>
+		<input id="bctypeItemclassEdit-obj_itemclass_id"  fgta5-component="Combobox" placeholder="itemclass" autocomplete="off" spellcheck="false" 
+			binding="itemclass_id"
+			data-tabindex="2" 
+			required 
+			invalid-message-required="itemclass harus diisi" 
+			data-display="itemclass_name" 
+		>
+	</div>
+
+
+	<!-- Textbox: bctype_id-->	
+	<div id="bctypeItemclassEdit-obj_bctype_id-container" class="input-field hidden" field="bctypeItemclassEdit-obj_bctype_id">
+		<label for="bctypeItemclassEdit-obj_bctype_id">ID</label>
+		<input id="bctypeItemclassEdit-obj_bctype_id"  fgta5-component="Textbox" placeholder="id" autocomplete="off" spellcheck="false" 
+			binding="bctype_id"
+			data-tabindex="3" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+			disabled 
+		>
+	</div>
+	
+
+
+	<div id="bctypeItemclassEdit-footer"></div>
+
+</form>
+
+
+
+<div class="panel-recordbar" data-view="nodetil">
+	<div><a id="bctypeItemclass-btn_recordstatus" href="javascript:void(0)" tabindex="-1">Record Status</a></div>
+	<div><a id="bctypeItemclass-btn_logs" href="javascript:void(0)" tabindex="-1">Logs</a></div>
+</div>
+
+
+<div class="footer-buttons-container hidden">
+	<div>
+		<button id="bctypeItemclassEdit-btn_prev"><span>&laquo;&laquo;</span></button>
+	</div>
+	<div>
+		<button id="bctypeItemclassEdit-btn_save">Save</button>
+		<button id="bctypeItemclassEdit-btn_edit">Edit</button>
+		<button id="bctypeItemclassEdit-btn_new" data-action="bctypeItemclass-addrow">New</button>
+		<button id="bctypeItemclassEdit-btn_reset">Reset</button>
+		<button id="bctypeItemclassEdit-btn_delete">Delete</button>
+	</div>
+	<div>
+		<button id="bctypeItemclassEdit-btn_next"><span>&raquo;&raquo;</span></button>
+	</div>
+</div>

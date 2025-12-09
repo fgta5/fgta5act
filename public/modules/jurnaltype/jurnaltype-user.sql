@@ -136,6 +136,11 @@ comment on column act."jurnaltypeuser"._modifydate is 'waktu terakhir record dim
 -- =============================================
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE act."jurnaltypeuser" DROP CONSTRAINT fk$act$jurnaltypeuser$jurnaltype_id;
+ALTER TABLE act."jurnaltypeuser" DROP CONSTRAINT fk$act$jurnaltypeuser$user_id;
+
+
 -- Add Foreign Key Constraint  
 ALTER TABLE act."jurnaltypeuser"
 	ADD CONSTRAINT fk$act$jurnaltypeuser$user_id

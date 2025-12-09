@@ -140,6 +140,17 @@
 		grid-column: 4;
 	}
 
+	#jurnaltypeHeaderEdit-obj_isdetilallowgetap-container {
+		grid-row: 11;
+		grid-column: 4;
+
+	}
+
+	#jurnaltypeHeaderEdit-obj_isdetilallowgetar-container {
+		grid-row: 12;
+		grid-column: 4;
+	}
+
 
 	#jurnaltypeHeaderEdit-obj_isdetilallowselectunit-container {
 		grid-row: 5;

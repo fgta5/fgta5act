@@ -1,0 +1,28 @@
+<div id="itemmanageHeaderList-header">
+</div>
+
+<div class="search-container">
+	<div id="itemmanageHeaderList-pnl_search" class="search-parameters">
+		<input id="itemmanageHeaderList-txt_searchtext" fgta5-component="Textbox" placeholder="search" autocomplete="off" spellcheck="false" binding="searchtext" data-searchinput>
+	</div>
+	<button id="itemmanageHeaderList-btn_gridload">Load</button>
+</div>
+
+<table id="itemmanageHeaderList-tbl" fgta5-component="Gridview">
+	<thead>
+		<tr data-header key="itemmanage_id">
+			<th data-name="itemmanage_id" binding="itemmanage_id" >ID</th>
+			<th data-name="itemmanage_name" binding="itemmanage_name" >Name</th>
+		</tr>
+	</thead>
+</table>
+
+
+
+<div class="footer-buttons-container">
+	<div></div>
+	<div>
+		<button id="itemmanageHeaderList-btn_new" data-action="itemmanageHeader-new" data-sectionsource="itemmanageHeaderList-section">New</button>
+	</div>
+	<div></div>
+</div>

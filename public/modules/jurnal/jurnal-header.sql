@@ -462,6 +462,21 @@ comment on column act."jurnal".coacurr is '';
 
 
 -- =============================================
+-- FIELD: jurnaldetil_id_link bigint
+-- =============================================
+-- ADD jurnaldetil_id_link
+alter table act."jurnal" add jurnaldetil_id_link bigint  ;
+comment on column act."jurnal".jurnaldetil_id_link is '';
+
+-- MODIFY jurnaldetil_id_link
+alter table act."jurnal"
+	alter column jurnaldetil_id_link type bigint,
+	ALTER COLUMN jurnaldetil_id_link DROP DEFAULT,
+	ALTER COLUMN jurnaldetil_id_link DROP NOT NULL;
+comment on column act."jurnal".jurnaldetil_id_link is '';
+
+
+-- =============================================
 -- FIELD: _createby integer
 -- =============================================
 -- ADD _createby
@@ -527,6 +542,7 @@ comment on column act."jurnal"._modifydate is 'waktu terakhir record dimodifikas
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
 -- Drop Existing Foreign Key Constraint 
+ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$jurnaldetil_id_link;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$curr_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$project_id;
 ALTER TABLE act."jurnal" DROP CONSTRAINT fk$act$jurnal$unit_id;
@@ -684,6 +700,17 @@ ALTER TABLE act."jurnal"
 -- Add As Index, drop dulu jika sudah ada
 DROP INDEX IF EXISTS act.idx_fk$act$jurnal$curr_id;
 CREATE INDEX idx_fk$act$jurnal$curr_id ON act."jurnal"(curr_id);	
+
+
+ALTER TABLE act."jurnal"
+	ADD CONSTRAINT fk$act$jurnal$jurnaldetil_id_link
+	FOREIGN KEY (jurnaldetil_id_link)
+	REFERENCES act."jurnaldetil"(jurnaldetil_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$jurnal$jurnaldetil_id_link;
+CREATE INDEX idx_fk$act$jurnal$jurnaldetil_id_link ON act."jurnal"(jurnaldetil_id_link);	
 
 	
 

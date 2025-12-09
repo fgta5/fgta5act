@@ -27,6 +27,21 @@ comment on column act."paymreqtype".paymreqtype_name is '';
 
 
 -- =============================================
+-- FIELD: agingtype_id smallint
+-- =============================================
+-- ADD agingtype_id
+alter table act."paymreqtype" add agingtype_id smallint  ;
+comment on column act."paymreqtype".agingtype_id is '';
+
+-- MODIFY agingtype_id
+alter table act."paymreqtype"
+	alter column agingtype_id type smallint,
+	ALTER COLUMN agingtype_id DROP DEFAULT,
+	ALTER COLUMN agingtype_id DROP NOT NULL;
+comment on column act."paymreqtype".agingtype_id is '';
+
+
+-- =============================================
 -- FIELD: _createby integer
 -- =============================================
 -- ADD _createby
@@ -91,12 +106,28 @@ comment on column act."paymreqtype"._modifydate is 'waktu terakhir record dimodi
 -- =============================================
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
--- Add Foreign Key Constraint  	
+-- Add Foreign Key Constraint  
+ALTER TABLE act."paymreqtype"
+	ADD CONSTRAINT fk$act$paymreqtype$agingtype_id
+	FOREIGN KEY (agingtype_id)
+	REFERENCES act."agingtype"(agingtype_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$paymreqtype$agingtype_id;
+CREATE INDEX idx_fk$act$paymreqtype$agingtype_id ON act."paymreqtype"(agingtype_id);	
+
+	
 
 
 -- =============================================
 -- UNIQUE INDEX
 -- =============================================
+-- Drop existing unique index 
+alter table act."paymreqtype"
+	drop constraint uq$act$paymreqtype$paymreqtype_name;
+	
+
 -- Add unique index 
 alter table  act."paymreqtype"
 	add constraint uq$act$paymreqtype$paymreqtype_name unique (paymreqtype_name); 

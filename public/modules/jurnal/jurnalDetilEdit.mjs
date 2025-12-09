@@ -85,6 +85,12 @@ export async function init(self, args) {
 
 	CurrentState.headerFormLocked = true 
 	CurrentState.editDisabled = false
+
+	CurrentState.Actions = {
+		newdata: btn_new,
+		edit: btn_edit,
+	}
+
 	CurrentState.getHeaderForm = () => {
 		const jurnalHeaderEdit = self.Modules.jurnalHeaderEdit
 		const frmHeader = jurnalHeaderEdit.getHeaderForm()
@@ -567,17 +573,22 @@ export async function openSelectedData(self, params) {
 		// disable primary key
 		setPrimaryKeyState(self, {disabled:true})
 
+		// isi form dengan data
 		frm.setData(data)
-		frm.acceptChanges()
-		frm.lock()
-
-
+	
+		// jika ada kebutuhan untuk oleh lagi form dan data, bisa lakukan di extender
 		// export function jurnalDetilEdit_formOpened(self, frm, CurrentState) {}
 		const fn_formopened_name = 'jurnalDetilEdit_formOpened'
 		const fn_formopened = Extender[fn_formopened_name]
 		if (typeof fn_formopened === 'function') {
 			fn_formopened(self, frm, CurrentState)
 		}
+
+
+		// finally, accept changes dan lock form
+		frm.acceptChanges()
+		frm.lock()
+
 	} catch (err) {
 		CurrentState.currentOpenedId = null
 		throw err
@@ -599,12 +610,28 @@ export function headerLocked(self) {
 	CurrentState.headerFormLocked = true
 	CurrentState.editDisabled = true
 	btn_new.disabled = true
+
+	// Extender untuk event Locked
+	// export function jurnalDetilEdit_formLocked(self, frm, CurrentState) {}
+	const fn_name = 'jurnalDetilEdit_formLocked'
+	const fn = Extender[fn_name]
+	if (typeof fn === 'function') {
+		fn(self, frm, CurrentState)
+	}	
 }
 
 export function headerUnlocked(self) {
 	CurrentState.headerFormLocked = false
 	CurrentState.editDisabled = false
 	btn_new.disabled = false
+
+	// Extender untuk event Unlocked
+	// export function jurnalDetilEdit_formUnlocked(self, frm, CurrentState) {}
+	const fn_name = 'jurnalDetilEdit_formUnlocked'
+	const fn = Extender[fn_name]
+	if (typeof fn === 'function') {
+		fn(self, frm, CurrentState)
+	}	
 }
 
 export function disableNextButton(self, disabled=true) {
@@ -945,13 +972,19 @@ async function btn_save_click(self, evt) {
 
 
 	// Extender Saving
-	// export async function jurnalDetilEdit_dataSaving(self, dataToSave, frm) {}
+	// export async function jurnalDetilEdit_dataSaving(self, dataToSave, frm, args) {}
+	const args = { cancelSave: false }
 	const fn_datasaving_name = 'jurnalDetilEdit_dataSaving'
 	const fn_datasaving = Extender[fn_datasaving_name]
 	if (typeof fn_datasaving === 'function') {
-		await fn_datasaving(self, dataToSave, frm)
+		await fn_datasaving(self, dataToSave, frm, args)
 	}
 
+	// batalkan save, jika ada request cancel
+	if (args.cancelSave) {
+		console.log('save is canceled')
+		return
+	}
 
 
 	let mask = $fgta5.Modal.createMask()

@@ -747,6 +747,14 @@ async function jurnal_detilOpen(self, body) {
 			data._modifyby = user_fullname ?? ''
 		}	
 
+
+		// pasang extender untuk olah data
+		// export async function detilOpen(self, db, data) {}
+		if (typeof Extender.detilOpen === 'function') {
+			// export async function detilOpen(self, db, data) {}
+			await Extender.detilOpen(self, db, data)
+		}
+
 		return data
 	} catch (err) {
 		throw err

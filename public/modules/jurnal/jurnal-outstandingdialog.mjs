@@ -1,7 +1,7 @@
 import Context from './jurnal-context.mjs'
 
 
-// const SelectedEvent = (data) => { return new CustomEvent('selected', data) }
+const SelectedEvent = (data) => { return new CustomEvent('selected', data) }
 
 export default class {
 	#title
@@ -83,13 +83,17 @@ export default class {
 		elTitle.innerHTML = title
 		this.#title = title
 	}
+
+	close() {
+		this.dialog.close()
+	}
 }
 
 
 
 function dialog_create(self) {
 	const target = document.body
-	const tpl = document.querySelector('template[name="tpl-dialog-outstanding"]')
+	const tpl = document.getElementById('tpl-dialog-outstanding')
 	if (tpl==null) {
 		console.error('Template dialog-outstanding belum dibuat')
 		return null
@@ -125,6 +129,8 @@ function dialog_show(self, outstandingtype) {
 
 	self.cboCurr.clear()
 	self.cboCurr.setSelected(null)	
+
+	self.txtSearch.value = ''
 	
 	if (outstandingtype=='AR') {
 		self.setTitle('Receivable Outstanding')
@@ -154,6 +160,18 @@ function dialog_show(self, outstandingtype) {
 		self.tableBody.innerHTML = ''
 	}
 
+
+	const obj_curr = frm.Inputs['jurnalHeaderEdit-obj_curr_id']
+	if (obj_curr.value!=null) {
+		self.cboCurr.clear()
+		self.cboCurr.setSelected(obj_curr.value, obj_curr.text)
+		self.cboCurr.disabled = true
+	} else {
+		self.cboCurr.clear()
+		self.cboCurr.setSelected(null)
+		self.cboCurr.disabled = false
+	}
+
 	dlg.showModal()
 }
 
@@ -178,12 +196,16 @@ async function dialog_loaddata(self, outstandingtype) {
 
 
 	const frm = Context.program.Modules.jurnalHeaderEdit.getForm()
+	
 
+	const jurnal_id = frm.Inputs['jurnalHeaderEdit-obj_jurnal_id'].value
 	const partner_id = self.cboPartner.value;
 	const coa_id = self.cboCoa.value;
 	const curr_id = self.cboCurr.value;
 	const paymdate = frm.Inputs['jurnalHeaderEdit-obj_jurnal_date'].value
-	
+	const searchtext = self.txtSearch.value	
+
+
 	if (partner_id==null) {
 		$fgta5.MessageBox.warning('Partner harus diisi')
 		return; // harus pilih dulu partnernya
@@ -193,8 +215,18 @@ async function dialog_loaddata(self, outstandingtype) {
 	let mask = $fgta5.Modal.createMask()
 	try {
 		const url = `/jurnal-outstanding/list-${outstandingtype}`
-		const apiParam = { partner_id, coa_id, curr_id, paymdate }
+		const apiParam = { 
+			jurnal_id,
+			partner_id, 
+			coa_id, 
+			curr_id, 
+			paymdate, 
+			searchtext 
+		}
 		const rows = await Module.apiCall(url, apiParam)
+
+
+
 
 		for (let row of rows) {
 			let renderedHtml = self.rowTemplate.cloneNode(true).outerHTML.trim()
@@ -350,8 +382,23 @@ async function cboCurr_selecting(self, evt) {
 
 async function dialog_rowselected(self, tr) {
 	const dlg = self.dialog;
-	const value = tr.getAttribute('data-value')
-	console.log(value)
+	const jurnaldetil_id = tr.getAttribute('data-value')
 
-	dlg.close()
+	// ambil data 
+	try {
+		const url = '/jurnal/detil-open'
+		const apiParam = {
+			id: jurnaldetil_id
+		}
+
+		const data = await Module.apiCall(url, apiParam)
+		
+		const detail = { data, cancelSelect:false}
+		self.eventListener.dispatchEvent(SelectedEvent({
+			detail: detail
+		}))
+
+	} catch (err) {
+		$fgta5.MessageBox.error(err.message)
+	} 
 }

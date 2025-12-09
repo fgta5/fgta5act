@@ -1,0 +1,156 @@
+<form id="bctypeHeaderEdit-frm" class="module-form" locked="true" autoid="true" primarykey="bctypeHeaderEdit-obj_bctype_id">
+
+	<!-- Textbox: bctype_id-->	
+	<div id="bctypeHeaderEdit-obj_bctype_id-container" class="input-field" field="bctypeHeaderEdit-obj_bctype_id">
+		<label for="bctypeHeaderEdit-obj_bctype_id">ID</label>
+		<input id="bctypeHeaderEdit-obj_bctype_id"  fgta5-component="Textbox" placeholder="id" autocomplete="off" spellcheck="false" 
+			binding="bctype_id"
+			data-tabindex="1" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+
+
+	<!-- Checkbox: bctype_isdisabled-->	
+	<div id="bctypeHeaderEdit-obj_bctype_isdisabled-container" class="input-field" field="bctypeHeaderEdit-obj_bctype_isdisabled">
+		<label for="bctypeHeaderEdit-obj_bctype_isdisabled">Disabled</label>
+		<input id="bctypeHeaderEdit-obj_bctype_isdisabled"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
+			binding="bctype_isdisabled"
+			data-tabindex="2" 
+			type="checkbox" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Checkbox: isalldept-->	
+	<div id="bctypeHeaderEdit-obj_isalldept-container" class="input-field" field="bctypeHeaderEdit-obj_isalldept">
+		<label for="bctypeHeaderEdit-obj_isalldept">Allow All Dept</label>
+		<input id="bctypeHeaderEdit-obj_isalldept"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
+			binding="isalldept"
+			data-tabindex="3" 
+			type="checkbox" 
+		>
+	</div>
+
+
+	<!-- Textbox: bctype_name-->	
+	<div id="bctypeHeaderEdit-obj_bctype_name-container" class="input-field" field="bctypeHeaderEdit-obj_bctype_name">
+		<label for="bctypeHeaderEdit-obj_bctype_name">Name</label>
+		<input id="bctypeHeaderEdit-obj_bctype_name"  fgta5-component="Textbox" placeholder="name" autocomplete="off" spellcheck="false" 
+			binding="bctype_name"
+			data-tabindex="4" 
+			required 
+			invalid-message-required="nama tipe bussiness case harus diisi" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="90" 
+		>
+	</div>
+
+
+	<!-- Textbox: bctype_descr-->	
+	<div id="bctypeHeaderEdit-obj_bctype_descr-container" class="input-field" field="bctypeHeaderEdit-obj_bctype_descr">
+		<label for="bctypeHeaderEdit-obj_bctype_descr">Descr</label>
+		<input id="bctypeHeaderEdit-obj_bctype_descr"  fgta5-component="Textbox" placeholder="descr" autocomplete="off" spellcheck="false" 
+			binding="bctype_descr"
+			data-tabindex="5" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="255" 
+		>
+	</div>
+
+
+	<!-- Combobox: approvaltype_id-->	
+	<div id="bctypeHeaderEdit-obj_approvaltype_id-container" class="input-field" field="bctypeHeaderEdit-obj_approvaltype_id">
+		<label for="bctypeHeaderEdit-obj_approvaltype_id">Approval</label>
+		<input id="bctypeHeaderEdit-obj_approvaltype_id"  fgta5-component="Combobox" placeholder="approval type" autocomplete="off" spellcheck="false" 
+			binding="approvaltype_id"
+			data-tabindex="6" 
+			required 
+			invalid-message-required="tipe approval harus diisi" 
+			data-display="approvaltype_name" 
+		>
+	</div>
+
+
+	<!-- Combobox: paymreqtype_id-->	
+	<div id="bctypeHeaderEdit-obj_paymreqtype_id-container" class="input-field" field="bctypeHeaderEdit-obj_paymreqtype_id">
+		<label for="bctypeHeaderEdit-obj_paymreqtype_id">Paymreq</label>
+		<input id="bctypeHeaderEdit-obj_paymreqtype_id"  fgta5-component="Combobox" placeholder="paymreq type" autocomplete="off" spellcheck="false" 
+			binding="paymreqtype_id"
+			data-tabindex="7" 
+			required 
+			invalid-message-required="tipe payment request harus diisi" 
+			data-display="paymreqtype_name" 
+		>
+	</div>
+
+
+	<!-- Combobox: agingtype_id-->	
+	<div id="bctypeHeaderEdit-obj_agingtype_id-container" class="input-field" field="bctypeHeaderEdit-obj_agingtype_id">
+		<label for="bctypeHeaderEdit-obj_agingtype_id">Agingtype</label>
+		<input id="bctypeHeaderEdit-obj_agingtype_id"  fgta5-component="Combobox" placeholder="agingtype" autocomplete="off" spellcheck="false" 
+			binding="agingtype_id"
+			data-tabindex="8" 
+			data-display="agingtype_name" 
+			disabled 
+		>
+	</div>
+	
+</form>
+
+
+<div id="bctypeHeaderEdit-footer">
+</div>
+
+<div id="bctypeHeaderEdit-panelaction" class="panel-action"></div>
+
+
+<div id="panel-detil-selector" class="panel-detil ">
+	<div panel-title>
+		Information Detil
+	</div>
+	<div panel-content>
+		<div class="panel-detil-row" id="bctypeHeaderEdit-info-coa-row">
+			<div data-label><a href="javascript:void(0)" data-target-section="bctypeCoaList" data-current-section="bctypeHeaderEdit">COA</a></div>
+			<div data-info>&nbsp</div>
+		</div>
+		<div class="panel-detil-row" id="bctypeHeaderEdit-info-itemclass-row">
+			<div data-label><a href="javascript:void(0)" data-target-section="bctypeItemclassList" data-current-section="bctypeHeaderEdit">ItemClass</a></div>
+			<div data-info>&nbsp</div>
+		</div>
+		<div class="panel-detil-row" id="bctypeHeaderEdit-info-dept-row">
+			<div data-label><a href="javascript:void(0)" data-target-section="bctypeDeptList" data-current-section="bctypeHeaderEdit">Departemen</a></div>
+			<div data-info>&nbsp</div>
+		</div>
+
+		<div id="panel-detil-additionalinfo">
+			<!-- tambahkan additional info disini -->
+		</div>
+	</div>
+</div>
+ 
+
+<div class="panel-recordbar" >
+	<div><a id="bctypeHeader-btn_recordstatus" href="javascript:void(0)" tabindex="-1">Record Status</a></div>
+	<div><a id="bctypeHeader-btn_logs" href="javascript:void(0)" tabindex="-1">Logs</a></div>
+	<div><a id="bctypeHeader-btn_about" href="javascript:void(0)" tabindex="-1">About</a></div>
+</div>
+
+
+<div class="footer-buttons-container hidden">
+	<div>
+		<button id="bctypeHeaderEdit-btn_prev"><span>&laquo;&laquo;</span></button>
+	</div>
+	<div>
+		<button id="bctypeHeaderEdit-btn_save">Save</button>
+		<button id="bctypeHeaderEdit-btn_edit">Edit</button>
+		<button id="bctypeHeaderEdit-btn_new" data-action="bctypeHeader-new">New</button>
+		<button id="bctypeHeaderEdit-btn_reset">Reset</button>
+		<button id="bctypeHeaderEdit-btn_delete">Delete</button>
+	</div>
+	<div>
+		<button id="bctypeHeaderEdit-btn_next"><span>&raquo;&raquo;</span></button>
+	</div>
+</div>

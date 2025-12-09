@@ -142,12 +142,16 @@
 		margin-top: 5px;
 	}
 
-	#jurnalHeaderEdit-obj_frgrate-container {
+
+	#jurnalHeaderEdit-obj_curr_rate-container {
 		grid-row: 11;
 		grid-column: 5 / span 2;
 	
 		margin-top: 5px;
 	}
+
+
+
 
 	#jurnalHeaderEdit-obj_jurnal_idr-container {
 		grid-row: 12;
@@ -182,8 +186,16 @@
 		z-index: -1;
 		margin-top: 5px;
 	}
+
+
+
 }
 
+
+#jurnalHeaderEdit-info-detil-row [data-label] {
+	display: flex;
+	column-gap: 10px;
+}
 
 
 .outstanding-button {

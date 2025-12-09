@@ -1,7 +1,5 @@
-#jurnalDetilList-tbl [data-name] { 
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+#jurnalDetilList-tbl td { 
+	vertical-align: top;
 }
 
 /* Mobile */
@@ -15,8 +13,18 @@
 
 	#jurnalDetilList-tbl [data-name="coa_name"] { width: 200px;} 
 	
-	#jurnalDetilList-tbl [data-name="jurnaldetil_value"] { width: 150px;} 
+	#jurnalDetilList-tbl [data-name="jurnaldetil_value"] { width: 120px; text-align: right; } 
 	#jurnalDetilList-tbl [data-name="curr_code"] { width: 100px; } 
-	#jurnalDetilList-tbl [data-name="jurnaldetil_idr"] { width: 150px;} 
+	#jurnalDetilList-tbl [data-name="jurnaldetil_idr"] { width: 120px; text-align: right; } 
 
 }
+
+
+#jurnalDetilList-tbl tfoot td { 
+	font-weight: bold; 
+	font-size: 1.2em;
+	padding-top: 5px;
+	border-top: 2px solid #666;
+}
+
+

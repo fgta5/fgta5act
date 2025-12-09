@@ -1,0 +1,73 @@
+<div id="bctypeDeptEdit-head">
+	<div id="bctypeDeptEdit-head-title" class="section-detil-title"></div>
+	<div id="bctypeDeptEdit-head-descr" class="section-detil-descr"></div>
+</div>
+
+<form id="bctypeDeptEdit-frm" class="module-form" locked="true" autoid="true" primarykey="bctypeDeptEdit-obj_bctypedept_id">
+
+	<!-- Textbox: bctypedept_id-->	
+	<div id="bctypeDeptEdit-obj_bctypedept_id-container" class="input-field hidden" field="bctypeDeptEdit-obj_bctypedept_id">
+		<label for="bctypeDeptEdit-obj_bctypedept_id">LineID</label>
+		<input id="bctypeDeptEdit-obj_bctypedept_id"  fgta5-component="Textbox" placeholder="bctypedept_id" autocomplete="off" spellcheck="false" 
+			binding="bctypedept_id"
+			data-tabindex="1" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+
+
+	<!-- Combobox: dept_id-->	
+	<div id="bctypeDeptEdit-obj_dept_id-container" class="input-field" field="bctypeDeptEdit-obj_dept_id">
+		<label for="bctypeDeptEdit-obj_dept_id">Dept</label>
+		<input id="bctypeDeptEdit-obj_dept_id"  fgta5-component="Combobox" placeholder="dept" autocomplete="off" spellcheck="false" 
+			binding="dept_id"
+			data-tabindex="2" 
+			required 
+			invalid-message-required="departemen harus diisi" 
+			data-display="dept_name" 
+		>
+	</div>
+
+
+	<!-- Textbox: bctype_id-->	
+	<div id="bctypeDeptEdit-obj_bctype_id-container" class="input-field hidden" field="bctypeDeptEdit-obj_bctype_id">
+		<label for="bctypeDeptEdit-obj_bctype_id">ID</label>
+		<input id="bctypeDeptEdit-obj_bctype_id"  fgta5-component="Textbox" placeholder="id" autocomplete="off" spellcheck="false" 
+			binding="bctype_id"
+			data-tabindex="3" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+			disabled 
+		>
+	</div>
+	
+
+
+	<div id="bctypeDeptEdit-footer"></div>
+
+</form>
+
+
+
+<div class="panel-recordbar" data-view="nodetil">
+	<div><a id="bctypeDept-btn_recordstatus" href="javascript:void(0)" tabindex="-1">Record Status</a></div>
+	<div><a id="bctypeDept-btn_logs" href="javascript:void(0)" tabindex="-1">Logs</a></div>
+</div>
+
+
+<div class="footer-buttons-container hidden">
+	<div>
+		<button id="bctypeDeptEdit-btn_prev"><span>&laquo;&laquo;</span></button>
+	</div>
+	<div>
+		<button id="bctypeDeptEdit-btn_save">Save</button>
+		<button id="bctypeDeptEdit-btn_edit">Edit</button>
+		<button id="bctypeDeptEdit-btn_new" data-action="bctypeDept-addrow">New</button>
+		<button id="bctypeDeptEdit-btn_reset">Reset</button>
+		<button id="bctypeDeptEdit-btn_delete">Delete</button>
+	</div>
+	<div>
+		<button id="bctypeDeptEdit-btn_next"><span>&raquo;&raquo;</span></button>
+	</div>
+</div>

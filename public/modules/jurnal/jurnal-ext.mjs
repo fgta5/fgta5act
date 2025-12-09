@@ -4,6 +4,21 @@ import * as ExtDetil from './jurnal-ext-detil.mjs'
 import outstandingDialog from './jurnal-outstandingdialog.mjs'
 
 
+const elDetilEditHead = document.getElementById('jurnalDetilEdit-head')
+
+
+
+const obj = {}
+
+const ICON_UNBALANCE = `<svg version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+<g stroke-width="2">
+<circle cx="16" cy="16" r="16" fill="#800000" style="font-variation-settings:'wght' 700"/>
+<path d="m13.665 3.3275h4.8618l-1.3399 12.672h-2.3735z" fill="#fff" style="font-variation-settings:'wght' 700"/>
+<circle cx="15.948" cy="23.52" r="3.5151" fill="#fff" style="font-variation-settings:'wght' 700"/>
+</g>
+</svg>`
+
+
 export const extenderHeader = ExtHeader;
 export const extenderDetil = ExtDetil;
 
@@ -11,6 +26,34 @@ export const extenderDetil = ExtDetil;
 
 export async function init(self, args) {
 	console.log('initializing jurnalExtender ...')
+	
+	const btnOutstandingPayable = document.createElement('button')
+	btnOutstandingPayable.id = 'jurnalDetilEdit-btn_payable'
+	btnOutstandingPayable.classList.add('outstanding-button')
+	btnOutstandingPayable.innerHTML = 'Payable'
+
+	const btnOutstandingReceivable = document.createElement('button')
+	btnOutstandingReceivable.id = 'jurnalDetilEdit-btn_receivable'
+	btnOutstandingReceivable.classList.add('outstanding-button')
+	btnOutstandingReceivable.innerHTML = 'Receivable'
+
+	args.btnOutstandingPayable = btnOutstandingPayable
+	args.btnOutstandingReceivable = btnOutstandingReceivable
+	elDetilEditHead.appendChild(btnOutstandingPayable)
+	elDetilEditHead.appendChild(btnOutstandingReceivable)
+
+
+	obj.btnPayable = new $fgta5.ActionButton('jurnalDetilEdit-btn_payable')
+	obj.btnReceivable = new $fgta5.ActionButton('jurnalDetilEdit-btn_receivable')
+
+
+	args.btnPayable = obj.btnPayable
+	args.btnReceivable = obj.btnReceivable
+	args.ICON_UNBALANCE = ICON_UNBALANCE
+
+	ExtHeader.init_header(self, args)
+	ExtDetil.init_detil(self, args)
+
 
 	Context.sourceName = 'non-modul'
 
@@ -48,20 +91,15 @@ export async function init(self, args) {
 
 	// tambahkan tombol untuk tarik outstanding AR/AP
 	const dlg = new outstandingDialog()
+	dlg.addEventListener('selected', async evt=>{
+		await ExtDetil.outstandingSelected(self, evt.detail.data, evt)
+		if (evt.detail.cancelSelect) {
+			return
+		}
+		dlg.close()
+	})
 	
-	
-	// const elDetilEditHead = document.getElementById('jurnalDetilEdit-head')
-	// const elDetilEditHead = document.getElementById('jurnalHeaderList-header') // sementara taruh di depan biar gampang diakses
-	const elDetilEditHead = document.getElementById('jurnalHeaderEdit-panelaction');	
-	
-	const btnOutstandingPayable = document.createElement('button')
-	const btnOutstandingReceivable = document.createElement('button')
-	elDetilEditHead.appendChild(btnOutstandingPayable)
-	elDetilEditHead.appendChild(btnOutstandingReceivable)
-
-	btnOutstandingPayable.classList.add('outstanding-button')
-	btnOutstandingPayable.innerHTML = 'Payable'
-	btnOutstandingPayable.addEventListener('click', (evt)=>{
+	obj.btnPayable.addEventListener('click', (evt)=>{
 		if (dlg==null) {
 			console.error('Template dialog-outstanding belum dibuat')
 			return
@@ -69,9 +107,8 @@ export async function init(self, args) {
 		dlg.show('AP')
 	})
 
-	btnOutstandingReceivable.classList.add('outstanding-button')
-	btnOutstandingReceivable.innerHTML = 'Receivable'
-	btnOutstandingReceivable.addEventListener('click', (evt)=>{
+
+	obj.btnReceivable.addEventListener('click', (evt)=>{
 		if (dlg==null) {
 			console.error('Template dialog-outstanding belum dibuat')
 			return

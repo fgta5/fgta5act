@@ -1,0 +1,86 @@
+<div id="bctypeCoaEdit-head">
+	<div id="bctypeCoaEdit-head-title" class="section-detil-title"></div>
+	<div id="bctypeCoaEdit-head-descr" class="section-detil-descr"></div>
+</div>
+
+<form id="bctypeCoaEdit-frm" class="module-form" locked="true" autoid="true" primarykey="bctypeCoaEdit-obj_bctypeitemclass">
+
+	<!-- Textbox: bctypecoa_id-->	
+	<div id="bctypeCoaEdit-obj_bctypeitemclass-container" class="input-field hidden" field="bctypeCoaEdit-obj_bctypeitemclass">
+		<label for="bctypeCoaEdit-obj_bctypeitemclass">LineID</label>
+		<input id="bctypeCoaEdit-obj_bctypeitemclass"  fgta5-component="Textbox" placeholder="lineID" autocomplete="off" spellcheck="false" 
+			binding="bctypecoa_id"
+			data-tabindex="1" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+		>
+	</div>
+
+
+	<!-- Combobox: curr_id-->	
+	<div id="bctypeCoaEdit-obj_curr_id-container" class="input-field" field="bctypeCoaEdit-obj_curr_id">
+		<label for="bctypeCoaEdit-obj_curr_id">Curr</label>
+		<input id="bctypeCoaEdit-obj_curr_id"  fgta5-component="Combobox" placeholder="curr" autocomplete="off" spellcheck="false" 
+			binding="curr_id"
+			data-tabindex="2" 
+			required 
+			invalid-message-required="currency harus diisi" 
+			data-display="curr_code" 
+		>
+	</div>
+
+
+	<!-- Combobox: coa_id-->	
+	<div id="bctypeCoaEdit-obj_coa_id-container" class="input-field" field="bctypeCoaEdit-obj_coa_id">
+		<label for="bctypeCoaEdit-obj_coa_id">COA</label>
+		<input id="bctypeCoaEdit-obj_coa_id"  fgta5-component="Combobox" placeholder="coa" autocomplete="off" spellcheck="false" 
+			binding="coa_id"
+			data-tabindex="3" 
+			required 
+			invalid-message-required="coa harus diisi" 
+			data-display="coa_name" 
+		>
+	</div>
+
+
+	<!-- Textbox: bctype_id-->	
+	<div id="bctypeCoaEdit-obj_bctype_id-container" class="input-field hidden" field="bctypeCoaEdit-obj_bctype_id">
+		<label for="bctypeCoaEdit-obj_bctype_id">ID</label>
+		<input id="bctypeCoaEdit-obj_bctype_id"  fgta5-component="Textbox" placeholder="id" autocomplete="off" spellcheck="false" 
+			binding="bctype_id"
+			data-tabindex="4" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+			disabled 
+		>
+	</div>
+	
+
+
+	<div id="bctypeCoaEdit-footer"></div>
+
+</form>
+
+
+
+<div class="panel-recordbar" data-view="nodetil">
+	<div><a id="bctypeCoa-btn_recordstatus" href="javascript:void(0)" tabindex="-1">Record Status</a></div>
+	<div><a id="bctypeCoa-btn_logs" href="javascript:void(0)" tabindex="-1">Logs</a></div>
+</div>
+
+
+<div class="footer-buttons-container hidden">
+	<div>
+		<button id="bctypeCoaEdit-btn_prev"><span>&laquo;&laquo;</span></button>
+	</div>
+	<div>
+		<button id="bctypeCoaEdit-btn_save">Save</button>
+		<button id="bctypeCoaEdit-btn_edit">Edit</button>
+		<button id="bctypeCoaEdit-btn_new" data-action="bctypeCoa-addrow">New</button>
+		<button id="bctypeCoaEdit-btn_reset">Reset</button>
+		<button id="bctypeCoaEdit-btn_delete">Delete</button>
+	</div>
+	<div>
+		<button id="bctypeCoaEdit-btn_next"><span>&raquo;&raquo;</span></button>
+	</div>
+</div>

@@ -23,7 +23,7 @@ export default class extends Api {
 
 export async function jurnalOutstanding_listAP(self, body) {
 	const req = self.req
-	const { partner_id, coa_id, curr_id, paymdate } = body
+	const { partner_id, coa_id, curr_id, paymdate, searchtext, jurnal_id } = body
 
 	try {
 		const sqlOutstanding = 'call act.outstanding_ap(${paymdate}, ${partner_id}, ${coa_id}, ${curr_id})'
@@ -34,10 +34,22 @@ export async function jurnalOutstanding_listAP(self, body) {
 			curr_id
 		})
 
-		const sql = 'select * from TEMP_RAW_AGING'
-		const rows = await db.any(sql)
 
-		return rows		
+		// exclude data yang sudah dipilih di jurnal_id
+		const sqlExclude = 'delete from TEMP_RAW_AGING where ref_jurnaldetil_id IN (select jurnaldetil_id_ref from act.jurnaldetil where jurnal_id=${jurnal_id})'
+		await db.any(sqlExclude, {jurnal_id})
+
+
+		// tampilkan data ke user
+		if (searchtext!='') {
+			const sql = "select * from TEMP_RAW_AGING where ref_jurnaldetil_descr ilike '%' || ${searchtext} || '%'"
+			const rows = await db.any(sql, {searchtext})
+			return rows		
+		} else {
+			const sql = 'select * from TEMP_RAW_AGING'
+			const rows = await db.any(sql)
+			return rows		
+		}
 	} catch (err) {
 		throw err
 	}
@@ -46,7 +58,7 @@ export async function jurnalOutstanding_listAP(self, body) {
 
 export async function jurnalOutstanding_listAR(self, body) {
 	const req = self.req
-	const { partner_id, coa_id, curr_id, paymdate } = body
+	const { partner_id, coa_id, curr_id, paymdate, searchtext } = body
 
 	try {
 		const sqlOutstanding = 'call act.outstanding_ar(${paymdate}, ${partner_id}, ${coa_id}, ${curr_id})'
@@ -57,10 +69,15 @@ export async function jurnalOutstanding_listAR(self, body) {
 			curr_id
 		})
 
-		const sql = 'select * from TEMP_RAW_AGING'
-		const rows = await db.any(sql)
-
-		return rows		
+		if (searchtext!='') {
+			const sql = "select * from TEMP_RAW_AGING where ref_jurnaldetil_descr ilike '%' || ${searchtext} || '%'"
+			const rows = await db.any(sql, {searchtext})
+			return rows		
+		} else {
+			const sql = 'select * from TEMP_RAW_AGING'
+			const rows = await db.any(sql)
+			return rows		
+		}	
 
 	} catch (err) {
 		throw err

@@ -1,0 +1,84 @@
+<section id="bctypeHeaderList-section" class="fgta5-carousell" data-title="Bussiness Case Type">
+<%- include(`${moduleDir}/bctypeHeaderList.html`) %>
+</section>
+
+<section id="bctypeHeaderEdit-section" class="fgta5-carousell" data-title="Edit Bussiness Case Type">
+<%- include(`${moduleDir}/bctypeHeaderEdit.html`) %>
+</section>
+
+<section id="bctypeCoaList-section" class="fgta5-carousell" data-title="List COA">
+<%- include(`${moduleDir}/bctypeCoaList.html`) %>
+</section>
+
+<section id="bctypeCoaEdit-section" class="fgta5-carousell" data-title="Edit COA">
+<%- include(`${moduleDir}/bctypeCoaEdit.html`) %>
+</section>
+
+<section id="bctypeItemclassList-section" class="fgta5-carousell" data-title="List ItemClass">
+<%- include(`${moduleDir}/bctypeItemclassList.html`) %>
+</section>
+
+<section id="bctypeItemclassEdit-section" class="fgta5-carousell" data-title="Edit ItemClass">
+<%- include(`${moduleDir}/bctypeItemclassEdit.html`) %>
+</section>
+
+<section id="bctypeDeptList-section" class="fgta5-carousell" data-title="List Departemen">
+<%- include(`${moduleDir}/bctypeDeptList.html`) %>
+</section>
+
+<section id="bctypeDeptEdit-section" class="fgta5-carousell" data-title="Edit Departemen">
+<%- include(`${moduleDir}/bctypeDeptEdit.html`) %>
+</section>
+
+
+
+<section id="fRecord-section" class="fgta5-carousell" data-title="Record Status">
+
+	<div name="panel">
+		<div name="row">
+			<span name="caption">Id</span>
+			<span name="value" id="fRecord-section-id">-</span>
+		</div>
+	</div>	
+
+
+	<div name="panel">
+		<!-- LEFT: Standard Info -->
+		<div name="column">
+			<div name="row">
+				<span name="caption">Create By</span>
+				<span name="value" id="fRecord-section-createby">-</span>
+			</div>
+			<div name="row">
+				<span name="caption">Create Date</span>
+				<span name="value" id="fRecord-section-createdate">-</span>
+			</div>
+			<div name="row">
+				<span name="caption">Modify By</span>
+				<span name="value" id="fRecord-section-modifyby">-</span>
+			</div>
+			<div name="row">
+				<span name="caption">Modify Date</span>
+				<span name="value"id="fRecord-section-modifydate">-</span>
+			</div>
+
+		</div>
+
+
+		<!-- RIGHT: Extended Info -->
+		<div name="column" exteder>
+		<%- include(`${moduleDir}/bctype-ext-record.html`) %>	
+		</div> 
+
+	</div>	
+</section>
+
+<section id="fLogs-section" class="fgta5-carousell" data-title="Logs">
+<%- include(`${moduleDir}/bctype-logs.html`) %>	
+</section>
+
+<section id="fAbout-section" class="fgta5-carousell" data-title="About">
+<%- include(`${moduleDir}/bctype-ext-about.html`) %>	
+</section>
+
+

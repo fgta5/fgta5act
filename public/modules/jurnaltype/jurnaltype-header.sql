@@ -447,6 +447,36 @@ comment on column act."jurnaltype".isdetilallowselectproject is '';
 
 
 -- =============================================
+-- FIELD: isdetilallowgetap boolean
+-- =============================================
+-- ADD isdetilallowgetap
+alter table act."jurnaltype" add isdetilallowgetap boolean not null default false;
+comment on column act."jurnaltype".isdetilallowgetap is '';
+
+-- MODIFY isdetilallowgetap
+alter table act."jurnaltype"
+	alter column isdetilallowgetap type boolean,
+	ALTER COLUMN isdetilallowgetap SET DEFAULT false,
+	ALTER COLUMN isdetilallowgetap SET NOT NULL;
+comment on column act."jurnaltype".isdetilallowgetap is '';
+
+
+-- =============================================
+-- FIELD: isdetilallowgetar boolean
+-- =============================================
+-- ADD isdetilallowgetar
+alter table act."jurnaltype" add isdetilallowgetar boolean not null default false;
+comment on column act."jurnaltype".isdetilallowgetar is '';
+
+-- MODIFY isdetilallowgetar
+alter table act."jurnaltype"
+	alter column isdetilallowgetar type boolean,
+	ALTER COLUMN isdetilallowgetar SET DEFAULT false,
+	ALTER COLUMN isdetilallowgetar SET NOT NULL;
+comment on column act."jurnaltype".isdetilallowgetar is '';
+
+
+-- =============================================
 -- FIELD: _createby integer
 -- =============================================
 -- ADD _createby

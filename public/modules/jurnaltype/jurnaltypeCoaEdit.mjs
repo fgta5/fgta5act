@@ -69,6 +69,12 @@ export async function init(self, args) {
 
 	CurrentState.headerFormLocked = true 
 	CurrentState.editDisabled = false
+
+	CurrentState.Actions = {
+		newdata: btn_new,
+		edit: btn_edit,
+	}
+
 	CurrentState.getHeaderForm = () => {
 		const jurnaltypeHeaderEdit = self.Modules.jurnaltypeHeaderEdit
 		const frmHeader = jurnaltypeHeaderEdit.getHeaderForm()
@@ -173,17 +179,22 @@ export async function openSelectedData(self, params) {
 		// disable primary key
 		setPrimaryKeyState(self, {disabled:true})
 
+		// isi form dengan data
 		frm.setData(data)
-		frm.acceptChanges()
-		frm.lock()
-
-
+	
+		// jika ada kebutuhan untuk oleh lagi form dan data, bisa lakukan di extender
 		// export function jurnaltypeCoaEdit_formOpened(self, frm, CurrentState) {}
 		const fn_formopened_name = 'jurnaltypeCoaEdit_formOpened'
 		const fn_formopened = Extender[fn_formopened_name]
 		if (typeof fn_formopened === 'function') {
 			fn_formopened(self, frm, CurrentState)
 		}
+
+
+		// finally, accept changes dan lock form
+		frm.acceptChanges()
+		frm.lock()
+
 	} catch (err) {
 		CurrentState.currentOpenedId = null
 		throw err
@@ -205,12 +216,28 @@ export function headerLocked(self) {
 	CurrentState.headerFormLocked = true
 	CurrentState.editDisabled = true
 	btn_new.disabled = true
+
+	// Extender untuk event Locked
+	// export function jurnaltypeCoaEdit_formLocked(self, frm, CurrentState) {}
+	const fn_name = 'jurnaltypeCoaEdit_formLocked'
+	const fn = Extender[fn_name]
+	if (typeof fn === 'function') {
+		fn(self, frm, CurrentState)
+	}	
 }
 
 export function headerUnlocked(self) {
 	CurrentState.headerFormLocked = false
 	CurrentState.editDisabled = false
 	btn_new.disabled = false
+
+	// Extender untuk event Unlocked
+	// export function jurnaltypeCoaEdit_formUnlocked(self, frm, CurrentState) {}
+	const fn_name = 'jurnaltypeCoaEdit_formUnlocked'
+	const fn = Extender[fn_name]
+	if (typeof fn === 'function') {
+		fn(self, frm, CurrentState)
+	}	
 }
 
 export function disableNextButton(self, disabled=true) {

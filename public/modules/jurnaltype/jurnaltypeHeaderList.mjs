@@ -42,7 +42,7 @@ export async function init(self, args) {
 
 	try {
 		// extract custom search panel from template
-		const tplSearchPanel = document.querySelector('template[name="custom-search-panel"]')
+		const tplSearchPanel = document.getElementById('tpl-custom-search-panel')
 		if (tplSearchPanel!=null) {
 			const clone = tplSearchPanel.content.cloneNode(true); // salin isi template
 			pnl_search.prepend(clone)
@@ -210,17 +210,18 @@ async function openRow(self, tr) {
 		CurrentState.SelectedRow.keyValue = keyvalue
 		CurrentState.SelectedRow.key = key
 		await jurnaltypeHeaderEdit.openSelectedData(self, {key:key, keyvalue:keyvalue})
-	} catch (err) {
-		console.error(err)
-		await $fgta5.MessageBox.error(err.message)
 
+		// matikan atau nyalakan button prev/next sesuai kondisi
+		setPagingButton(self, jurnaltypeHeaderEdit)
+
+	} catch (err) {
 		setCurrentRow(self, null)
 		CurrentSection.show() // kembalikan ke list kalau error saat buka data
+
+		console.error(err)
+		await $fgta5.MessageBox.error(err.message)
 	}
-
-
-	// matikan atau nyalakan button prev/next sesuai kondisi
-	setPagingButton(self, jurnaltypeHeaderEdit)
+	
 }
 
 async function listRows(self, criteria, offset, limit, sort) {

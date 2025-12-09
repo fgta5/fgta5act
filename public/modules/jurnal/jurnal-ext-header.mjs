@@ -4,6 +4,16 @@ const elPostby = document.getElementById('fRecord-section-postby')
 const elPostdate = document.getElementById('fRecord-section-postdate')
 
 
+
+const obj = {}
+
+export function init_header(self, args)  {
+	obj.btnPayable = args.btnPayable
+	obj.btnReceivable = args.btnReceivable
+	obj.ICON_UNBALANCE = args.ICON_UNBALANCE
+}
+
+
 export function headerList_initSearchParams(self, SearchParams) {
 	
 	// periode
@@ -178,7 +188,7 @@ async function jurnalPost(self, frm, buttons, isposting, jurnal_id, jurnal_doc) 
 
 
 function recalculateCurrency(self, frm) {
-	const rate = frm.Inputs['jurnalHeaderEdit-obj_frgrate'].value
+	const rate = frm.Inputs['jurnalHeaderEdit-obj_curr_rate'].value
 	const value = frm.Inputs['jurnalHeaderEdit-obj_jurnal_value'].value
 	const idr = value * rate
 	
@@ -238,7 +248,7 @@ export function obj_curr_id_selecting_criteria(self, obj_curr_id, frm, criteria,
 export async function obj_curr_id_selected(self, obj_curr_id, frm, evt) {
 	const { data } = evt.detail
 
-	frm.Inputs['jurnalHeaderEdit-obj_frgrate'].value = data.curr_rate
+	frm.Inputs['jurnalHeaderEdit-obj_curr_rate'].value = data.curr_rate
 
 	recalculateCurrency(self, frm)
 }
@@ -248,7 +258,7 @@ export async function obj_jurnal_value_changed(self, obj_jurnal_value, frm, evt)
 	recalculateCurrency(self, frm)
 }
 
-export async function obj_frgrate_changed(self, obj_frgrate, frm, evt) {
+export async function obj_curr_rate_changed(self, obj_curr_rate, frm, evt) {
 	console.log('rate changed')
 	recalculateCurrency(self, frm)
 }
@@ -338,7 +348,7 @@ function jurnaltype_changed(jurnaltype, frm) {
 	setVisibility('jurnalHeaderEdit-obj_site_id-container', jurnaltype.isheadhassite)
 	setVisibility('jurnalHeaderEdit-obj_unit_id-container', jurnaltype.isheadhasunit)
 	setVisibility('jurnalHeaderEdit-obj_jurnal_idr-container', jurnaltype.isheadhasvalue)
-	setVisibility('jurnalHeaderEdit-obj_frgrate-container', jurnaltype.isheadhasvalue)
+	setVisibility('jurnalHeaderEdit-obj_curr_rate-container', jurnaltype.isheadhasvalue)
 	setVisibility('jurnalHeaderEdit-obj_jurnal_value-container', jurnaltype.isheadhasvalue)
 	setVisibility('jurnalHeaderEdit-obj_curr_id-container', jurnaltype.isheadhasvalue)
 	setVisibility('jurnalHeaderEdit-obj_jurnal_datedue-container', jurnaltype.isheadhasduedate)
@@ -356,6 +366,9 @@ function jurnaltype_changed(jurnaltype, frm) {
 	frm.Inputs['jurnalHeaderEdit-obj_coa_id'].markAsRequired(jurnaltype.isheadhascoa)
 	frm.Inputs['jurnalHeaderEdit-obj_paymtype_id'].markAsRequired(jurnaltype.isheadhaspaymtype)
 	frm.Inputs['jurnalHeaderEdit-obj_curr_id'].markAsRequired(jurnaltype.isheadhasvalue)
+
+	obj.btnPayable.hide(!jurnaltype.isdetilallowgetap)
+	obj.btnReceivable.hide(!jurnaltype.isdetilallowgetar)
 }
 
 
@@ -400,6 +413,8 @@ export async function obj_jurnaltype_id_selected(self, obj_jurnaltype_id, frm, e
 
 	frm.Inputs['jurnalHeaderEdit-obj_curr_id'].clear()
 	frm.Inputs['jurnalHeaderEdit-obj_curr_id'].setSelected(null, '')
+
+
 
 
 	const CurrentState = evt.detail.CurrentState
@@ -469,7 +484,14 @@ export async function obj_partner_id_selected(self, obj_partner_id, frm, evt) {
 export async function jurnalHeaderEdit_formOpened(self, frm, CurrentState) {
 	frm.Inputs['jurnalHeaderEdit-obj_jurnaltype_id'].disabled = true
 	
-	const {jurnaltype, paymtype, periode_isclosed, ispost, jurnal_source, _postby, _postdate, isallowposting, isallowunposting} = frm.getOriginalData()
+	const {
+		jurnaltype, paymtype, periode_isclosed, ispost, jurnal_source, 
+		_postby, _postdate, 
+		isallowposting, isallowunposting, 
+		total_value, total_idr
+	} = frm.getOriginalData()
+
+
 	jurnaltype_changed(jurnaltype, frm)
 	paymtype_changed(paymtype, frm)
 
@@ -501,6 +523,10 @@ export async function jurnalHeaderEdit_formOpened(self, frm, CurrentState) {
 	CurrentState.Actions.unpost.hide(!isallowunposting)
 
 
+	// total value dan idr
+	updateTotalIdr(total_idr)
+
+
 	// set record info
 	elPostby.innerHTML = _postby
 	elPostdate.innerHTML = _postdate
@@ -509,6 +535,9 @@ export async function jurnalHeaderEdit_formOpened(self, frm, CurrentState) {
 
 export async function jurnalHeaderEdit_dataSaved(self, data, frm) {
 	frm.Inputs['jurnalHeaderEdit-obj_jurnaltype_id'].disabled = true
+
+	// total value dan idr
+	updateTotalIdr(data.total_idr)
 }
 
 export async function jurnalHeaderEdit_newData(self, datainit, frm) {
@@ -517,7 +546,26 @@ export async function jurnalHeaderEdit_newData(self, datainit, frm) {
 	frm.Inputs['jurnalHeaderEdit-obj_jurnaltype_id'].disabled = false
 	jurnaltype_changed(null, frm)
 	paymtype_changed(null, frm)
+
+		// total value dan idr
+	updateTotalIdr(0)
+
 }
 
 
+function updateTotalIdr(value) {
+	const total = formatNumber(value)
+
+	const infoDetilRow = document.getElementById('jurnalHeaderEdit-info-detil-row')
+	const totalIdrDiv = infoDetilRow.querySelector('[data-info]')
+	totalIdrDiv.innerHTML = total
+
+	const tblDetil = document.getElementById('jurnalDetilList-tbl')
+	const totalIdrCell = tblDetil.querySelector('tfoot [data-name="jurnaldetil_idr"]')
+	totalIdrCell.innerHTML = total
+
+	const txtBalance =  document.getElementById('jurnalDetilEdit-balance_idr')
+	txtBalance.innerHTML = total
+
+}
 

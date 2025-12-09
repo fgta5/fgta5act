@@ -43,7 +43,7 @@ export async function init(self, args) {
 
 	{
 		const target = document.getElementById('jurnaltypeHeaderEdit-frm') 
-		const tpl = document.querySelector('template[name="header-form-label"]')
+		const tpl = document.getElementById('tpl-header-form-label')
 		if (tpl!=null) {
 			const clone = tpl.content.cloneNode(true); // salin isi template
 			target.prepend(clone)
