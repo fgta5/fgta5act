@@ -106,6 +106,10 @@ comment on column act."paymreqterm"._modifydate is 'waktu terakhir record dimodi
 -- =============================================
 -- FOREIGN KEY CONSTRAINT
 -- =============================================
+-- Drop Existing Foreign Key Constraint 
+ALTER TABLE act."paymreqterm" DROP CONSTRAINT fk$act$paymreqterm$paymreq_id;
+
+
 -- Add Foreign Key Constraint  
 ALTER TABLE act."paymreqterm"
 	ADD CONSTRAINT fk$act$paymreqterm$paymreq_id

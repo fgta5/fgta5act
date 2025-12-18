@@ -13,10 +13,10 @@ export default class extends Api {
 		Api.cekLogin(req)
 	}
 
-	async list(body) { return await coa_list(this, body) }
+	async listByJurnaltype(body) { return await coa_listByJurnaltype(this, body) }
 }
 
-export async function coa_list(self, body) {
+export async function coa_listByJurnaltype(self, body) {
 	const tablename = 'act.coa A inner join act.jurnaltypecoa B on B.coa_id = A.coa_id'
 	const columns = ['A.*', 'B.jurnaltypecoa_isdr as isdebet',  'B.jurnaltypecoa_iscr as iskredit']
 	const { criteria={}, limit=0, offset=0, sort={} } = body

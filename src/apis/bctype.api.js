@@ -166,10 +166,15 @@ async function bctype_headerList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
-			// lookup: approvaltype_name dari field approvaltype_name pada table core.approvaltype dimana (core.approvaltype.approvaltype_id = act.bctype.approvaltype_id)
+			// lookup: bccycle_name dari field bccycle_name pada table act.bccycle dimana (act.bccycle.bccycle_id = act.bctype.bccycle_id)
 			{
-				const { approvaltype_name } = await sqlUtil.lookupdb(db, 'core.approvaltype', 'approvaltype_id', row.approvaltype_id)
-				row.approvaltype_name = approvaltype_name
+				const { bccycle_name } = await sqlUtil.lookupdb(db, 'act.bccycle', 'bccycle_id', row.bccycle_id)
+				row.bccycle_name = bccycle_name
+			}
+			// lookup: approvalmodel_name dari field approvalmodel_name pada table ent.approvalmodel dimana (ent.approvalmodel.approvalmodel_id = act.bctype.approvalmodel_id)
+			{
+				const { approvalmodel_name } = await sqlUtil.lookupdb(db, 'ent.approvalmodel', 'approvalmodel_id', row.approvalmodel_id)
+				row.approvalmodel_name = approvalmodel_name
 			}
 			// lookup: paymreqtype_name dari field paymreqtype_name pada table act.paymreqtype dimana (act.paymreqtype.paymreqtype_id = act.bctype.paymreqtype_id)
 			{
@@ -230,10 +235,15 @@ async function bctype_headerOpen(self, body) {
 			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
 		}	
 
-		// lookup: approvaltype_name dari field approvaltype_name pada table core.approvaltype dimana (core.approvaltype.approvaltype_id = act.bctype.approvaltype_id)
+		// lookup: bccycle_name dari field bccycle_name pada table act.bccycle dimana (act.bccycle.bccycle_id = act.bctype.bccycle_id)
 		{
-			const { approvaltype_name } = await sqlUtil.lookupdb(db, 'core.approvaltype', 'approvaltype_id', data.approvaltype_id)
-			data.approvaltype_name = approvaltype_name
+			const { bccycle_name } = await sqlUtil.lookupdb(db, 'act.bccycle', 'bccycle_id', data.bccycle_id)
+			data.bccycle_name = bccycle_name
+		}
+		// lookup: approvalmodel_name dari field approvalmodel_name pada table ent.approvalmodel dimana (ent.approvalmodel.approvalmodel_id = act.bctype.approvalmodel_id)
+		{
+			const { approvalmodel_name } = await sqlUtil.lookupdb(db, 'ent.approvalmodel', 'approvalmodel_id', data.approvalmodel_id)
+			data.approvalmodel_name = approvalmodel_name
 		}
 		// lookup: paymreqtype_name dari field paymreqtype_name pada table act.paymreqtype dimana (act.paymreqtype.paymreqtype_id = act.bctype.paymreqtype_id)
 		{
@@ -293,7 +303,7 @@ async function bctype_headerCreate(self, body) {
 			sqlUtil.connect(tx)
 
 
-			const args = { section: 'header' }
+			const args = { section: 'header', prefix:'' }
 
 			
 			// buat short sequencer	
@@ -569,6 +579,11 @@ async function bctype_coaList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
+			// lookup: bccoaclass_name dari field bccoaclass_name pada table act.bccoaclass dimana (act.bccoaclass.bccoaclass_id = act.bctype.bccoaclass_id)
+			{
+				const { bccoaclass_name } = await sqlUtil.lookupdb(db, 'act.bccoaclass', 'bccoaclass_id', row.bccoaclass_id)
+				row.bccoaclass_name = bccoaclass_name
+			}
 			// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.bctype.curr_id)
 			{
 				const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', row.curr_id)
@@ -630,6 +645,11 @@ async function bctype_coaOpen(self, body) {
 		}	
 
 
+		// lookup: bccoaclass_name dari field bccoaclass_name pada table act.bccoaclass dimana (act.bccoaclass.bccoaclass_id = act.bctype.bccoaclass_id)
+		{
+			const { bccoaclass_name } = await sqlUtil.lookupdb(db, 'act.bccoaclass', 'bccoaclass_id', data.bccoaclass_id)
+			data.bccoaclass_name = bccoaclass_name
+		}
 		// lookup: curr_code dari field curr_code pada table ent.curr dimana (ent.curr.curr_id = act.bctype.curr_id)
 		{
 			const { curr_code } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', data.curr_id)

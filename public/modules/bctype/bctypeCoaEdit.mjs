@@ -31,7 +31,8 @@ const btn_recordstatus = document.getElementById('bctypeCoa-btn_recordstatus')
 const btn_logs = document.getElementById('bctypeCoa-btn_logs')
 
 const frm = new $fgta5.Form('bctypeCoaEdit-frm');
-const obj_bctypeitemclass = frm.Inputs['bctypeCoaEdit-obj_bctypeitemclass']
+const obj_bctypecoa_id = frm.Inputs['bctypeCoaEdit-obj_bctypecoa_id']
+const obj_bccoaclass_id = frm.Inputs['bctypeCoaEdit-obj_bccoaclass_id']
 const obj_curr_id = frm.Inputs['bctypeCoaEdit-obj_curr_id']
 const obj_coa_id = frm.Inputs['bctypeCoaEdit-obj_coa_id']
 const obj_bctype_id = frm.Inputs['bctypeCoaEdit-obj_bctype_id']	
@@ -81,6 +82,60 @@ export async function init(self, args) {
 	}
 
 
+	
+	// Combobox: obj_bccoaclass_id
+	obj_bccoaclass_id.addEventListener('selecting', async (evt)=>{
+		const fn_selecting_name = 'obj_bccoaclass_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_bccoaclass_id_selecting(self, obj_bccoaclass_id, frm, evt) {}
+			fn_selecting(self, obj_bccoaclass_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'bccoaclass/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			evt.detail.CurrentState = CurrentState
+			
+			// buat function di extender:
+			// export function obj_bccoaclass_id_selecting_criteria(self, obj_bccoaclass_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_bccoaclass_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_bccoaclass_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.bccoaclass_id, row.bccoaclass_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
 	
 	// Combobox: obj_curr_id
 	obj_curr_id.addEventListener('selecting', async (evt)=>{
@@ -198,6 +253,7 @@ export async function openSelectedData(self, params) {
 
 	let mask = $fgta5.Modal.createMask()
 	try {
+		obj_bccoaclass_id.clear()
 		obj_curr_id.clear()
 		obj_coa_id.clear()
 		

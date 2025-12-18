@@ -1,0 +1,215 @@
+<form id="bcHeaderEdit-frm" class="module-form" locked="true" autoid="true" primarykey="bcHeaderEdit-obj_bc_id">
+
+	<!-- Textbox: bc_id-->	
+	<div id="bcHeaderEdit-obj_bc_id-container" class="input-field hidden" field="bcHeaderEdit-obj_bc_id">
+		<label for="bcHeaderEdit-obj_bc_id">ID</label>
+		<input id="bcHeaderEdit-obj_bc_id"  fgta5-component="Textbox" placeholder="id" autocomplete="off" spellcheck="false" 
+			binding="bc_id"
+			data-tabindex="1" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Textbox: bc_doc-->	
+	<div id="bcHeaderEdit-obj_bc_doc-container" class="input-field" field="bcHeaderEdit-obj_bc_doc">
+		<label for="bcHeaderEdit-obj_bc_doc">Doc</label>
+		<input id="bcHeaderEdit-obj_bc_doc"  fgta5-component="Textbox" placeholder="doc" autocomplete="off" spellcheck="false" 
+			binding="bc_doc"
+			data-tabindex="2" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Checkbox: isapproved-->	
+	<div id="bcHeaderEdit-obj_isapproved-container" class="input-field" field="bcHeaderEdit-obj_isapproved">
+		<label for="bcHeaderEdit-obj_isapproved">Approved</label>
+		<input id="bcHeaderEdit-obj_isapproved"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
+			binding="isapproved"
+			data-tabindex="3" 
+			type="checkbox" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Datepicker: bc_date-->	
+	<div id="bcHeaderEdit-obj_bc_date-container" class="input-field" field="bcHeaderEdit-obj_bc_date">
+		<label for="bcHeaderEdit-obj_bc_date">Date</label>
+		<input id="bcHeaderEdit-obj_bc_date"  fgta5-component="Datepicker" placeholder="date" autocomplete="off" spellcheck="false" 
+			binding="bc_date"
+			data-tabindex="4" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Combobox: dept_id-->	
+	<div id="bcHeaderEdit-obj_dept_id-container" class="input-field" field="bcHeaderEdit-obj_dept_id">
+		<label for="bcHeaderEdit-obj_dept_id">Dept</label>
+		<input id="bcHeaderEdit-obj_dept_id"  fgta5-component="Combobox" placeholder="dept" autocomplete="off" spellcheck="false" 
+			binding="dept_id"
+			data-tabindex="5" 
+			required 
+			invalid-message-required="departemen harus diisi" 
+			data-display="dept_name" 
+		>
+	</div>
+
+
+	<!-- Combobox: bctype_id-->	
+	<div id="bcHeaderEdit-obj_bctype_id-container" class="input-field" field="bcHeaderEdit-obj_bctype_id">
+		<label for="bcHeaderEdit-obj_bctype_id">Type</label>
+		<input id="bcHeaderEdit-obj_bctype_id"  fgta5-component="Combobox" placeholder="type" autocomplete="off" spellcheck="false" 
+			binding="bctype_id"
+			data-tabindex="6" 
+			required 
+			invalid-message-required="type bussiness case harus diisi" 
+			data-display="bctype_name" 
+		>
+	</div>
+
+
+	<!-- Textbox: bc_title-->	
+	<div id="bcHeaderEdit-obj_bc_title-container" class="input-field" field="bcHeaderEdit-obj_bc_title">
+		<label for="bcHeaderEdit-obj_bc_title">Title</label>
+		<input id="bcHeaderEdit-obj_bc_title"  fgta5-component="Textbox" placeholder="title" autocomplete="off" spellcheck="false" 
+			binding="bc_title"
+			data-tabindex="7" 
+			required 
+			invalid-message-required="nama/judul bussiness case harus diisi" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="90" 
+		>
+	</div>
+
+
+	<!-- Textbox: bc_descr-->	
+	<div id="bcHeaderEdit-obj_bc_descr-container" class="input-field" field="bcHeaderEdit-obj_bc_descr">
+		<label for="bcHeaderEdit-obj_bc_descr">Descr</label>
+		<input id="bcHeaderEdit-obj_bc_descr"  fgta5-component="Textbox" placeholder="descr" autocomplete="off" spellcheck="false" 
+			binding="bc_descr"
+			data-tabindex="8" 
+			style="height: 200px" 
+			required 
+			invalid-message-required="deskripsi bussiness case harus diisi" 
+			multiline 
+			autocomplete="off" spellcheck="false" 
+			maxlength="500" 
+		>
+	</div>
+
+
+	<!-- Combobox: curr_id-->	
+	<div id="bcHeaderEdit-obj_curr_id-container" class="input-field" field="bcHeaderEdit-obj_curr_id">
+		<label for="bcHeaderEdit-obj_curr_id">Curr</label>
+		<input id="bcHeaderEdit-obj_curr_id"  fgta5-component="Combobox" placeholder="curr" autocomplete="off" spellcheck="false" 
+			binding="curr_id"
+			data-tabindex="9" 
+			data-display="curr_code" 
+		>
+	</div>
+
+
+	<!-- Combobox: coa_id-->	
+	<div id="bcHeaderEdit-obj_coa_id-container" class="input-field" field="bcHeaderEdit-obj_coa_id">
+		<label for="bcHeaderEdit-obj_coa_id">COA</label>
+		<input id="bcHeaderEdit-obj_coa_id"  fgta5-component="Combobox" placeholder="coa" autocomplete="off" spellcheck="false" 
+			binding="coa_id"
+			data-tabindex="10" 
+			data-display="coa_name" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Numberbox: bc_value-->	
+	<div id="bcHeaderEdit-obj_bc_value-container" class="input-field" field="bcHeaderEdit-obj_bc_value">
+		<label for="bcHeaderEdit-obj_bc_value">Value</label>
+		<input id="bcHeaderEdit-obj_bc_value"  fgta5-component="Numberbox" placeholder="value" autocomplete="off" spellcheck="false" 
+			binding="bc_value"
+			value="0" 
+			data-tabindex="11" 
+			maxlength="9" 
+			min="0" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Textbox: paymreqtype_id-->	
+	<div id="bcHeaderEdit-obj_paymreqtype_id-container" class="input-field hidden" field="bcHeaderEdit-obj_paymreqtype_id">
+		<label for="bcHeaderEdit-obj_paymreqtype_id">PaymReq Type</label>
+		<input id="bcHeaderEdit-obj_paymreqtype_id"  fgta5-component="Textbox" placeholder="paymreqtype_id" autocomplete="off" spellcheck="false" 
+			binding="paymreqtype_id"
+			data-tabindex="12" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Textbox: approvalmodel_id-->	
+	<div id="bcHeaderEdit-obj_approvalmodel_id-container" class="input-field hidden" field="bcHeaderEdit-obj_approvalmodel_id">
+		<label for="bcHeaderEdit-obj_approvalmodel_id">Appr Model</label>
+		<input id="bcHeaderEdit-obj_approvalmodel_id"  fgta5-component="Textbox" placeholder="approval" autocomplete="off" spellcheck="false" 
+			binding="approvalmodel_id"
+			data-tabindex="13" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
+			disabled 
+		>
+	</div>
+	
+</form>
+
+
+<div id="bcHeaderEdit-footer">
+</div>
+
+<div id="bcHeaderEdit-panelaction" class="panel-action">
+	<button id="bcHeaderEdit-btn_actionCommit">Commit</button>
+</div>
+
+
+<div id="panel-detil-selector" class="panel-detil hidden">
+	<div panel-title>
+		Information Detil
+	</div>
+	<div panel-content>
+
+		<div id="panel-detil-additionalinfo">
+			<!-- tambahkan additional info disini -->
+		</div>
+	</div>
+</div>
+ 
+
+<div class="panel-recordbar" data-view="nodetil">
+	<div><a id="bcHeader-btn_recordstatus" href="javascript:void(0)" tabindex="-1">Record Status</a></div>
+	<div><a id="bcHeader-btn_logs" href="javascript:void(0)" tabindex="-1">Logs</a></div>
+	<div><a id="bcHeader-btn_about" href="javascript:void(0)" tabindex="-1">About</a></div>
+</div>
+
+
+<div class="footer-buttons-container hidden">
+	<div>
+		<button id="bcHeaderEdit-btn_prev"><span>&laquo;&laquo;</span></button>
+	</div>
+	<div>
+		<button id="bcHeaderEdit-btn_save">Save</button>
+		<button id="bcHeaderEdit-btn_edit">Edit</button>
+		<button id="bcHeaderEdit-btn_new" data-action="bcHeader-new">New</button>
+		<button id="bcHeaderEdit-btn_reset">Reset</button>
+		<button id="bcHeaderEdit-btn_delete">Delete</button>
+	</div>
+	<div>
+		<button id="bcHeaderEdit-btn_next"><span>&raquo;&raquo;</span></button>
+	</div>
+</div>

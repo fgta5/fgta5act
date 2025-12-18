@@ -17,33 +17,48 @@
 		grid-column: 3 / span 2;
 	}
 
+
+
+	#bctypeHeaderEdit-obj_bccycle_id-container {
+		grid-row: 2;
+		grid-column: 1 / span 2;
+	}
+
 	#bctypeHeaderEdit-obj_isalldept-container {
-		grid-row: 1;
+		grid-row: 2;
+		grid-column: 3 / span 2;
+	}	
+
+
+
+	#bctypeHeaderEdit-obj_bctype_name-container {
+		grid-row: 3;
+		grid-column: 1 / span 4;
+	}
+
+	#bctypeHeaderEdit-obj_bctype_code-container {
+		grid-row: 3;
 		grid-column: 5 / span 2;
 	}
 
-	#bctypeHeaderEdit-obj_bctype_name-container {
-		grid-row: 2;
-		grid-column: 1 / span 5;
-	}
 
 	#bctypeHeaderEdit-obj_bctype_descr-container {
-		grid-row: 3;
+		grid-row: 4;
 		grid-column: 1 / span 6;
 	}
 
-	#bctypeHeaderEdit-obj_approvaltype_id-container {
-		grid-row: 4;
+	#bctypeHeaderEdit-obj_approvalmodel_id-container {
+		grid-row: 5;
 		grid-column: 1 / span 4;
 	}
 
 	#bctypeHeaderEdit-obj_paymreqtype_id-container {
-		grid-row: 5;
+		grid-row: 6;
 		grid-column: 1 / span 2;
 	}
 	
 	#bctypeHeaderEdit-obj_agingtype_id-container {
-		grid-row: 5;
+		grid-row: 6;
 		grid-column: 3 / span 2;
 	}
 

@@ -12,36 +12,6 @@ comment on table act."itemclass" is '';
 
 
 -- =============================================
--- FIELD: itemclasstype_id smallint
--- =============================================
--- ADD itemclasstype_id
-alter table act."itemclass" add itemclasstype_id smallint  ;
-comment on column act."itemclass".itemclasstype_id is '';
-
--- MODIFY itemclasstype_id
-alter table act."itemclass"
-	alter column itemclasstype_id type smallint,
-	ALTER COLUMN itemclasstype_id DROP DEFAULT,
-	ALTER COLUMN itemclasstype_id DROP NOT NULL;
-comment on column act."itemclass".itemclasstype_id is '';
-
-
--- =============================================
--- FIELD: itemclass_name text
--- =============================================
--- ADD itemclass_name
-alter table act."itemclass" add itemclass_name text  ;
-comment on column act."itemclass".itemclass_name is '';
-
--- MODIFY itemclass_name
-alter table act."itemclass"
-	alter column itemclass_name type text,
-	ALTER COLUMN itemclass_name DROP DEFAULT,
-	ALTER COLUMN itemclass_name DROP NOT NULL;
-comment on column act."itemclass".itemclass_name is '';
-
-
--- =============================================
 -- FIELD: itemclass_isdisabled boolean
 -- =============================================
 -- ADD itemclass_isdisabled
@@ -57,6 +27,21 @@ comment on column act."itemclass".itemclass_isdisabled is '';
 
 
 -- =============================================
+-- FIELD: itemclasstype_id smallint
+-- =============================================
+-- ADD itemclasstype_id
+alter table act."itemclass" add itemclasstype_id smallint  ;
+comment on column act."itemclass".itemclasstype_id is '';
+
+-- MODIFY itemclasstype_id
+alter table act."itemclass"
+	alter column itemclasstype_id type smallint,
+	ALTER COLUMN itemclasstype_id DROP DEFAULT,
+	ALTER COLUMN itemclasstype_id DROP NOT NULL;
+comment on column act."itemclass".itemclasstype_id is '';
+
+
+-- =============================================
 -- FIELD: dept_id int
 -- =============================================
 -- ADD dept_id
@@ -69,6 +54,21 @@ alter table act."itemclass"
 	ALTER COLUMN dept_id DROP DEFAULT,
 	ALTER COLUMN dept_id DROP NOT NULL;
 comment on column act."itemclass".dept_id is 'departemen owner dari itemclass ini';
+
+
+-- =============================================
+-- FIELD: itemclass_name text
+-- =============================================
+-- ADD itemclass_name
+alter table act."itemclass" add itemclass_name text  ;
+comment on column act."itemclass".itemclass_name is '';
+
+-- MODIFY itemclass_name
+alter table act."itemclass"
+	alter column itemclass_name type text,
+	ALTER COLUMN itemclass_name DROP DEFAULT,
+	ALTER COLUMN itemclass_name DROP NOT NULL;
+comment on column act."itemclass".itemclass_name is '';
 
 
 -- =============================================

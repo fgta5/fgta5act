@@ -21,7 +21,7 @@ export default class extends Module {
 	async main(args={}) {
 		
 		console.log('initializing module...')
-		app.setTitle('BC Type')
+		app.setTitle('Bussiness Case Type')
 		app.showFooter(true)
 		
 		args.autoLoadGridData = true

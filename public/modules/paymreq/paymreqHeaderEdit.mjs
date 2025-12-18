@@ -26,6 +26,11 @@ const btn_reset = new $fgta5.ActionButton('paymreqHeaderEdit-btn_reset')
 const btn_prev = new $fgta5.ActionButton('paymreqHeaderEdit-btn_prev')
 const btn_next = new $fgta5.ActionButton('paymreqHeaderEdit-btn_next')
 
+const btn_actionCommit = new $fgta5.ActionButton('paymreqHeaderEdit-btn_actionCommit')
+const btn_actionUncommit = new $fgta5.ActionButton('paymreqHeaderEdit-btn_actionUncommit')
+const btn_actionApprove = new $fgta5.ActionButton('paymreqHeaderEdit-btn_actionApprove')
+const btn_actionUnapprove = new $fgta5.ActionButton('paymreqHeaderEdit-btn_actionUnapprove')
+const btn_actionPrint = new $fgta5.ActionButton('paymreqHeaderEdit-btn_actionPrint')
 
 const btn_recordstatus = document.getElementById('paymreqHeader-btn_recordstatus')
 const btn_logs = document.getElementById('paymreqHeader-btn_logs')
@@ -34,9 +39,29 @@ const btn_about = document.getElementById('paymreqHeader-btn_about')
 const frm = new $fgta5.Form('paymreqHeaderEdit-frm');
 const obj_paymreq_id = frm.Inputs['paymreqHeaderEdit-obj_paymreq_id']
 const obj_paymreq_doc = frm.Inputs['paymreqHeaderEdit-obj_paymreq_doc']
+const obj_iscommit = frm.Inputs['paymreqHeaderEdit-obj_iscommit']
+const obj_isapproved = frm.Inputs['paymreqHeaderEdit-obj_isapproved']
 const obj_paymreq_date = frm.Inputs['paymreqHeaderEdit-obj_paymreq_date']
+const obj_paymreqtype_id = frm.Inputs['paymreqHeaderEdit-obj_paymreqtype_id']
+const obj_dept_id = frm.Inputs['paymreqHeaderEdit-obj_dept_id']
+const obj_site_id = frm.Inputs['paymreqHeaderEdit-obj_site_id']
+const obj_unit_id = frm.Inputs['paymreqHeaderEdit-obj_unit_id']
+const obj_project_id = frm.Inputs['paymreqHeaderEdit-obj_project_id']
+const obj_bctype_id = frm.Inputs['paymreqHeaderEdit-obj_bctype_id']
+const obj_bc_id = frm.Inputs['paymreqHeaderEdit-obj_bc_id']
 const obj_paymreq_datedue = frm.Inputs['paymreqHeaderEdit-obj_paymreq_datedue']
-const obj_paymreq_descr = frm.Inputs['paymreqHeaderEdit-obj_paymreq_descr']	
+const obj_paymreq_descr = frm.Inputs['paymreqHeaderEdit-obj_paymreq_descr']
+const obj_partner_id = frm.Inputs['paymreqHeaderEdit-obj_partner_id']
+const obj_paymtype_id = frm.Inputs['paymreqHeaderEdit-obj_paymtype_id']
+const obj_partnerbank_id = frm.Inputs['paymreqHeaderEdit-obj_partnerbank_id']
+const obj_payment_bgno = frm.Inputs['paymreqHeaderEdit-obj_payment_bgno']
+const obj_partnerbank_account = frm.Inputs['paymreqHeaderEdit-obj_partnerbank_account']
+const obj_partnerbank_bankname = frm.Inputs['paymreqHeaderEdit-obj_partnerbank_bankname']
+const obj_partnerbank_accountname = frm.Inputs['paymreqHeaderEdit-obj_partnerbank_accountname']
+const obj_partnercontact_id = frm.Inputs['paymreqHeaderEdit-obj_partnercontact_id']
+const obj_coa_id = frm.Inputs['paymreqHeaderEdit-obj_coa_id']
+const obj_curr_id = frm.Inputs['paymreqHeaderEdit-obj_curr_id']
+const obj_paymreq_value = frm.Inputs['paymreqHeaderEdit-obj_paymreq_value']	
 const rec_createby = document.getElementById('fRecord-section-createby')
 const rec_createdate = document.getElementById('fRecord-section-createdate')
 const rec_modifyby = document.getElementById('fRecord-section-modifyby')
@@ -73,11 +98,826 @@ export async function init(self, args) {
 
 	// set actions
 	CurrentState.Actions = {
-		edit: btn_edit,	
+		newdata: btn_new,
+		edit: btn_edit,
+		commit: btn_actionCommit,
+		uncommit: btn_actionUncommit,
+		approve: btn_actionApprove,
+		unapprove: btn_actionUnapprove,
+		print: btn_actionPrint,	
+	}
+
+
+	// export async function paymreqHeaderEdit_init(self, CurrentState)
+	const fn_init_name = 'paymreqHeaderEdit_init'
+	const fn_init = Extender[fn_init_name]
+	if (typeof fn_init === 'function') {
+		await fn_init(self, CurrentState)
+	}
+
+
+	// buat di Extender: export function setupActionButtonEvent(self, frm, CurrentState, buttons) { }
+	const fn_setupactionbuttonevent_name = 'setupActionButtonEvent'
+	const fn_setupactionbuttonevent = Extender[fn_setupactionbuttonevent_name]
+	if (typeof fn_setupactionbuttonevent === 'function') {
+		fn_setupactionbuttonevent(self, frm, CurrentState, {
+			btn_actionCommit,
+			btn_actionUncommit,
+			btn_actionApprove,
+			btn_actionUnapprove,
+			btn_actionPrint,
+		})
+	} else {
+		console.warn('Extender.setupActionButtonEvent is not implemented')
+		console.log('buat function di extender: export function setupActionButtonEvent(self, buttons)')
 	}
 
 	
+	// Combobox: obj_paymreqtype_id
+	obj_paymreqtype_id.addEventListener('selected', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selected_name = 'obj_paymreqtype_id_selected'
+		const fn_selected = Extender[fn_selected_name]
+		if (typeof fn_selected === 'function') {
+			// create function di Extender:
+			// export async function obj_paymreqtype_id_selected(self, obj_paymreqtype_id, frm, evt) {}
+			fn_selected(self, obj_paymreqtype_id, frm, evt)
+		} else {	
+			console.warn('Extender.obj_paymreqtype_id_selected is not implemented')
+		}		
+	})
+	
+	obj_paymreqtype_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_paymreqtype_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_paymreqtype_id_selecting(self, obj_paymreqtype_id, frm, evt) {}
+			fn_selecting(self, obj_paymreqtype_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'paymreqtype/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
 
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_paymreqtype_id_selecting_criteria(self, obj_paymreqtype_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_paymreqtype_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_paymreqtype_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.paymreqtype_id, row.paymreqtype_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_dept_id
+	obj_dept_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_dept_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_dept_id_selecting(self, obj_dept_id, frm, evt) {}
+			fn_selecting(self, obj_dept_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = `${Context.appsUrls.ent.url}/dept/header-list`
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_dept_id_selecting_criteria(self, obj_dept_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_dept_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_dept_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.dept_id, row.dept_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_site_id
+	obj_site_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_site_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_site_id_selecting(self, obj_site_id, frm, evt) {}
+			fn_selecting(self, obj_site_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = `${Context.appsUrls.ent.url}/site/header-list`
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_site_id_selecting_criteria(self, obj_site_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_site_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_site_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.site_id, row.site_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_unit_id
+	obj_unit_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_unit_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_unit_id_selecting(self, obj_unit_id, frm, evt) {}
+			fn_selecting(self, obj_unit_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = `${Context.appsUrls.ent.url}/unit/header-list`
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_unit_id_selecting_criteria(self, obj_unit_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_unit_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_unit_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.unit_id, row.unit_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_project_id
+	obj_project_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_project_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_project_id_selecting(self, obj_project_id, frm, evt) {}
+			fn_selecting(self, obj_project_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = `${Context.appsUrls.ent.url}/project/header-list`
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_project_id_selecting_criteria(self, obj_project_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_project_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_project_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.project_id, row.project_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_bctype_id
+	obj_bctype_id.addEventListener('selected', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selected_name = 'obj_bctype_id_selected'
+		const fn_selected = Extender[fn_selected_name]
+		if (typeof fn_selected === 'function') {
+			// create function di Extender:
+			// export async function obj_bctype_id_selected(self, obj_bctype_id, frm, evt) {}
+			fn_selected(self, obj_bctype_id, frm, evt)
+		} else {	
+			console.warn('Extender.obj_bctype_id_selected is not implemented')
+		}		
+	})
+	
+	obj_bctype_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_bctype_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_bctype_id_selecting(self, obj_bctype_id, frm, evt) {}
+			fn_selecting(self, obj_bctype_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'bctype/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_bctype_id_selecting_criteria(self, obj_bctype_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_bctype_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_bctype_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.bctype_id, row.bctype_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_bc_id
+	obj_bc_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_bc_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_bc_id_selecting(self, obj_bc_id, frm, evt) {}
+			fn_selecting(self, obj_bc_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'bc/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_bc_id_selecting_criteria(self, obj_bc_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_bc_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_bc_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.bc_id, row.bc_title, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_partner_id
+	obj_partner_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_partner_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_partner_id_selecting(self, obj_partner_id, frm, evt) {}
+			fn_selecting(self, obj_partner_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = `${Context.appsUrls.ent.url}/partner/header-list`
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_partner_id_selecting_criteria(self, obj_partner_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_partner_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_partner_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.partner_id, row.partner_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_paymtype_id
+	obj_paymtype_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_paymtype_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_paymtype_id_selecting(self, obj_paymtype_id, frm, evt) {}
+			fn_selecting(self, obj_paymtype_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'paymtype/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_paymtype_id_selecting_criteria(self, obj_paymtype_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_paymtype_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_paymtype_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.paymtype_id, row.paymtype_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_partnerbank_id
+	obj_partnerbank_id.addEventListener('selected', (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selected_name = 'obj_partnerbank_id_selected'
+		const fn_selected = Extender[fn_selected_name]
+		if (typeof fn_selected === 'function') {
+			// create function di Extender:
+			// export async function obj_partnerbank_id_selected(self, obj_partnerbank_id, frm, evt) {}
+			fn_selected(self, obj_partnerbank_id, frm, evt)
+		} else {	
+			console.warn('Extender.obj_partnerbank_id_selected is not implemented')
+		}		
+	})
+	
+	obj_partnerbank_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_partnerbank_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_partnerbank_id_selecting(self, obj_partnerbank_id, frm, evt) {}
+			fn_selecting(self, obj_partnerbank_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = `${Context.appsUrls.ent.url}/partner/bank-list`
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_partnerbank_id_selecting_criteria(self, obj_partnerbank_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_partnerbank_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_partnerbank_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.partnerbank_id, row.partnerbank_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_partnercontact_id
+	obj_partnercontact_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_partnercontact_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_partnercontact_id_selecting(self, obj_partnercontact_id, frm, evt) {}
+			fn_selecting(self, obj_partnercontact_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = `${Context.appsUrls.ent.url}/partner/contact-list`
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_partnercontact_id_selecting_criteria(self, obj_partnercontact_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_partnercontact_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_partnercontact_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.partnercontact_id, row.partnercontact_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_coa_id
+	obj_coa_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_coa_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_coa_id_selecting(self, obj_coa_id, frm, evt) {}
+			fn_selecting(self, obj_coa_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = 'coa/header-list'
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_coa_id_selecting_criteria(self, obj_coa_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_coa_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_coa_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.coa_id, row.coa_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_curr_id
+	obj_curr_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_curr_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_curr_id_selecting(self, obj_curr_id, frm, evt) {}
+			fn_selecting(self, obj_curr_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = `${Context.appsUrls.ent.url}/curr/header-list`
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_curr_id_selecting_criteria(self, obj_curr_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_curr_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_curr_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.curr_id, row.curr_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
 		
 	
 }
@@ -87,6 +927,19 @@ export async function openSelectedData(self, params) {
 
 	let mask = $fgta5.Modal.createMask()
 	try {
+		obj_paymreqtype_id.clear()
+		obj_dept_id.clear()
+		obj_site_id.clear()
+		obj_unit_id.clear()
+		obj_project_id.clear()
+		obj_bctype_id.clear()
+		obj_bc_id.clear()
+		obj_partner_id.clear()
+		obj_paymtype_id.clear()
+		obj_partnerbank_id.clear()
+		obj_partnercontact_id.clear()
+		obj_coa_id.clear()
+		obj_curr_id.clear()
 					
 		const id = params.keyvalue
 		const data = await openData(self, id)
@@ -95,6 +948,7 @@ export async function openSelectedData(self, params) {
 
 		CurrentState.currentOpenedId = id
 
+		// export async function paymreqHeaderEdit_isEditDisabled(self, data)
 		const fn_iseditdisabled_name = 'paymreqHeaderEdit_isEditDisabled'
 		const fn_iseditdisabled = Extender[fn_iseditdisabled_name]
 		if (typeof fn_iseditdisabled === 'function') {
@@ -105,16 +959,20 @@ export async function openSelectedData(self, params) {
 		// disable primary key
 		setPrimaryKeyState(self, {disabled:true})
 
+		// isi form dengan data
 		frm.setData(data)
-		frm.acceptChanges()
-		frm.lock()
 
+		// jika ada kebutuhan untuk oleh lagi form dan data, bisa lakukan di extender
+		// export async function paymreqHeaderEdit_formOpened(self, frm, CurrentState)
 		const fn_formopened_name = 'paymreqHeaderEdit_formOpened'
 		const fn_formopened = Extender[fn_formopened_name]
 		if (typeof fn_formopened === 'function') {
-			// export async function paymreqHeaderEdit_formOpened(self, frm, CurrentState)
 			await fn_formopened(self, frm, CurrentState)
 		}
+
+		// finally, accept changes dan lock form
+		frm.acceptChanges()
+		frm.lock()
 
 	} catch (err) {
 		CurrentState.currentOpenedId = null
@@ -262,9 +1120,15 @@ async function  frm_locked(self, evt) {
 	btn_prev.disabled = false
 	btn_next.disabled = false
 
-	
+	// Enable action: action hanya bisa dilakukan saat posisi edit off
+	btn_actionCommit.disabled = false
+	btn_actionUncommit.disabled = false
+	btn_actionApprove.disabled = false
+	btn_actionUnapprove.disabled = false
+	btn_actionPrint.disabled = false
 	
 	// Extender untuk event locked
+	// export function paymreqHeaderEdit_formLocked(self, frm, CurrentState) {}
 	const fn_name = 'paymreqHeaderEdit_formLocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
@@ -305,9 +1169,15 @@ async function  frm_unlocked(self, evt) {
 	btn_prev.disabled = true
 	btn_next.disabled = true
 
-	
+	// Disable action: action hanya bisa dilakukan saat posisi edit off
+	btn_actionCommit.disabled = true
+	btn_actionUncommit.disabled = true
+	btn_actionApprove.disabled = true
+	btn_actionUnapprove.disabled = true
+	btn_actionPrint.disabled = true
 
 	// Extender untuk event Unlocked
+	// export function paymreqHeaderEdit_formUnlocked(self, frm, CurrentState) {}
 	const fn_name = 'paymreqHeaderEdit_formUnlocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
@@ -387,10 +1257,10 @@ async function btn_new_click(self, evt) {
 	try {
 
 		// inisiasi data baru
-		let datainit = {
+		const datainit = {
 			paymreq_date: new Date(),
-		
 			paymreq_datedue: new Date(),
+			paymreq_value: 0,
 		}
 
 
@@ -399,6 +1269,7 @@ async function btn_new_click(self, evt) {
 		const fn_newdata_name = 'paymreqHeaderEdit_newData'
 		const fn_newdata = Extender[fn_newdata_name]
 		if (typeof fn_newdata === 'function') {
+			// export async function paymreqHeaderEdit_newData(self, datainit, frm) {}
 			await fn_newdata(self, datainit, frm)
 		}
 
@@ -466,12 +1337,6 @@ async function btn_save_click(self, evt) {
 		dataToSave = frm.getData()		
 	}
 
-	// Extender Saving
-	const fn_datasaving_name = 'paymreqHeaderEdit_dataSaving'
-	const fn_datasaving = Extender[fn_datasaving_name]
-	if (typeof fn_datasaving === 'function') {
-		await fn_datasaving(self, dataToSave, frm)
-	}
 
 
 	// bila ada file, upload filenya
@@ -483,7 +1348,24 @@ async function btn_save_click(self, evt) {
 			const file = files[name]
 			formData.append(name, file)
 		}
-	}	
+	}
+
+
+	// Extender Saving
+	// export async function paymreqHeaderEdit_dataSaving(self, dataToSave, frm, args) {}
+	const args = { cancelSave: false }
+	const fn_datasaving_name = 'paymreqHeaderEdit_dataSaving'
+	const fn_datasaving = Extender[fn_datasaving_name]
+	if (typeof fn_datasaving === 'function') {
+		await fn_datasaving(self, dataToSave, frm, args)
+	}
+
+	// batalkan save, jika ada request cancel
+	if (args.cancelSave) {
+		console.log('save is canceled')
+		return
+	}
+	
 
 	let mask = $fgta5.Modal.createMask()
 	try {
@@ -525,6 +1407,7 @@ async function btn_save_click(self, evt) {
 		const fn_datasaved_name = 'paymreqHeaderEdit_dataSaved'
 		const fn_datasaved = Extender[fn_datasaved_name]
 		if (typeof fn_datasaved === 'function') {
+			// export async function paymreqHeaderEdit_dataSaved(self, data, frm) {}
 			await fn_datasaved(self, data, frm)
 		}
 
@@ -757,7 +1640,7 @@ async function btn_about_click(self, evt) {
 			const divFooter = document.createElement('div')
 			divFooter.setAttribute('id', 'fAbout-section-footer')
 			divFooter.setAttribute('style', 'border-top: 1px solid #ccc; padding: 5px 0 0 0; margin-top: 50px')
-			divFooter.innerHTML = 'This module is generated by fgta5 generator at 28 Nov 2025 17:48'
+			divFooter.innerHTML = 'This module is generated by fgta5 generator at 14 Dec 2025 07:42'
 			section.appendChild(divFooter)
 		}
 		

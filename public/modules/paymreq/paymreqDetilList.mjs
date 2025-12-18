@@ -33,6 +33,7 @@ export async function init(self, args) {
 
 	// tambahkan event lain di extender: rowrender, rowremoving
 	// dapatkan parameternya di evt.detail
+	// export function detilList_addTableEvents(self, tbl) {}
 	const fn_addTableEvents_name = 'detilList_addTableEvents'
 	const fn_addTableEvents = Extender[fn_addTableEvents_name]
 	if (typeof fn_addTableEvents === 'function') {
@@ -49,6 +50,7 @@ export async function init(self, args) {
 	btn_delrow.addEventListener('click', (evt)=>{ btn_delrow_click(self, evt) })
 	
 	// Extend list detil
+	// export function paymreqDetilList_init(self) {}
 	const fn_name = 'paymreqDetilList_init'
 	const fn_paymreqDetilList_init = Extender[fn_name]
 	if (typeof fn_paymreqDetilList_init === 'function') {
@@ -69,6 +71,7 @@ export async function openList(self, params) {
 	// apabila mau menambahkan informasi saat detil list dibuka,
 	// misalnya menambahkan informasi beberapa data dari formHeader
 	// bisa di set pada Extender.paymreqDetilList_openList :  bisa menggunakan template untuk di embed ke header pada detil list
+	// export function paymreqDetilList_openList(self, headerForm) {}
 	const fn_name = 'paymreqDetilList_openList'
 	const fn_paymreqDetilList_openList = Extender[fn_name]
 	if (typeof fn_paymreqDetilList_openList === 'function') {
@@ -218,13 +221,22 @@ async function openRow(self, tr) {
 
 async function listRows(self, criteria, offset, limit, sort) {
 	const url = `/${Context.moduleName}/detil-list`
+	const evt = { url, limit }
+
+	// export function detilList_dataLoad(self, criteria, sort, evt) {}
+	const fn_dataLoad_name = 'detilList_dataLoad'
+	const fn_dataLoad = Extender[fn_dataLoad_name]
+	if (typeof fn_dataLoad === 'function') {
+		fn_dataLoad(self, criteria, sort, evt)
+	}
+
 	try {
 		const columns = []
-		const result = await Module.apiCall(url, {  
+		const result = await Module.apiCall(evt.url, {  
 			columns,
 			criteria,
 			offset,
-			limit,
+			limit: evt.limit,
 			sort
 		}) 
 		return result 
@@ -288,6 +300,16 @@ async function tbl_loadData(self, params={}) {
 		}
 		tbl.addRows(result.data)
 		tbl.setNext(result.nextoffset, result.limit)
+
+
+		// export function detilList_tableDataLoaded(self, tbl, result) {}
+		const fn_name = 'detilList_tableDataLoaded'
+		const fn = Extender[fn_name]
+		if (typeof fn === 'function') {
+			fn(self, tbl, result)
+		}
+
+
 	} catch (err) {
 		console.error(err)
 		$fgta5.MessageBox.error(err.message)

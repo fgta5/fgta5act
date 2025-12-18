@@ -1,0 +1,30 @@
+<div id="taxmodelHeaderList-header">
+</div>
+
+<div class="search-container">
+	<div id="taxmodelHeaderList-pnl_search" class="search-parameters">
+		<input id="taxmodelHeaderList-txt_searchtext" fgta5-component="Textbox" placeholder="search" autocomplete="off" spellcheck="false" binding="searchtext" data-searchinput>
+	</div>
+	<button id="taxmodelHeaderList-btn_gridload">Load</button>
+</div>
+
+<table id="taxmodelHeaderList-tbl" fgta5-component="Gridview">
+	<thead>
+		<tr data-header key="taxmodel_id">
+			<th data-name="taxmodel_id" binding="taxmodel_id" >ID</th>
+			<th data-name="taxmodel_name" binding="taxmodel_name" >Name</th>
+			<th data-name="taxmodel_formula" binding="taxmodel_formula" >Formula</th>
+			<th data-name="taxmodel_value" binding="taxmodel_value" formatter="decimal(v, 2)" style="text-align:right">Value</th>
+		</tr>
+	</thead>
+</table>
+
+
+
+<div class="footer-buttons-container">
+	<div></div>
+	<div>
+		<button id="taxmodelHeaderList-btn_new" data-action="taxmodelHeader-new" data-sectionsource="taxmodelHeaderList-section">New</button>
+	</div>
+	<div></div>
+</div>

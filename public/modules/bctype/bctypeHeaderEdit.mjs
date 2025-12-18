@@ -12,9 +12,9 @@ const CurrentSection = Crsl.Items[CurrentSectionId]
 const Source = Context.Source
 
 
-const TitleWhenNew = 'New BC Type'
-const TitleWhenView = 'View BC Type'
-const TitleWhenEdit = 'Edit BC Type'
+const TitleWhenNew = 'New Bussiness Case Type'
+const TitleWhenView = 'View Bussiness Case Type'
+const TitleWhenEdit = 'Edit Bussiness Case Type'
 const EditModeText = 'Edit'
 const LockModeText = 'Lock'
 
@@ -34,12 +34,18 @@ const btn_about = document.getElementById('bctypeHeader-btn_about')
 const frm = new $fgta5.Form('bctypeHeaderEdit-frm');
 const obj_bctype_id = frm.Inputs['bctypeHeaderEdit-obj_bctype_id']
 const obj_bctype_isdisabled = frm.Inputs['bctypeHeaderEdit-obj_bctype_isdisabled']
+const obj_bccycle_id = frm.Inputs['bctypeHeaderEdit-obj_bccycle_id']
 const obj_isalldept = frm.Inputs['bctypeHeaderEdit-obj_isalldept']
 const obj_bctype_name = frm.Inputs['bctypeHeaderEdit-obj_bctype_name']
+const obj_bctype_code = frm.Inputs['bctypeHeaderEdit-obj_bctype_code']
 const obj_bctype_descr = frm.Inputs['bctypeHeaderEdit-obj_bctype_descr']
-const obj_approvaltype_id = frm.Inputs['bctypeHeaderEdit-obj_approvaltype_id']
+const obj_approvalmodel_id = frm.Inputs['bctypeHeaderEdit-obj_approvalmodel_id']
 const obj_paymreqtype_id = frm.Inputs['bctypeHeaderEdit-obj_paymreqtype_id']
-const obj_agingtype_id = frm.Inputs['bctypeHeaderEdit-obj_agingtype_id']	
+const obj_agingtype_id = frm.Inputs['bctypeHeaderEdit-obj_agingtype_id']
+const obj_isusecoaclass = frm.Inputs['bctypeHeaderEdit-obj_isusecoaclass']
+const obj_isusecurr = frm.Inputs['bctypeHeaderEdit-obj_isusecurr']
+const obj_isuseapproval = frm.Inputs['bctypeHeaderEdit-obj_isuseapproval']
+const obj_isusepaymreq = frm.Inputs['bctypeHeaderEdit-obj_isusepaymreq']	
 const rec_createby = document.getElementById('fRecord-section-createby')
 const rec_createdate = document.getElementById('fRecord-section-createdate')
 const rec_modifyby = document.getElementById('fRecord-section-modifyby')
@@ -80,26 +86,50 @@ export async function init(self, args) {
 		edit: btn_edit,	
 	}
 
+
+	// export async function bctypeHeaderEdit_init(self, CurrentState)
+	const fn_init_name = 'bctypeHeaderEdit_init'
+	const fn_init = Extender[fn_init_name]
+	if (typeof fn_init === 'function') {
+		await fn_init(self, CurrentState)
+	}
+
+
 	
 
 	
-	// Combobox: obj_approvaltype_id
-	obj_approvaltype_id.addEventListener('selecting', async (evt)=>{
+	// Combobox: obj_bccycle_id
+	obj_bccycle_id.addEventListener('selected', (evt)=>{
 		
 		evt.detail.CurrentState = CurrentState
 		
-		const fn_selecting_name = 'obj_approvaltype_id_selecting'
+		const fn_selected_name = 'obj_bccycle_id_selected'
+		const fn_selected = Extender[fn_selected_name]
+		if (typeof fn_selected === 'function') {
+			// create function di Extender:
+			// export async function obj_bccycle_id_selected(self, obj_bccycle_id, frm, evt) {}
+			fn_selected(self, obj_bccycle_id, frm, evt)
+		} else {	
+			console.warn('Extender.obj_bccycle_id_selected is not implemented')
+		}		
+	})
+	
+	obj_bccycle_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_bccycle_id_selecting'
 		const fn_selecting = Extender[fn_selecting_name]
 		if (typeof fn_selecting === 'function') {
 			// create function di Extender (jika perlu):
-			// export async function obj_approvaltype_id_selecting(self, obj_approvaltype_id, frm, evt) {}
-			fn_selecting(self, obj_approvaltype_id, frm, evt)
+			// export async function obj_bccycle_id_selecting(self, obj_bccycle_id, frm, evt) {}
+			fn_selecting(self, obj_bccycle_id, frm, evt)
 		} else {
 			// default selecting
 			const cbo = evt.detail.sender
 			const dialog = evt.detail.dialog
 			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
-			const url = `${Context.appsUrls.core.url}/approvaltype/header-list`
+			const url = 'bccycle/header-list'
 			const sort = {}
 			const criteria = {
 				searchtext: searchtext,
@@ -108,11 +138,11 @@ export async function init(self, args) {
 			evt.detail.url = url 
 			
 			// buat function di extender:
-			// export function obj_approvaltype_id_selecting_criteria(self, obj_approvaltype_id, frm, criteria, sort, evt) {}
-			const fn_selecting_criteria_name = 'obj_approvaltype_id_selecting_criteria'
+			// export function obj_bccycle_id_selecting_criteria(self, obj_bccycle_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_bccycle_id_selecting_criteria'
 			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
 			if (typeof fn_selecting_criteria === 'function') {
-				fn_selecting_criteria(self, obj_approvaltype_id, frm, criteria, sort, evt)
+				fn_selecting_criteria(self, obj_bccycle_id, frm, criteria, sort, evt)
 			}
 
 			cbo.wait()
@@ -125,7 +155,64 @@ export async function init(self, args) {
 				}) 
 
 				for (var row of result.data) {
-					evt.detail.addRow(row.approvaltype_id, row.approvaltype_name, row)
+					evt.detail.addRow(row.bccycle_id, row.bccycle_name, row)
+				}
+
+				dialog.setNext(result.nextoffset, result.limit)
+			} catch (err) {
+				$fgta5.MessageBox.error(err.message)
+			} finally {
+				cbo.wait(false)
+			}
+
+			
+		}		
+	})
+	
+	
+	// Combobox: obj_approvalmodel_id
+	obj_approvalmodel_id.addEventListener('selecting', async (evt)=>{
+		
+		evt.detail.CurrentState = CurrentState
+		
+		const fn_selecting_name = 'obj_approvalmodel_id_selecting'
+		const fn_selecting = Extender[fn_selecting_name]
+		if (typeof fn_selecting === 'function') {
+			// create function di Extender (jika perlu):
+			// export async function obj_approvalmodel_id_selecting(self, obj_approvalmodel_id, frm, evt) {}
+			fn_selecting(self, obj_approvalmodel_id, frm, evt)
+		} else {
+			// default selecting
+			const cbo = evt.detail.sender
+			const dialog = evt.detail.dialog
+			const searchtext = evt.detail.searchtext!=null ? evt.detail.searchtext : ''
+			const url = `${Context.appsUrls.ent.url}/approvalmodel/header-list`
+			const sort = {}
+			const criteria = {
+				searchtext: searchtext,
+			}
+
+			evt.detail.url = url 
+			
+			// buat function di extender:
+			// export function obj_approvalmodel_id_selecting_criteria(self, obj_approvalmodel_id, frm, criteria, sort, evt) {}
+			const fn_selecting_criteria_name = 'obj_approvalmodel_id_selecting_criteria'
+			const fn_selecting_criteria = Extender[fn_selecting_criteria_name]
+			if (typeof fn_selecting_criteria === 'function') {
+				fn_selecting_criteria(self, obj_approvalmodel_id, frm, criteria, sort, evt)
+			}
+
+			cbo.wait()
+			try {
+				const result = await Module.apiCall(evt.detail.url, {
+					sort,
+					criteria,
+					offset: evt.detail.offset,
+					limit: evt.detail.limit,
+				}) 
+
+				for (var row of result.data) {
+					evt.detail.addRow(row.approvalmodel_id, row.approvalmodel_name, row)
 				}
 
 				dialog.setNext(result.nextoffset, result.limit)
@@ -277,7 +364,8 @@ export async function openSelectedData(self, params) {
 
 	let mask = $fgta5.Modal.createMask()
 	try {
-		obj_approvaltype_id.clear()
+		obj_bccycle_id.clear()
+		obj_approvalmodel_id.clear()
 		obj_paymreqtype_id.clear()
 		obj_agingtype_id.clear()
 					
@@ -288,6 +376,7 @@ export async function openSelectedData(self, params) {
 
 		CurrentState.currentOpenedId = id
 
+		// export async function bctypeHeaderEdit_isEditDisabled(self, data)
 		const fn_iseditdisabled_name = 'bctypeHeaderEdit_isEditDisabled'
 		const fn_iseditdisabled = Extender[fn_iseditdisabled_name]
 		if (typeof fn_iseditdisabled === 'function') {
@@ -957,7 +1046,7 @@ async function btn_about_click(self, evt) {
 	pageHelper.openSection(self, 'fAbout-section', params, async ()=>{
 		
 		const AboutSection = Crsl.Items['fAbout-section']
-		AboutSection.Title = 'About BC Type'
+		AboutSection.Title = 'About Bussiness Case Type'
 
 		const section = document.getElementById('fAbout-section')
 
@@ -974,7 +1063,7 @@ async function btn_about_click(self, evt) {
 			const divFooter = document.createElement('div')
 			divFooter.setAttribute('id', 'fAbout-section-footer')
 			divFooter.setAttribute('style', 'border-top: 1px solid #ccc; padding: 5px 0 0 0; margin-top: 50px')
-			divFooter.innerHTML = 'This module is generated by fgta5 generator at 9 Dec 2025 13:29'
+			divFooter.innerHTML = 'This module is generated by fgta5 generator at 16 Dec 2025 14:09'
 			section.appendChild(divFooter)
 		}
 		

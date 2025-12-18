@@ -1,0 +1,52 @@
+/* Desktop */
+@media screen and (min-width: 501px) {
+	#bccycleHeaderEdit-frm {
+		display: grid;
+		grid-template-columns: repeat(6, 1fr);
+		grid-auto-rows: auto;
+		gap: 10;
+		width: 850px;
+	}
+
+
+	#bccycleHeaderEdit-obj_bccycle_id-container {
+		grid-row: 1;
+		grid-column: 1 / span 2;
+	}
+
+	#bccycleHeaderEdit-obj_bccycle_name-container {
+		grid-row: 2;
+		grid-column: 1 / span 3;	
+	}
+
+	#bccycleHeaderEdit-obj_allowselect-container {
+		grid-row: 2;
+		grid-column: 4 / span 2;
+	}
+
+	#bccycleHeaderEdit-obj_isuseclass-container {
+		grid-row: 3;
+		grid-column: 1 / span 2;
+		margin-left: 77px;
+		margin-top: 5px;
+	}
+
+	#bccycleHeaderEdit-obj_isusecurr-container {
+		grid-row: 4;
+		grid-column: 1 / span 2;
+		margin-left: 77px;
+	}
+
+	#bccycleHeaderEdit-obj_isuseapproval-container {
+		grid-row: 5;
+		grid-column: 1 / span 2;
+		margin-left: 77px;
+	}
+
+	#bccycleHeaderEdit-obj_isusepaymreq-container {
+		grid-row: 6;
+		grid-column: 1 / span 2;
+		margin-left: 77px;
+	}
+
+}

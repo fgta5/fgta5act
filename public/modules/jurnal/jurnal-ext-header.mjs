@@ -202,7 +202,7 @@ export function headerList_dataLoad(self, criteria, sort, evt) {
 
 
 export function obj_jurnaltype_id_selecting_criteria(self, obj_jurnaltype_id, frm, criteria, sort, evt) {
-	evt.detail.url = 'jurnaltype-byuser/list'
+	evt.detail.url = 'jurnaltype-filtered/list-by-user'
 
 	sort.jurnaltype_name = 'asc' 
 	criteria.jurnaltype_isallowselect = true
@@ -264,7 +264,7 @@ export async function obj_curr_rate_changed(self, obj_curr_rate, frm, evt) {
 }
 
 export function obj_coa_id_selecting_criteria(self, obj_coa_id, frm, criteria, sort, evt) {
-	evt.detail.url = 'coa-byjurnaltype/list'
+	evt.detail.url = 'coa-filtered/list-by-jurnaltype'
 
 	const jurnaltype_id = frm.Inputs['jurnalHeaderEdit-obj_jurnaltype_id'].value
 	const copyto = frm.Inputs['jurnalHeaderEdit-obj_copyto'].value

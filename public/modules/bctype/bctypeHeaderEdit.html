@@ -24,12 +24,25 @@
 	</div>
 
 
+	<!-- Combobox: bccycle_id-->	
+	<div id="bctypeHeaderEdit-obj_bccycle_id-container" class="input-field" field="bctypeHeaderEdit-obj_bccycle_id">
+		<label for="bctypeHeaderEdit-obj_bccycle_id">Cycle</label>
+		<input id="bctypeHeaderEdit-obj_bccycle_id"  fgta5-component="Combobox" placeholder="cycle" autocomplete="off" spellcheck="false" 
+			binding="bccycle_id"
+			data-tabindex="3" 
+			required 
+			invalid-message-required="bussiness cycle harus diisi" 
+			data-display="bccycle_name" 
+		>
+	</div>
+
+
 	<!-- Checkbox: isalldept-->	
 	<div id="bctypeHeaderEdit-obj_isalldept-container" class="input-field" field="bctypeHeaderEdit-obj_isalldept">
 		<label for="bctypeHeaderEdit-obj_isalldept">Allow All Dept</label>
 		<input id="bctypeHeaderEdit-obj_isalldept"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
 			binding="isalldept"
-			data-tabindex="3" 
+			data-tabindex="4" 
 			type="checkbox" 
 		>
 	</div>
@@ -40,11 +53,24 @@
 		<label for="bctypeHeaderEdit-obj_bctype_name">Name</label>
 		<input id="bctypeHeaderEdit-obj_bctype_name"  fgta5-component="Textbox" placeholder="name" autocomplete="off" spellcheck="false" 
 			binding="bctype_name"
-			data-tabindex="4" 
+			data-tabindex="5" 
 			required 
 			invalid-message-required="nama tipe bussiness case harus diisi" 
 			autocomplete="off" spellcheck="false" 
 			maxlength="90" 
+		>
+	</div>
+
+
+	<!-- Textbox: bctype_code-->	
+	<div id="bctypeHeaderEdit-obj_bctype_code-container" class="input-field" field="bctypeHeaderEdit-obj_bctype_code">
+		<label for="bctypeHeaderEdit-obj_bctype_code">Code</label>
+		<input id="bctypeHeaderEdit-obj_bctype_code"  fgta5-component="Textbox" placeholder="code" autocomplete="off" spellcheck="false" 
+			binding="bctype_code"
+			data-tabindex="6" 
+			character-case="uppercase" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="30" 
 		>
 	</div>
 
@@ -54,22 +80,22 @@
 		<label for="bctypeHeaderEdit-obj_bctype_descr">Descr</label>
 		<input id="bctypeHeaderEdit-obj_bctype_descr"  fgta5-component="Textbox" placeholder="descr" autocomplete="off" spellcheck="false" 
 			binding="bctype_descr"
-			data-tabindex="5" 
+			data-tabindex="7" 
 			autocomplete="off" spellcheck="false" 
 			maxlength="255" 
 		>
 	</div>
 
 
-	<!-- Combobox: approvaltype_id-->	
-	<div id="bctypeHeaderEdit-obj_approvaltype_id-container" class="input-field" field="bctypeHeaderEdit-obj_approvaltype_id">
-		<label for="bctypeHeaderEdit-obj_approvaltype_id">Approval</label>
-		<input id="bctypeHeaderEdit-obj_approvaltype_id"  fgta5-component="Combobox" placeholder="approval type" autocomplete="off" spellcheck="false" 
-			binding="approvaltype_id"
-			data-tabindex="6" 
+	<!-- Combobox: approvalmodel_id-->	
+	<div id="bctypeHeaderEdit-obj_approvalmodel_id-container" class="input-field" field="bctypeHeaderEdit-obj_approvalmodel_id">
+		<label for="bctypeHeaderEdit-obj_approvalmodel_id">Approval</label>
+		<input id="bctypeHeaderEdit-obj_approvalmodel_id"  fgta5-component="Combobox" placeholder="approval" autocomplete="off" spellcheck="false" 
+			binding="approvalmodel_id"
+			data-tabindex="8" 
 			required 
 			invalid-message-required="tipe approval harus diisi" 
-			data-display="approvaltype_name" 
+			data-display="approvalmodel_name" 
 		>
 	</div>
 
@@ -79,7 +105,7 @@
 		<label for="bctypeHeaderEdit-obj_paymreqtype_id">Paymreq</label>
 		<input id="bctypeHeaderEdit-obj_paymreqtype_id"  fgta5-component="Combobox" placeholder="paymreq type" autocomplete="off" spellcheck="false" 
 			binding="paymreqtype_id"
-			data-tabindex="7" 
+			data-tabindex="9" 
 			required 
 			invalid-message-required="tipe payment request harus diisi" 
 			data-display="paymreqtype_name" 
@@ -92,8 +118,56 @@
 		<label for="bctypeHeaderEdit-obj_agingtype_id">Agingtype</label>
 		<input id="bctypeHeaderEdit-obj_agingtype_id"  fgta5-component="Combobox" placeholder="agingtype" autocomplete="off" spellcheck="false" 
 			binding="agingtype_id"
-			data-tabindex="8" 
+			data-tabindex="10" 
 			data-display="agingtype_name" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Checkbox: isusecoaclass-->	
+	<div id="bctypeHeaderEdit-obj_isusecoaclass-container" class="input-field hidden" field="bctypeHeaderEdit-obj_isusecoaclass">
+		<label for="bctypeHeaderEdit-obj_isusecoaclass">COA Class</label>
+		<input id="bctypeHeaderEdit-obj_isusecoaclass"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
+			binding="isusecoaclass"
+			data-tabindex="11" 
+			type="checkbox" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Checkbox: isusecurr-->	
+	<div id="bctypeHeaderEdit-obj_isusecurr-container" class="input-field hidden" field="bctypeHeaderEdit-obj_isusecurr">
+		<label for="bctypeHeaderEdit-obj_isusecurr">Curr</label>
+		<input id="bctypeHeaderEdit-obj_isusecurr"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
+			binding="isusecurr"
+			data-tabindex="12" 
+			type="checkbox" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Checkbox: isuseapproval-->	
+	<div id="bctypeHeaderEdit-obj_isuseapproval-container" class="input-field hidden" field="bctypeHeaderEdit-obj_isuseapproval">
+		<label for="bctypeHeaderEdit-obj_isuseapproval">Approval</label>
+		<input id="bctypeHeaderEdit-obj_isuseapproval"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
+			binding="isuseapproval"
+			data-tabindex="13" 
+			type="checkbox" 
+			disabled 
+		>
+	</div>
+
+
+	<!-- Checkbox: isusepaymreq-->	
+	<div id="bctypeHeaderEdit-obj_isusepaymreq-container" class="input-field hidden" field="bctypeHeaderEdit-obj_isusepaymreq">
+		<label for="bctypeHeaderEdit-obj_isusepaymreq">Paym Req</label>
+		<input id="bctypeHeaderEdit-obj_isusepaymreq"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
+			binding="isusepaymreq"
+			data-tabindex="14" 
+			type="checkbox" 
 			disabled 
 		>
 	</div>

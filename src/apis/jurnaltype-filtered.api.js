@@ -13,10 +13,10 @@ export default class extends Api {
 		Api.cekLogin(req)
 	}
 
-	async list(body) { return await jurnaltype_list(this, body) }
+	async listByUser(body) { return await jurnaltype_listByUser(this, body) }
 }
 
-export async function jurnaltype_list(self, body) {
+export async function jurnaltype_listByUser(self, body) {
 	const req = self.req
 	const user_id = req.session.user.userId
 

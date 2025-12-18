@@ -12,40 +12,26 @@
 	</div>
 
 
-	<!-- Combobox: itemclasstype_id-->	
-	<div id="itemclassHeaderEdit-obj_itemclasstype_id-container" class="input-field" field="itemclassHeaderEdit-obj_itemclasstype_id">
-		<label for="itemclassHeaderEdit-obj_itemclasstype_id">Type</label>
-		<input id="itemclassHeaderEdit-obj_itemclasstype_id"  fgta5-component="Combobox" placeholder="itemclasstype_id" autocomplete="off" spellcheck="false" 
-			binding="itemclasstype_id"
-			data-tabindex="2" 
-			required 
-			invalid-message-required="tipe itemclass harus diisi" 
-			data-display="itemclasstype_name" 
-		>
-	</div>
-
-
-	<!-- Textbox: itemclass_name-->	
-	<div id="itemclassHeaderEdit-obj_itemclass_name-container" class="input-field" field="itemclassHeaderEdit-obj_itemclass_name">
-		<label for="itemclassHeaderEdit-obj_itemclass_name">Name</label>
-		<input id="itemclassHeaderEdit-obj_itemclass_name"  fgta5-component="Textbox" placeholder="name" autocomplete="off" spellcheck="false" 
-			binding="itemclass_name"
-			data-tabindex="3" 
-			required 
-			invalid-message-required="nama itemclass harus diisi" 
-			autocomplete="off" spellcheck="false" 
-			maxlength="90" 
-		>
-	</div>
-
-
 	<!-- Checkbox: itemclass_isdisabled-->	
 	<div id="itemclassHeaderEdit-obj_itemclass_isdisabled-container" class="input-field" field="itemclassHeaderEdit-obj_itemclass_isdisabled">
 		<label for="itemclassHeaderEdit-obj_itemclass_isdisabled">Disabled</label>
 		<input id="itemclassHeaderEdit-obj_itemclass_isdisabled"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
 			binding="itemclass_isdisabled"
-			data-tabindex="4" 
+			data-tabindex="2" 
 			type="checkbox" 
+		>
+	</div>
+
+
+	<!-- Combobox: itemclasstype_id-->	
+	<div id="itemclassHeaderEdit-obj_itemclasstype_id-container" class="input-field" field="itemclassHeaderEdit-obj_itemclasstype_id">
+		<label for="itemclassHeaderEdit-obj_itemclasstype_id">Type</label>
+		<input id="itemclassHeaderEdit-obj_itemclasstype_id"  fgta5-component="Combobox" placeholder="itemclasstype_id" autocomplete="off" spellcheck="false" 
+			binding="itemclasstype_id"
+			data-tabindex="3" 
+			required 
+			invalid-message-required="tipe itemclass harus diisi" 
+			data-display="itemclasstype_name" 
 		>
 	</div>
 
@@ -55,10 +41,24 @@
 		<label for="itemclassHeaderEdit-obj_dept_id">Dept</label>
 		<input id="itemclassHeaderEdit-obj_dept_id"  fgta5-component="Combobox" placeholder="dept" autocomplete="off" spellcheck="false" 
 			binding="dept_id"
-			data-tabindex="5" 
+			data-tabindex="4" 
 			required 
 			invalid-message-required="departemen owner harus diisi" 
 			data-display="dept_name" 
+		>
+	</div>
+
+
+	<!-- Textbox: itemclass_name-->	
+	<div id="itemclassHeaderEdit-obj_itemclass_name-container" class="input-field" field="itemclassHeaderEdit-obj_itemclass_name">
+		<label for="itemclassHeaderEdit-obj_itemclass_name">Name</label>
+		<input id="itemclassHeaderEdit-obj_itemclass_name"  fgta5-component="Textbox" placeholder="name" autocomplete="off" spellcheck="false" 
+			binding="itemclass_name"
+			data-tabindex="5" 
+			required 
+			invalid-message-required="nama itemclass harus diisi" 
+			autocomplete="off" spellcheck="false" 
+			maxlength="90" 
 		>
 	</div>
 
@@ -111,7 +111,7 @@
 
 	<!-- Checkbox: directexpensecond-->	
 	<div id="itemclassHeaderEdit-obj_directexpensecond-container" class="input-field" field="itemclassHeaderEdit-obj_directexpensecond">
-		<label for="itemclassHeaderEdit-obj_directexpensecond">Direct Expense Condition</label>
+		<label for="itemclassHeaderEdit-obj_directexpensecond">Direct Expense</label>
 		<input id="itemclassHeaderEdit-obj_directexpensecond"  fgta5-component="Checkbox" placeholder="" autocomplete="off" spellcheck="false" 
 			binding="directexpensecond"
 			data-tabindex="10" 
@@ -122,7 +122,7 @@
 
 	<!-- Numberbox: bellowvalue-->	
 	<div id="itemclassHeaderEdit-obj_bellowvalue-container" class="input-field" field="itemclassHeaderEdit-obj_bellowvalue">
-		<label for="itemclassHeaderEdit-obj_bellowvalue">Bellow Value</label>
+		<label for="itemclassHeaderEdit-obj_bellowvalue">When bellow value</label>
 		<input id="itemclassHeaderEdit-obj_bellowvalue"  fgta5-component="Numberbox" placeholder="bellowvalue" autocomplete="off" spellcheck="false" 
 			binding="bellowvalue"
 			value="0" 

@@ -118,7 +118,7 @@ export async function jurnalDetilEdit_dataSaved(self, data, frm) {
 
 
 export function obj_coa_id_selecting_criteria(self, obj_coa_id, frm, criteria, sort, evt) {
-	evt.detail.url = 'coa-byjurnaltype/list'
+	evt.detail.url = 'coa-filtered/list-by-jurnaltype'
 
 	const jurnaltype_id = frm.Inputs['jurnalDetilEdit-obj_jurnaltype_id'].value
 

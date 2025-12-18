@@ -11,9 +11,9 @@ const CurrentSectionId = Context.Sections.paymreqTermEdit
 const CurrentSection = Crsl.Items[CurrentSectionId]
 const Source = Context.Source
 
-const TitleWhenNew = 'New Payment Request'
-const TitleWhenView = 'View Payment Request'
-const TitleWhenEdit = 'Edit Payment Request'
+const TitleWhenNew = 'New Term'
+const TitleWhenView = 'View Term'
+const TitleWhenEdit = 'Edit Term'
 const EditModeText = 'Edit'
 const LockModeText = 'Lock'
 
@@ -68,6 +68,17 @@ export async function init(self, args) {
 	CurrentState.headerFormLocked = true 
 	CurrentState.editDisabled = false
 
+	CurrentState.Actions = {
+		newdata: btn_new,
+		edit: btn_edit,
+	}
+
+	CurrentState.getHeaderForm = () => {
+		const paymreqHeaderEdit = self.Modules.paymreqHeaderEdit
+		const frmHeader = paymreqHeaderEdit.getHeaderForm()
+		return frmHeader
+	}
+
 
 		
 }
@@ -100,15 +111,22 @@ export async function openSelectedData(self, params) {
 		// disable primary key
 		setPrimaryKeyState(self, {disabled:true})
 
+		// isi form dengan data
 		frm.setData(data)
-		frm.acceptChanges()
-		frm.lock()
-
+	
+		// jika ada kebutuhan untuk oleh lagi form dan data, bisa lakukan di extender
+		// export function paymreqTermEdit_formOpened(self, frm, CurrentState) {}
 		const fn_formopened_name = 'paymreqTermEdit_formOpened'
 		const fn_formopened = Extender[fn_formopened_name]
 		if (typeof fn_formopened === 'function') {
 			fn_formopened(self, frm, CurrentState)
 		}
+
+
+		// finally, accept changes dan lock form
+		frm.acceptChanges()
+		frm.lock()
+
 	} catch (err) {
 		CurrentState.currentOpenedId = null
 		throw err
@@ -130,12 +148,28 @@ export function headerLocked(self) {
 	CurrentState.headerFormLocked = true
 	CurrentState.editDisabled = true
 	btn_new.disabled = true
+
+	// Extender untuk event Locked
+	// export function paymreqTermEdit_formLocked(self, frm, CurrentState) {}
+	const fn_name = 'paymreqTermEdit_formLocked'
+	const fn = Extender[fn_name]
+	if (typeof fn === 'function') {
+		fn(self, frm, CurrentState)
+	}	
 }
 
 export function headerUnlocked(self) {
 	CurrentState.headerFormLocked = false
 	CurrentState.editDisabled = false
 	btn_new.disabled = false
+
+	// Extender untuk event Unlocked
+	// export function paymreqTermEdit_formUnlocked(self, frm, CurrentState) {}
+	const fn_name = 'paymreqTermEdit_formUnlocked'
+	const fn = Extender[fn_name]
+	if (typeof fn === 'function') {
+		fn(self, frm, CurrentState)
+	}	
 }
 
 export function disableNextButton(self, disabled=true) {
@@ -267,6 +301,7 @@ async function  frm_locked(self, evt) {
 
 
 	// Extender untuk event locked
+	// export function paymreqTermEdit_formLocked(self, frm, CurrentState) {}
 	const fn_name = 'paymreqTermEdit_formLocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
@@ -303,6 +338,7 @@ async function  frm_unlocked(self, evt) {
 	btn_next.disabled = true
 
 	// Extender untuk event Unlocked
+	// export function paymreqTermEdit_formUnlocked(self, frm) {}
 	const fn_name = 'paymreqTermEdit_formUnlocked'
 	const fn = Extender[fn_name]
 	if (typeof fn === 'function') {
@@ -381,17 +417,19 @@ async function btn_new_click(self, evt) {
 		const paymreq_id = header_pk.value
 
 		// inisiasi data baru
-		let datainit = {
-			paymreq_id,}
+		const datainit = {
+			paymreq_id,
+		}
 
 
 		// jika perlu modifikasi data initial,
 		// atau dialog untuk opsi data baru, 
 		// dapat dibuat di Extender.newData
+		// export async function paymreqTermEdit_newData(self, datainit, frm, CurrentState) {}
 		const fn_newdata_name = 'paymreqTermEdit_newData'
 		const fn_newdata = Extender[fn_newdata_name]
 		if (typeof fn_newdata === 'function') {
-			await fn_newdata(self, datainit, frm)
+			await fn_newdata(self, datainit, frm, CurrentState)
 		}
 
 		// buat data baru
@@ -418,6 +456,7 @@ async function btn_save_click(self, evt) {
 	console.log('btn_save_click')
 
 	// Extender Autofill
+	// export async function paymreqTermEdit_autofill(self, frm) {}
 	const fn_autofill_name = 'paymreqTermEdit_autofill'
 	const fn_autofill = Extender[fn_autofill_name]
 	if (typeof fn_autofill === 'function') {
@@ -468,12 +507,19 @@ async function btn_save_click(self, evt) {
 
 
 	// Extender Saving
+	// export async function paymreqTermEdit_dataSaving(self, dataToSave, frm, args) {}
+	const args = { cancelSave: false }
 	const fn_datasaving_name = 'paymreqTermEdit_dataSaving'
 	const fn_datasaving = Extender[fn_datasaving_name]
 	if (typeof fn_datasaving === 'function') {
-		await fn_datasaving(self, dataToSave, frm)
+		await fn_datasaving(self, dataToSave, frm, args)
 	}
 
+	// batalkan save, jika ada request cancel
+	if (args.cancelSave) {
+		console.log('save is canceled')
+		return
+	}
 
 
 	let mask = $fgta5.Modal.createMask()
@@ -513,6 +559,7 @@ async function btn_save_click(self, evt) {
 
 
 		// Extender Saving
+		// export async function paymreqTermEdit_dataSaved(self, data, frm) {}
 		const fn_datasaved_name = 'paymreqTermEdit_dataSaved'
 		const fn_datasaved = Extender[fn_datasaved_name]
 		if (typeof fn_datasaved === 'function') {
@@ -661,6 +708,7 @@ async function btn_recordstatus_click(self, evt) {
 			// jika mau menambah beberapa informasi mengenai record,
 			// misalnya commit by, postby, dll
 			// melalui extender paymreqTermEdit_addRecordInfo
+			// export async function paymreqTermEdit_addRecordInfo(self,  data) {}
 			const fn_addrecordinfo_name = 'paymreqTermEdit_addRecordInfo'
 			const fn_addrecordinfo = Extender[fn_addrecordinfo_name]
 			if (typeof fn_addrecordinfo === 'function') {

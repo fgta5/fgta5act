@@ -12,6 +12,21 @@ comment on table act."bctypecoa" is '';
 
 
 -- =============================================
+-- FIELD: bccoaclass_id smallint
+-- =============================================
+-- ADD bccoaclass_id
+alter table act."bctypecoa" add bccoaclass_id smallint  ;
+comment on column act."bctypecoa".bccoaclass_id is '';
+
+-- MODIFY bccoaclass_id
+alter table act."bctypecoa"
+	alter column bccoaclass_id type smallint,
+	ALTER COLUMN bccoaclass_id DROP DEFAULT,
+	ALTER COLUMN bccoaclass_id DROP NOT NULL;
+comment on column act."bctypecoa".bccoaclass_id is '';
+
+
+-- =============================================
 -- FIELD: curr_id smallint
 -- =============================================
 -- ADD curr_id
@@ -125,9 +140,21 @@ comment on column act."bctypecoa"._modifydate is 'waktu terakhir record dimodifi
 ALTER TABLE act."bctypecoa" DROP CONSTRAINT fk$act$bctypecoa$bctype_id;
 ALTER TABLE act."bctypecoa" DROP CONSTRAINT fk$act$bctypecoa$coa_id;
 ALTER TABLE act."bctypecoa" DROP CONSTRAINT fk$act$bctypecoa$curr_id;
+ALTER TABLE act."bctypecoa" DROP CONSTRAINT fk$act$bctypecoa$bccoaclass_id;
 
 
 -- Add Foreign Key Constraint  
+ALTER TABLE act."bctypecoa"
+	ADD CONSTRAINT fk$act$bctypecoa$bccoaclass_id
+	FOREIGN KEY (bccoaclass_id)
+	REFERENCES act."bccoaclass"(bccoaclass_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$bctypecoa$bccoaclass_id;
+CREATE INDEX idx_fk$act$bctypecoa$bccoaclass_id ON act."bctypecoa"(bccoaclass_id);	
+
+
 ALTER TABLE act."bctypecoa"
 	ADD CONSTRAINT fk$act$bctypecoa$curr_id
 	FOREIGN KEY (curr_id)

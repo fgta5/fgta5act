@@ -27,6 +27,21 @@ comment on column act."bctype".bctype_isdisabled is '';
 
 
 -- =============================================
+-- FIELD: bccycle_id smallint
+-- =============================================
+-- ADD bccycle_id
+alter table act."bctype" add bccycle_id smallint  ;
+comment on column act."bctype".bccycle_id is '';
+
+-- MODIFY bccycle_id
+alter table act."bctype"
+	alter column bccycle_id type smallint,
+	ALTER COLUMN bccycle_id DROP DEFAULT,
+	ALTER COLUMN bccycle_id DROP NOT NULL;
+comment on column act."bctype".bccycle_id is '';
+
+
+-- =============================================
 -- FIELD: isalldept boolean
 -- =============================================
 -- ADD isalldept
@@ -57,6 +72,21 @@ comment on column act."bctype".bctype_name is '';
 
 
 -- =============================================
+-- FIELD: bctype_code text
+-- =============================================
+-- ADD bctype_code
+alter table act."bctype" add bctype_code text  ;
+comment on column act."bctype".bctype_code is '';
+
+-- MODIFY bctype_code
+alter table act."bctype"
+	alter column bctype_code type text,
+	ALTER COLUMN bctype_code DROP DEFAULT,
+	ALTER COLUMN bctype_code DROP NOT NULL;
+comment on column act."bctype".bctype_code is '';
+
+
+-- =============================================
 -- FIELD: bctype_descr text
 -- =============================================
 -- ADD bctype_descr
@@ -72,18 +102,18 @@ comment on column act."bctype".bctype_descr is '';
 
 
 -- =============================================
--- FIELD: approvaltype_id int
+-- FIELD: approvalmodel_id int
 -- =============================================
--- ADD approvaltype_id
-alter table act."bctype" add approvaltype_id int  ;
-comment on column act."bctype".approvaltype_id is '';
+-- ADD approvalmodel_id
+alter table act."bctype" add approvalmodel_id int  ;
+comment on column act."bctype".approvalmodel_id is '';
 
--- MODIFY approvaltype_id
+-- MODIFY approvalmodel_id
 alter table act."bctype"
-	alter column approvaltype_id type int,
-	ALTER COLUMN approvaltype_id DROP DEFAULT,
-	ALTER COLUMN approvaltype_id DROP NOT NULL;
-comment on column act."bctype".approvaltype_id is '';
+	alter column approvalmodel_id type int,
+	ALTER COLUMN approvalmodel_id DROP DEFAULT,
+	ALTER COLUMN approvalmodel_id DROP NOT NULL;
+comment on column act."bctype".approvalmodel_id is '';
 
 
 -- =============================================
@@ -114,6 +144,66 @@ alter table act."bctype"
 	ALTER COLUMN agingtype_id DROP DEFAULT,
 	ALTER COLUMN agingtype_id DROP NOT NULL;
 comment on column act."bctype".agingtype_id is '';
+
+
+-- =============================================
+-- FIELD: isusecoaclass boolean
+-- =============================================
+-- ADD isusecoaclass
+alter table act."bctype" add isusecoaclass boolean not null default false;
+comment on column act."bctype".isusecoaclass is '';
+
+-- MODIFY isusecoaclass
+alter table act."bctype"
+	alter column isusecoaclass type boolean,
+	ALTER COLUMN isusecoaclass SET DEFAULT false,
+	ALTER COLUMN isusecoaclass SET NOT NULL;
+comment on column act."bctype".isusecoaclass is '';
+
+
+-- =============================================
+-- FIELD: isusecurr boolean
+-- =============================================
+-- ADD isusecurr
+alter table act."bctype" add isusecurr boolean not null default false;
+comment on column act."bctype".isusecurr is '';
+
+-- MODIFY isusecurr
+alter table act."bctype"
+	alter column isusecurr type boolean,
+	ALTER COLUMN isusecurr SET DEFAULT false,
+	ALTER COLUMN isusecurr SET NOT NULL;
+comment on column act."bctype".isusecurr is '';
+
+
+-- =============================================
+-- FIELD: isuseapproval boolean
+-- =============================================
+-- ADD isuseapproval
+alter table act."bctype" add isuseapproval boolean not null default false;
+comment on column act."bctype".isuseapproval is '';
+
+-- MODIFY isuseapproval
+alter table act."bctype"
+	alter column isuseapproval type boolean,
+	ALTER COLUMN isuseapproval SET DEFAULT false,
+	ALTER COLUMN isuseapproval SET NOT NULL;
+comment on column act."bctype".isuseapproval is '';
+
+
+-- =============================================
+-- FIELD: isusepaymreq boolean
+-- =============================================
+-- ADD isusepaymreq
+alter table act."bctype" add isusepaymreq boolean not null default false;
+comment on column act."bctype".isusepaymreq is '';
+
+-- MODIFY isusepaymreq
+alter table act."bctype"
+	alter column isusepaymreq type boolean,
+	ALTER COLUMN isusepaymreq SET DEFAULT false,
+	ALTER COLUMN isusepaymreq SET NOT NULL;
+comment on column act."bctype".isusepaymreq is '';
 
 
 -- =============================================
@@ -184,19 +274,31 @@ comment on column act."bctype"._modifydate is 'waktu terakhir record dimodifikas
 -- Drop Existing Foreign Key Constraint 
 ALTER TABLE act."bctype" DROP CONSTRAINT fk$act$bctype$agingtype_id;
 ALTER TABLE act."bctype" DROP CONSTRAINT fk$act$bctype$paymreqtype_id;
+ALTER TABLE act."bctype" DROP CONSTRAINT fk$act$bctype$bccycle_id;
 ALTER TABLE act."bctype" DROP CONSTRAINT fk$act$bctype$approvaltype_id;
 
 
 -- Add Foreign Key Constraint  
 ALTER TABLE act."bctype"
-	ADD CONSTRAINT fk$act$bctype$approvaltype_id
-	FOREIGN KEY (approvaltype_id)
-	REFERENCES core."approvaltype"(approvaltype_id);
+	ADD CONSTRAINT fk$act$bctype$bccycle_id
+	FOREIGN KEY (bccycle_id)
+	REFERENCES act."bccycle"(bccycle_id);
 
 
 -- Add As Index, drop dulu jika sudah ada
-DROP INDEX IF EXISTS act.idx_fk$act$bctype$approvaltype_id;
-CREATE INDEX idx_fk$act$bctype$approvaltype_id ON act."bctype"(approvaltype_id);	
+DROP INDEX IF EXISTS act.idx_fk$act$bctype$bccycle_id;
+CREATE INDEX idx_fk$act$bctype$bccycle_id ON act."bctype"(bccycle_id);	
+
+
+ALTER TABLE act."bctype"
+	ADD CONSTRAINT fk$act$bctype$approvalmodel_id
+	FOREIGN KEY (approvalmodel_id)
+	REFERENCES ent."approvalmodel"(approvalmodel_id);
+
+
+-- Add As Index, drop dulu jika sudah ada
+DROP INDEX IF EXISTS act.idx_fk$act$bctype$approvalmodel_id;
+CREATE INDEX idx_fk$act$bctype$approvalmodel_id ON act."bctype"(approvalmodel_id);	
 
 
 ALTER TABLE act."bctype"
@@ -228,10 +330,16 @@ CREATE INDEX idx_fk$act$bctype$agingtype_id ON act."bctype"(agingtype_id);
 -- =============================================
 -- Drop existing unique index 
 alter table act."bctype"
+	drop constraint uq$act$bctype$bctype_code;
+
+alter table act."bctype"
 	drop constraint uq$act$bctype$bctype_name;
 	
 
 -- Add unique index 
 alter table  act."bctype"
 	add constraint uq$act$bctype$bctype_name unique (bctype_name); 
+
+alter table  act."bctype"
+	add constraint uq$act$bctype$bctype_code unique (bctype_code); 
 

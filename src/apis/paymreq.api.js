@@ -85,8 +85,9 @@ async function paymreq_init(self, body) {
 			setting: {}
 		}
 		
-		if (typeof Extender.coa_init === 'function') {
-			await Extender.coa_init(self, initialData)
+		if (typeof Extender.paymreq_init === 'function') {
+			// export async function paymreq_init(self, initialData) {}
+			await Extender.paymreq_init(self, initialData)
 		}
 
 		return initialData
@@ -137,9 +138,12 @@ async function paymreq_headerList(self, body) {
 			}
 		}
 
+		const args = { db, criteria }
+
 		// apabila ada keperluan untuk recompose criteria
 		if (typeof Extender.headerListCriteria === 'function') {
-			await Extender.headerListCriteria(self, db, searchMap, criteria, sort, columns)
+			// export async function headerListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.headerListCriteria(self, db, searchMap, criteria, sort, columns, args)
 		}
 
 		var max_rows = limit==0 ? 10 : limit
@@ -154,10 +158,76 @@ async function paymreq_headerList(self, body) {
 			i++
 			if (i>max_rows) { break }
 
+			// lookup: paymreqtype_name dari field paymreqtype_name pada table act.paymreqtype dimana (act.paymreqtype.paymreqtype_id = act.paymreq.paymreqtype_id)
+			{
+				const { paymreqtype_name } = await sqlUtil.lookupdb(db, 'act.paymreqtype', 'paymreqtype_id', row.paymreqtype_id)
+				row.paymreqtype_name = paymreqtype_name
+			}
+			// lookup: dept_name dari field dept_name pada table ent.dept dimana (ent.dept.dept_id = act.paymreq.dept_id)
+			{
+				const { dept_name } = await sqlUtil.lookupdb(db, 'ent.dept', 'dept_id', row.dept_id)
+				row.dept_name = dept_name
+			}
+			// lookup: site_name dari field site_name pada table ent.site dimana (ent.site.site_id = act.paymreq.site_id)
+			{
+				const { site_name } = await sqlUtil.lookupdb(db, 'ent.site', 'site_id', row.site_id)
+				row.site_name = site_name
+			}
+			// lookup: unit_name dari field unit_name pada table ent.unit dimana (ent.unit.unit_id = act.paymreq.unit_id)
+			{
+				const { unit_name } = await sqlUtil.lookupdb(db, 'ent.unit', 'unit_id', row.unit_id)
+				row.unit_name = unit_name
+			}
+			// lookup: project_name dari field project_name pada table prj.project dimana (prj.project.project_id = act.paymreq.project_id)
+			{
+				const { project_name } = await sqlUtil.lookupdb(db, 'prj.project', 'project_id', row.project_id)
+				row.project_name = project_name
+			}
+			// lookup: bctype_name dari field bctype_name pada table act.bctype dimana (act.bctype.bctype_id = act.paymreq.bctype_id)
+			{
+				const { bctype_name } = await sqlUtil.lookupdb(db, 'act.bctype', 'bctype_id', row.bctype_id)
+				row.bctype_name = bctype_name
+			}
+			// lookup: bc_title dari field bc_title pada table act.bc dimana (act.bc.bc_id = act.paymreq.bc_id)
+			{
+				const { bc_title } = await sqlUtil.lookupdb(db, 'act.bc', 'bc_id', row.bc_id)
+				row.bc_title = bc_title
+			}
+			// lookup: partner_name dari field partner_name pada table ent.partner dimana (ent.partner.partner_id = act.paymreq.partner_id)
+			{
+				const { partner_name } = await sqlUtil.lookupdb(db, 'ent.partner', 'partner_id', row.partner_id)
+				row.partner_name = partner_name
+			}
+			// lookup: paymtype_name dari field paymtype_name pada table act.paymtype dimana (act.paymtype.paymtype_id = act.paymreq.paymtype_id)
+			{
+				const { paymtype_name } = await sqlUtil.lookupdb(db, 'act.paymtype', 'paymtype_id', row.paymtype_id)
+				row.paymtype_name = paymtype_name
+			}
+			// lookup: partnerbank_name dari field partnerbank_name pada table ent.partnerbank dimana (ent.partnerbank.partnerbank_id = act.paymreq.partnerbank_id)
+			{
+				const { partnerbank_name } = await sqlUtil.lookupdb(db, 'ent.partnerbank', 'partnerbank_id', row.partnerbank_id)
+				row.partnerbank_name = partnerbank_name
+			}
+			// lookup: partnercontact_name dari field partnercontact_name pada table ent.partnercontact dimana (ent.partnercontact.partnercontact_id = act.paymreq.partnercontact_id)
+			{
+				const { partnercontact_name } = await sqlUtil.lookupdb(db, 'ent.partnercontact', 'partnercontact_id', row.partnercontact_id)
+				row.partnercontact_name = partnercontact_name
+			}
+			// lookup: coa_name dari field coa_name pada table act.coa dimana (act.coa.coa_id = act.paymreq.coa_id)
+			{
+				const { coa_name } = await sqlUtil.lookupdb(db, 'act.coa', 'coa_id', row.coa_id)
+				row.coa_name = coa_name
+			}
+			// lookup: curr_name dari field curr_name pada table ent.curr dimana (ent.curr.curr_id = act.paymreq.curr_id)
+			{
+				const { curr_name } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', row.curr_id)
+				row.curr_name = curr_name
+			}
 			
 			// pasang extender di sini
 			if (typeof Extender.headerListRow === 'function') {
-				await Extender.headerListRow(self, row)
+				// export async function headerListRow(self, row, args) {}
+				await Extender.headerListRow(self, row, args)
 			}
 
 			data.push(row)
@@ -202,6 +272,71 @@ async function paymreq_headerOpen(self, body) {
 			throw new Error(`[${tablename}] data dengan id '${id}' tidak ditemukan`) 
 		}	
 
+		// lookup: paymreqtype_name dari field paymreqtype_name pada table act.paymreqtype dimana (act.paymreqtype.paymreqtype_id = act.paymreq.paymreqtype_id)
+		{
+			const { paymreqtype_name } = await sqlUtil.lookupdb(db, 'act.paymreqtype', 'paymreqtype_id', data.paymreqtype_id)
+			data.paymreqtype_name = paymreqtype_name
+		}
+		// lookup: dept_name dari field dept_name pada table ent.dept dimana (ent.dept.dept_id = act.paymreq.dept_id)
+		{
+			const { dept_name } = await sqlUtil.lookupdb(db, 'ent.dept', 'dept_id', data.dept_id)
+			data.dept_name = dept_name
+		}
+		// lookup: site_name dari field site_name pada table ent.site dimana (ent.site.site_id = act.paymreq.site_id)
+		{
+			const { site_name } = await sqlUtil.lookupdb(db, 'ent.site', 'site_id', data.site_id)
+			data.site_name = site_name
+		}
+		// lookup: unit_name dari field unit_name pada table ent.unit dimana (ent.unit.unit_id = act.paymreq.unit_id)
+		{
+			const { unit_name } = await sqlUtil.lookupdb(db, 'ent.unit', 'unit_id', data.unit_id)
+			data.unit_name = unit_name
+		}
+		// lookup: project_name dari field project_name pada table prj.project dimana (prj.project.project_id = act.paymreq.project_id)
+		{
+			const { project_name } = await sqlUtil.lookupdb(db, 'prj.project', 'project_id', data.project_id)
+			data.project_name = project_name
+		}
+		// lookup: bctype_name dari field bctype_name pada table act.bctype dimana (act.bctype.bctype_id = act.paymreq.bctype_id)
+		{
+			const { bctype_name } = await sqlUtil.lookupdb(db, 'act.bctype', 'bctype_id', data.bctype_id)
+			data.bctype_name = bctype_name
+		}
+		// lookup: bc_title dari field bc_title pada table act.bc dimana (act.bc.bc_id = act.paymreq.bc_id)
+		{
+			const { bc_title } = await sqlUtil.lookupdb(db, 'act.bc', 'bc_id', data.bc_id)
+			data.bc_title = bc_title
+		}
+		// lookup: partner_name dari field partner_name pada table ent.partner dimana (ent.partner.partner_id = act.paymreq.partner_id)
+		{
+			const { partner_name } = await sqlUtil.lookupdb(db, 'ent.partner', 'partner_id', data.partner_id)
+			data.partner_name = partner_name
+		}
+		// lookup: paymtype_name dari field paymtype_name pada table act.paymtype dimana (act.paymtype.paymtype_id = act.paymreq.paymtype_id)
+		{
+			const { paymtype_name } = await sqlUtil.lookupdb(db, 'act.paymtype', 'paymtype_id', data.paymtype_id)
+			data.paymtype_name = paymtype_name
+		}
+		// lookup: partnerbank_name dari field partnerbank_name pada table ent.partnerbank dimana (ent.partnerbank.partnerbank_id = act.paymreq.partnerbank_id)
+		{
+			const { partnerbank_name } = await sqlUtil.lookupdb(db, 'ent.partnerbank', 'partnerbank_id', data.partnerbank_id)
+			data.partnerbank_name = partnerbank_name
+		}
+		// lookup: partnercontact_name dari field partnercontact_name pada table ent.partnercontact dimana (ent.partnercontact.partnercontact_id = act.paymreq.partnercontact_id)
+		{
+			const { partnercontact_name } = await sqlUtil.lookupdb(db, 'ent.partnercontact', 'partnercontact_id', data.partnercontact_id)
+			data.partnercontact_name = partnercontact_name
+		}
+		// lookup: coa_name dari field coa_name pada table act.coa dimana (act.coa.coa_id = act.paymreq.coa_id)
+		{
+			const { coa_name } = await sqlUtil.lookupdb(db, 'act.coa', 'coa_id', data.coa_id)
+			data.coa_name = coa_name
+		}
+		// lookup: curr_name dari field curr_name pada table ent.curr dimana (ent.curr.curr_id = act.paymreq.curr_id)
+		{
+			const { curr_name } = await sqlUtil.lookupdb(db, 'ent.curr', 'curr_id', data.curr_id)
+			data.curr_name = curr_name
+		}
 		
 
 		// lookup data createby
@@ -219,6 +354,7 @@ async function paymreq_headerOpen(self, body) {
 		// pasang extender untuk olah data
 		// export async function headerOpen(self, db, data) {}
 		if (typeof Extender.headerOpen === 'function') {
+			// export async function headerOpen(self, db, data) {}
 			await Extender.headerOpen(self, db, data)
 		}
 
@@ -248,6 +384,12 @@ async function paymreq_headerCreate(self, body) {
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
+
+			const args = { section: 'header' }
+
+			// set default document prefix
+			args.prefix = 'XX'	
+				
 			// buat sequencer document	
 			const sequencer = createSequencerDocument(tx, { 
 				COMPANY_CODE: req.app.locals.appConfig.COMPANY_CODE,
@@ -258,16 +400,18 @@ async function paymreq_headerCreate(self, body) {
 			if (typeof Extender.sequencerSetup === 'function') {
 				// jika ada keperluan menambahkan code block/cluster di sequencer
 				// dapat diimplementasikan di exterder sequencerSetup 
-				await Extender.sequencerSetup(self, tx, sequencer, data)
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
 			}
 
-			// generate data XX reset perbulan
-			const seqdata = await sequencer.monthly('XX')	
+			// generate data sesuai prefix (default: XX) reset perbulan
+			const seqdata = await sequencer.monthly(args.prefix)	
 			data.paymreq_id = seqdata.id
 
 			// apabila ada keperluan pengelohan data sebelum disimpan, lakukan di extender headerCreating
 			if (typeof Extender.headerCreating === 'function') {
-				await Extender.headerCreating(self, tx, data, seqdata)
+				// export async function headerCreating(self, tx, data, seqdata, args) {}
+				await Extender.headerCreating(self, tx, data, seqdata, args)
 			}			
 			
 			
@@ -280,7 +424,8 @@ async function paymreq_headerCreate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.headerCreated === 'function') {
-				await Extender.headerCreated(self, tx, ret, data, logMetadata)
+				// export async function headerCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.headerCreated(self, tx, ret, data, logMetadata, args)
 			}
 
 			// record log
@@ -317,6 +462,7 @@ async function paymreq_headerUpdate(self, body) {
 
 			// apabila ada keperluan pengelohan data sebelum disimpan, lakukan di extender headerCreating
 			if (typeof Extender.headerUpdating === 'function') {
+				// export async function headerUpdating(self, tx, data) {}
 				await Extender.headerUpdating(self, tx, data)
 			}
 
@@ -329,6 +475,7 @@ async function paymreq_headerUpdate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.headerUpdated === 'function') {
+				// export async function headerUpdated(self, tx, ret, data, logMetadata) {}
 				await Extender.headerUpdated(self, tx, ret, data, logMetadata)
 			}			
 
@@ -362,6 +509,7 @@ async function paymreq_headerDelete(self, body) {
 
 			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender headerDeleting
 			if (typeof Extender.headerDeleting === 'function') {
+				// export async function headerDeleting(self, tx, dataToRemove) {}
 				await Extender.headerDeleting(self, tx, dataToRemove)
 			}
 
@@ -373,6 +521,7 @@ async function paymreq_headerDelete(self, body) {
 				for (let rowdetil of rows) {
 					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
 					if (typeof Extender.detilDeleting === 'function') {
+						// export async function detilDeleting(self, tx, rowdetil, logMetadata) {}
 						await Extender.detilDeleting(self, tx, rowdetil, logMetadata)
 					}
 
@@ -382,6 +531,7 @@ async function paymreq_headerDelete(self, body) {
 
 					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
 					if (typeof Extender.detilDeleted === 'function') {
+						// export async function detilDeleted(self, tx, deletedRow, logMetadata) {}
 						await Extender.detilDeleted(self, tx, deletedRow, logMetadata)
 					}					
 
@@ -399,6 +549,7 @@ async function paymreq_headerDelete(self, body) {
 				for (let rowterm of rows) {
 					// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
 					if (typeof Extender.termDeleting === 'function') {
+						// export async function termDeleting(self, tx, rowterm, logMetadata) {}
 						await Extender.termDeleting(self, tx, rowterm, logMetadata)
 					}
 
@@ -408,6 +559,7 @@ async function paymreq_headerDelete(self, body) {
 
 					// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
 					if (typeof Extender.termDeleted === 'function') {
+						// export async function termDeleted(self, tx, deletedRow, logMetadata) {}
 						await Extender.termDeleted(self, tx, deletedRow, logMetadata)
 					}					
 
@@ -429,6 +581,7 @@ async function paymreq_headerDelete(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender headerDeleted
 			if (typeof Extender.headerDeleted === 'function') {
+				// export async function headerDeleted(self, tx, ret, logMetadata) {}
 				await Extender.headerDeleted(self, tx, ret, logMetadata)
 			}
 
@@ -466,9 +619,12 @@ async function paymreq_detilList(self, body) {
 			}
 		}
 
+		const args = { db, criteria }
+
 		// apabila ada keperluan untuk recompose criteria
-		if (typeof Extender.paymreqListCriteria === 'function') {
-			await Extender.paymreqListCriteria(self, db, searchMap, criteria, sort, columns)
+		if (typeof Extender.detilListCriteria === 'function') {
+			// export async function detilListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.detilListCriteria(self, db, searchMap, criteria, sort, columns, args)
 		}
 
 		var max_rows = limit==0 ? 10 : limit
@@ -487,7 +643,8 @@ async function paymreq_detilList(self, body) {
 
 			// pasang extender di sini
 			if (typeof Extender.detilListRow === 'function') {
-				await Extender.detilListRow(row)
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
 			}
 
 			data.push(row)
@@ -547,6 +704,14 @@ async function paymreq_detilOpen(self, body) {
 			data._modifyby = user_fullname ?? ''
 		}	
 
+
+		// pasang extender untuk olah data
+		// export async function detilOpen(self, db, data) {}
+		if (typeof Extender.detilOpen === 'function') {
+			// export async function detilOpen(self, db, data) {}
+			await Extender.detilOpen(self, db, data)
+		}
+
 		return data
 	} catch (err) {
 		throw err
@@ -572,13 +737,30 @@ async function paymreq_detilCreate(self, body) {
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
+
+			const args = { 
+				section: 'detil', 
+				prefix: 'XX'	
+			}
+
 			const sequencer = createSequencerLine(tx, {})
-			const seqdata = await sequencer.increment('XX')
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.prefix)
 			data.paymreqdetil_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
 			if (typeof Extender.detilCreating === 'function') {
-				await Extender.detilCreating(self, tx, data, seqdata)
+				// export async function detilCreating(self, tx, data, seqdata, args) {}
+				await Extender.detilCreating(self, tx, data, seqdata, args)
 			}
 
 			const cmd = sqlUtil.createInsertCommand(tablename, data)
@@ -588,7 +770,8 @@ async function paymreq_detilCreate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.detilCreated === 'function') {
-				await Extender.detilCreated(self, tx, ret, data, logMetadata)
+				// export async function detilCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.detilCreated(self, tx, ret, data, logMetadata, args)
 			}
 
 			// record log
@@ -625,6 +808,7 @@ async function paymreq_detilUpdate(self, body) {
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
 			if (typeof Extender.detilUpdating === 'function') {
+				// export async function detilUpdating(self, tx, data) {}
 				await Extender.detilUpdating(self, tx, data)
 			}			
 			
@@ -635,6 +819,7 @@ async function paymreq_detilUpdate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.detilUpdated === 'function') {
+				// export async function detilUpdated(self, tx, ret, data, logMetadata) {}
 				await Extender.detilUpdated(self, tx, ret, data, logMetadata)
 			}
 
@@ -669,6 +854,7 @@ async function paymreq_detilDelete(self, body) {
 
 			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
 			if (typeof Extender.detilDeleting === 'function') {
+				// export async function detilDeleting(self, tx, rowdetil, logMetadata) {}
 				await Extender.detilDeleting(self, tx, rowdetil, logMetadata)
 			}
 
@@ -678,6 +864,7 @@ async function paymreq_detilDelete(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
 			if (typeof Extender.detilDeleted === 'function') {
+				// export async function detilDeleted(self, tx, deletedRow, logMetadata) {}
 				await Extender.detilDeleted(self, tx, deletedRow, logMetadata)
 			}					
 
@@ -713,6 +900,7 @@ async function paymreq_detilDeleteRows(self, body) {
 
 				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
 				if (typeof Extender.detilDeleting === 'function') {
+					// async function detilDeleting(self, tx, rowdetil, logMetadata) {}
 					await Extender.detilDeleting(self, tx, rowdetil, logMetadata)
 				}
 
@@ -722,6 +910,7 @@ async function paymreq_detilDeleteRows(self, body) {
 
 				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
 				if (typeof Extender.detilDeleted === 'function') {
+					// export async function detilDeleted(self, tx, deletedRow, logMetadata) {}
 					await Extender.detilDeleted(self, tx, deletedRow, logMetadata)
 				}					
 
@@ -760,9 +949,12 @@ async function paymreq_termList(self, body) {
 			}
 		}
 
+		const args = { db, criteria }
+
 		// apabila ada keperluan untuk recompose criteria
-		if (typeof Extender.paymreqListCriteria === 'function') {
-			await Extender.paymreqListCriteria(self, db, searchMap, criteria, sort, columns)
+		if (typeof Extender.termListCriteria === 'function') {
+			// export async function termListCriteria(self, db, searchMap, criteria, sort, columns, args) {}
+			await Extender.termListCriteria(self, db, searchMap, criteria, sort, columns, args)
 		}
 
 		var max_rows = limit==0 ? 10 : limit
@@ -781,7 +973,8 @@ async function paymreq_termList(self, body) {
 
 			// pasang extender di sini
 			if (typeof Extender.detilListRow === 'function') {
-				await Extender.detilListRow(row)
+				// export async function detilListRow(self, row, args) {}
+				await Extender.detilListRow(self, row, args)
 			}
 
 			data.push(row)
@@ -841,6 +1034,14 @@ async function paymreq_termOpen(self, body) {
 			data._modifyby = user_fullname ?? ''
 		}	
 
+
+		// pasang extender untuk olah data
+		// export async function termOpen(self, db, data) {}
+		if (typeof Extender.termOpen === 'function') {
+			// export async function termOpen(self, db, data) {}
+			await Extender.termOpen(self, db, data)
+		}
+
 		return data
 	} catch (err) {
 		throw err
@@ -866,13 +1067,30 @@ async function paymreq_termCreate(self, body) {
 		const result = await db.tx(async tx=>{
 			sqlUtil.connect(tx)
 
+
+			const args = { 
+				section: 'term', 
+				prefix: 'XX'	
+			}
+
 			const sequencer = createSequencerLine(tx, {})
-			const seqdata = await sequencer.increment('XX')
+
+
+			if (typeof Extender.sequencerSetup === 'function') {
+				// jika ada keperluan menambahkan code block/cluster di sequencer
+				// dapat diimplementasikan di exterder sequencerSetup 
+				// export async function sequencerSetup(self, tx, sequencer, data, args) {}
+				await Extender.sequencerSetup(self, tx, sequencer, data, args)
+			}
+
+
+			const seqdata = await sequencer.increment(args.prefix)
 			data.paymreqterm_id = seqdata.id
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
 			if (typeof Extender.termCreating === 'function') {
-				await Extender.termCreating(self, tx, data, seqdata)
+				// export async function termCreating(self, tx, data, seqdata, args) {}
+				await Extender.termCreating(self, tx, data, seqdata, args)
 			}
 
 			const cmd = sqlUtil.createInsertCommand(tablename, data)
@@ -882,7 +1100,8 @@ async function paymreq_termCreate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.termCreated === 'function') {
-				await Extender.termCreated(self, tx, ret, data, logMetadata)
+				// export async function termCreated(self, tx, ret, data, logMetadata, args) {}
+				await Extender.termCreated(self, tx, ret, data, logMetadata, args)
 			}
 
 			// record log
@@ -919,6 +1138,7 @@ async function paymreq_termUpdate(self, body) {
 
 			// apabila ada keperluan pengolahan data SEBELUM disimpan
 			if (typeof Extender.termUpdating === 'function') {
+				// export async function termUpdating(self, tx, data) {}
 				await Extender.termUpdating(self, tx, data)
 			}			
 			
@@ -929,6 +1149,7 @@ async function paymreq_termUpdate(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah disimpan, lakukan di extender headerCreated
 			if (typeof Extender.termUpdated === 'function') {
+				// export async function termUpdated(self, tx, ret, data, logMetadata) {}
 				await Extender.termUpdated(self, tx, ret, data, logMetadata)
 			}
 
@@ -963,6 +1184,7 @@ async function paymreq_termDelete(self, body) {
 
 			// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
 			if (typeof Extender.termDeleting === 'function') {
+				// export async function termDeleting(self, tx, rowterm, logMetadata) {}
 				await Extender.termDeleting(self, tx, rowterm, logMetadata)
 			}
 
@@ -972,6 +1194,7 @@ async function paymreq_termDelete(self, body) {
 
 			// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
 			if (typeof Extender.termDeleted === 'function') {
+				// export async function termDeleted(self, tx, deletedRow, logMetadata) {}
 				await Extender.termDeleted(self, tx, deletedRow, logMetadata)
 			}					
 
@@ -1007,6 +1230,7 @@ async function paymreq_termDeleteRows(self, body) {
 
 				// apabila ada keperluan pengelohan data sebelum dihapus, lakukan di extender
 				if (typeof Extender.termDeleting === 'function') {
+					// async function termDeleting(self, tx, rowterm, logMetadata) {}
 					await Extender.termDeleting(self, tx, rowterm, logMetadata)
 				}
 
@@ -1016,6 +1240,7 @@ async function paymreq_termDeleteRows(self, body) {
 
 				// apabila ada keperluan pengelohan data setelah dihapus, lakukan di extender
 				if (typeof Extender.termDeleted === 'function') {
+					// export async function termDeleted(self, tx, deletedRow, logMetadata) {}
 					await Extender.termDeleted(self, tx, deletedRow, logMetadata)
 				}					
 
